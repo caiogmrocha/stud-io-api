@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch --ignore ./node_modules ./src/main/main.ts",
-    "test": "jest"
+    "test:unit": "jest --config ./jest-unit.config.ts --passWithNoTests --runInBand --no-cache", 
+    "test:unit:watch": "npm run test:unit -- --watch", 
+    "test:e2e": "jest --config ./jest-e2e.config.ts --passWithNoTests --runInBand --no-cache",
+    "test:e2e:watch": "npm run test:e2e -- --watch"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +19,7 @@
     "git-commit-msg-linter": "^4.4.0",
     "jest": "^29.3.1",
     "ts-jest": "^29.0.3",
+    "ts-node": "^10.9.1",
     "tsx": "^3.12.1",
     "typescript": "^4.9.3"
   }
