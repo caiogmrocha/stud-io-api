@@ -2,15 +2,15 @@ import type { EnvironmentContext, JestEnvironmentConfig } from '@jest/environmen
 import NodeEnvironment from 'jest-environment-node';
 
 export default class E2ETestEnvironment extends NodeEnvironment {
-    constructor (config: JestEnvironmentConfig, context: EnvironmentContext) {
-        super(config, context);
-    }
+	constructor(config: JestEnvironmentConfig, context: EnvironmentContext) {
+		super(config, context);
+	}
 
-    async setup(): Promise<void> {
-        return super.setup();
-    }
+	async setup(): Promise<void> {
+		return super.setup();
+	}
 
-    async teardown(): Promise<void> {
-        
-    }
+	async teardown(): Promise<void> {
+		console.log('teste');
+	}
 }
