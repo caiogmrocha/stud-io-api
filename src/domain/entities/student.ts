@@ -1,4 +1,4 @@
-import { Entity } from ".";
+import { Entity, Profile } from ".";
 
 export interface IStudentProps {
     id: string;
@@ -7,6 +7,8 @@ export interface IStudentProps {
     updatedAt: Date;
     deletedAt?: Date;
     isDeleted: boolean;
+
+    profile: Profile;
 }
 
 export class Student extends Entity<IStudentProps> {
@@ -37,5 +39,4 @@ export class Student extends Entity<IStudentProps> {
     get isDeleted(): boolean {
         return this.props.isDeleted;
     }
-
 }
