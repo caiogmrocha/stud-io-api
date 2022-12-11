@@ -1,4 +1,4 @@
-import { Student } from "."
+import { Profile, Student } from "."
 
 import { faker } from '@faker-js/faker'
 
@@ -11,6 +11,17 @@ describe('[Unit] Student Entity', () => {
             updatedAt: new Date(),
             deletedAt: undefined,
             isDeleted: false,
+            profile: new Profile({
+                id: faker.datatype.uuid(),
+                email: faker.internet.email(),
+                password: faker.random.alphaNumeric(12),
+                level: Number(faker.random.numeric()),
+                type: faker.helpers.arrayElement([ 'student', 'teacher' ]),
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                deletedAt: undefined,
+                isDeleted: false,
+            }),
         })
 
         expect(sut.props).toEqual(expect.objectContaining({
@@ -20,6 +31,8 @@ describe('[Unit] Student Entity', () => {
             updatedAt: expect.any(Date),
             deletedAt: undefined,
             isDeleted: false,
+
+            profile: expect.any(Profile),
         }))
     })
 })
