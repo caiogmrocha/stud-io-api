@@ -6,7 +6,7 @@ export default {
   collectCoverageFrom: [
     'src/**/*.ts'
   ],
-  testEnvironment: 'node',
+  testEnvironment: './tests/environment/e2e/index.ts',
   moduleNameMapper: {
     '@/(.*)': '<rootDir>/src/$1'
   },

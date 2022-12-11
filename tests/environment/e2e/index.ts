@@ -1,16 +1,24 @@
 import type { EnvironmentContext, JestEnvironmentConfig } from '@jest/environment';
 import NodeEnvironment from 'jest-environment-node';
 
+import { PrismaTestEnvironment } from './prisma-test-environment';
+
 export default class E2ETestEnvironment extends NodeEnvironment {
-	constructor(config: JestEnvironmentConfig, context: EnvironmentContext) {
+  private prismaTestEnvironment: PrismaTestEnvironment;
+
+  constructor(config: JestEnvironmentConfig, context: EnvironmentContext) {
 		super(config, context);
+
+    this.prismaTestEnvironment = new PrismaTestEnvironment();
 	}
 
 	async setup(): Promise<void> {
+    await this.prismaTestEnvironment.setup();
+
 		return super.setup();
 	}
 
 	async teardown(): Promise<void> {
-		console.log('teste');
+    await this.prismaTestEnvironment.teardown();
 	}
 }
