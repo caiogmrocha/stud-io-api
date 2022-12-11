@@ -1,4 +1,4 @@
-import { Entity } from ".";
+import { Entity, Student, Teacher } from ".";
 
 export interface IProfileProps {
     id: string;
@@ -10,6 +10,8 @@ export interface IProfileProps {
     updatedAt: Date;
     deletedAt?: Date;
     isDeleted: boolean;
+
+    owner?: Student | Teacher;
 }
 
 export class Profile extends Entity<IProfileProps> {

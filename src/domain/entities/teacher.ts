@@ -8,7 +8,7 @@ export interface ITeacherProps {
     deletedAt?: Date;
     isDeleted: boolean;
 
-    profile: Profile;
+    profile?: Profile;
 }
 
 export class Teacher extends Entity<ITeacherProps> {
