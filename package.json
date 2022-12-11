@@ -37,6 +37,7 @@
   "dependencies": {
     "@prisma/client": "^4.7.1",
     "@types/dotenv": "^8.2.0",
+    "dayjs": "^1.11.7",
     "dotenv": "^16.0.3"
   }
 }
