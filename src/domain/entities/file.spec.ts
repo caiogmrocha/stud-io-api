@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker"
-import { File } from "."
+import { File, Post } from "."
 
 describe('[Unit] File Entity', () => {
     it('should return with correct properties', () => {
@@ -13,6 +13,16 @@ describe('[Unit] File Entity', () => {
             updatedAt: new Date(),
             deletedAt: undefined,
             isDeleted: false,
+
+            post: new Post({
+                id: faker.datatype.uuid(),
+                title: faker.name.fullName(),
+                description: faker.random.words(7),
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                deletedAt: undefined,
+                isDeleted: false,
+            })
         })
 
         expect(sut.props).toEqual(expect.objectContaining({
@@ -25,6 +35,8 @@ describe('[Unit] File Entity', () => {
             updatedAt: expect.any(Date),
             deletedAt: undefined,
             isDeleted: expect.any(Boolean),
+
+            post: expect.any(Post),
         }))
     })
 })
