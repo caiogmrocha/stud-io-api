@@ -1,9 +1,9 @@
-import { IAvailableFileMediaTypes } from "@/types";
+import { MediaType } from "../value-objects";
 import { Entity } from ".";
 
 export interface IFileProps {
     id: string;
-    mediaType: IAvailableFileMediaTypes;
+    mediaType: MediaType;
     path: string;
     name: string;
     extension: string;
@@ -23,7 +23,7 @@ export class File extends Entity<IFileProps> {
         return this.props.id;
     }
 
-    get mediaType(): IAvailableFileMediaTypes {
+    get mediaType(): MediaType {
         return this.props.mediaType;
     }
 
