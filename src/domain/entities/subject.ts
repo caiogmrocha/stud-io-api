@@ -1,4 +1,4 @@
-import { Entity, Profile, Student, Teacher } from ".";
+import { Entity, Post, Profile, Student, Teacher } from ".";
 
 export interface ISubjectProps {
     id: string;
@@ -12,6 +12,7 @@ export interface ISubjectProps {
 
     teachers?: Teacher[];
     students?: Student[];
+    posts?: Post[];
 }
 
 export class Subject extends Entity<ISubjectProps> {
@@ -57,5 +58,9 @@ export class Subject extends Entity<ISubjectProps> {
 
     get students(): Student[] {
         return this.props.students || [];
+    }
+
+    get posts(): Post[] {
+        return this.props.posts || [];
     }
 }
