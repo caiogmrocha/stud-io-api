@@ -1,5 +1,5 @@
 import { MediaType } from "../value-objects";
-import { Entity } from ".";
+import { Entity, Post } from ".";
 
 export interface IFileProps {
     id: string;
@@ -7,11 +7,12 @@ export interface IFileProps {
     path: string;
     name: string;
     extension: string;
-
     createdAt: Date;
     updatedAt: Date;
     deletedAt?: Date;
     isDeleted: boolean;
+
+    post?: Post;
 }
 
 export class File extends Entity<IFileProps> {
@@ -53,5 +54,9 @@ export class File extends Entity<IFileProps> {
 
     get isDeleted(): boolean {
         return this.props.isDeleted;
+    }
+
+    get post(): Post | undefined {
+        return this.props.post;
     }
 }
