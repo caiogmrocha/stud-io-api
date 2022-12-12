@@ -1,4 +1,4 @@
-import { Profile, Student, Teacher } from "."
+import { Post, Profile, Student, Teacher } from "."
 
 import { faker } from '@faker-js/faker'
 
@@ -14,6 +14,7 @@ describe('[Unit] Profile Entity', () => {
             updatedAt: new Date(),
             deletedAt: undefined,
             isDeleted: false,
+
             owner: new Student({
                 id: faker.datatype.uuid(),
                 name: faker.name.fullName(),
@@ -22,7 +23,16 @@ describe('[Unit] Profile Entity', () => {
                 deletedAt: undefined,
                 isDeleted: false,
                 profile: undefined,
-            })
+            }),
+            posts: [ new Post({
+                id: faker.datatype.uuid(),
+                title: faker.name.fullName(),
+                description: faker.random.words(7),
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                deletedAt: undefined,
+                isDeleted: false,
+            }) ],
         })
         const secondSut = new Profile({
             id: faker.datatype.uuid(),
@@ -34,6 +44,7 @@ describe('[Unit] Profile Entity', () => {
             updatedAt: new Date(),
             deletedAt: undefined,
             isDeleted: false,
+
             owner: new Teacher({
                 id: faker.datatype.uuid(),
                 name: faker.name.fullName(),
@@ -42,7 +53,16 @@ describe('[Unit] Profile Entity', () => {
                 deletedAt: undefined,
                 isDeleted: false,
                 profile: undefined,
-            })
+            }),
+            posts: [ new Post({
+                id: faker.datatype.uuid(),
+                title: faker.name.fullName(),
+                description: faker.random.words(7),
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                deletedAt: undefined,
+                isDeleted: false,
+            }) ],
         })
 
         expect(firstSut.props).toEqual(expect.objectContaining({
@@ -56,6 +76,9 @@ describe('[Unit] Profile Entity', () => {
             deletedAt: undefined,
             isDeleted: false,
             owner: expect.any(Student),
+            posts: expect.arrayContaining([
+                expect.any(Post),
+            ]),
         }))
         expect(secondSut.props).toEqual(expect.objectContaining({
             id: expect.any(String),
@@ -68,6 +91,9 @@ describe('[Unit] Profile Entity', () => {
             deletedAt: undefined,
             isDeleted: false,
             owner: expect.any(Teacher),
+            posts: expect.arrayContaining([
+                expect.any(Post),
+            ]),
         }))
     })
 })
