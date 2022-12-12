@@ -1,4 +1,4 @@
-import { Entity, Profile } from ".";
+import { Entity, Profile, Subject } from ".";
 
 export interface ITeacherProps {
     id: string;
@@ -9,6 +9,7 @@ export interface ITeacherProps {
     isDeleted: boolean;
 
     profile?: Profile;
+    subjects?: Subject[];
 }
 
 export class Teacher extends Entity<ITeacherProps> {
@@ -38,5 +39,12 @@ export class Teacher extends Entity<ITeacherProps> {
 
     get isDeleted(): boolean {
         return this.props.isDeleted;
+    }
+
+    get profile(): Profile | undefined {
+        return this.props.profile || undefined;
+    }
+    get subjects(): Subject[] {
+        return this.props.subjects || [];
     }
 }
