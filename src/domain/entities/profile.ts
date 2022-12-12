@@ -1,4 +1,4 @@
-import { Entity, Student, Teacher } from ".";
+import { Entity, Post, Student, Teacher } from ".";
 
 export interface IProfileProps {
     id: string;
@@ -12,6 +12,7 @@ export interface IProfileProps {
     isDeleted: boolean;
 
     owner?: Student | Teacher;
+    posts?: Post[];
 }
 
 export class Profile extends Entity<IProfileProps> {
@@ -53,5 +54,12 @@ export class Profile extends Entity<IProfileProps> {
 
     get isDeleted(): boolean {
         return this.props.isDeleted;
+    }
+
+    get owner(): Student | Teacher | undefined {
+        return this.props.owner;
+    }
+    get posts(): Post[] {
+        return this.props.posts || [];
     }
 }
