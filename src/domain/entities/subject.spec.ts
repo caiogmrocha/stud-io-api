@@ -1,4 +1,4 @@
-import { Subject, Teacher, Student } from "."
+import { Subject, Teacher, Student, Post } from "."
 
 import { faker } from "@faker-js/faker"
 
@@ -32,6 +32,15 @@ describe('[Unit] Subject Entity', () => {
                 isDeleted: false,
                 profile: undefined,
             }) ],
+            posts: [ new Post({
+                id: faker.datatype.uuid(),
+                title: faker.name.fullName(),
+                description: faker.random.words(7),
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                deletedAt: undefined,
+                isDeleted: false,
+            }) ]
         })
 
         expect(sut.props).toEqual(expect.objectContaining({
@@ -49,6 +58,9 @@ describe('[Unit] Subject Entity', () => {
             ]),
             students: expect.arrayContaining([
                 expect.any(Student),
+            ]),
+            posts: expect.arrayContaining([
+                expect.any(Post),
             ]),
         }))
     })
