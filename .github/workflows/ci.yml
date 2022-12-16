@@ -1,0 +1,61 @@
+name: CI - Continuous Integration
+
+on: ['push', 'pull_request']
+
+jobs:
+  run-unit-tests:
+    name: Run unit tests
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run unit tests
+        run: npm run test:unit
+
+  run-e2e-tests:
+    name: Run e2e tests
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_USER: root
+      DATABASE_PASS: password
+      DATABASE_HOST: localhost
+      DATABASE_PORT: 3306
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Shutdown Ubuntu MySQL
+        run: sudo service mysql stop
+
+      - name: Setup MySQL
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          mysql root password: $DATABASE_PASS
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Set .env.test variables
+        run: |
+          echo DATABASE_USER=$DATABASE_USER >> .env.test
+          echo DATABASE_PASS=$DATABASE_PASS >> .env.test
+          echo DATABASE_HOST=$DATABASE_HOST >> .env.test
+          echo DATABASE_PORT=$DATABASE_PORT >> .env.test
+
+      - name: Run e2e tests
+        run: npm run test:e2e
