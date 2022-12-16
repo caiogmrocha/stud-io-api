@@ -1,19 +1,22 @@
-import { Entity, Profile, Subject } from ".";
+import { MediaType } from "../value-objects";
+import { Entity, Post } from ".";
 
-export interface IStudentProps {
+export interface IFileProps {
     id: string;
+    mediaType: MediaType;
+    path: string;
     name: string;
+    extension: string;
     createdAt: Date;
     updatedAt: Date;
     deletedAt?: Date;
     isDeleted: boolean;
 
-    profile?: Profile;
-    subjects?: Subject[];
+    post?: Post;
 }
 
-export class Student extends Entity<IStudentProps> {
-    constructor (props: IStudentProps) {
+export class File extends Entity<IFileProps> {
+    constructor (props: IFileProps) {
         super(props);
     }
 
@@ -21,8 +24,20 @@ export class Student extends Entity<IStudentProps> {
         return this.props.id;
     }
 
+    get mediaType(): MediaType {
+        return this.props.mediaType;
+    }
+
+    get path(): string {
+        return this.props.path;
+    }
+
     get name(): string {
         return this.props.name;
+    }
+
+    get extension(): string {
+        return this.props.extension;
     }
 
     get createdAt(): Date {
@@ -41,11 +56,7 @@ export class Student extends Entity<IStudentProps> {
         return this.props.isDeleted;
     }
 
-    get profile(): Profile | undefined {
-        return this.props.profile || undefined;
-    }
-
-    get subjects(): Subject[] {
-        return this.props.subjects || [];
+    get post(): Post | undefined {
+        return this.props.post;
     }
 }

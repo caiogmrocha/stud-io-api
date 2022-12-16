@@ -1,12 +1,13 @@
-import { Profile, Student, Subject } from "."
+import { File, Post, Profile, Subject } from ".";
 
-import { faker } from '@faker-js/faker'
+import { faker } from "@faker-js/faker";
 
-describe('[Unit] Student Entity', () => {
+describe('[Unit] Post Entity', () => {
     it('should return with correct properties', () => {
-        const sut = new Student({
+        const sut = new Post({
             id: faker.datatype.uuid(),
-            name: faker.name.fullName(),
+            title: faker.name.fullName(),
+            description: faker.random.words(7),
             createdAt: new Date(),
             updatedAt: new Date(),
             deletedAt: undefined,
@@ -32,20 +33,35 @@ describe('[Unit] Student Entity', () => {
                 updatedAt: new Date(),
                 deletedAt: undefined,
                 isDeleted: false,
+            }) ],
+            files: [ new File({
+                id: faker.datatype.uuid(),
+                name: faker.word.noun(),
+                path: faker.internet.url(),
+                mediaType: faker.helpers.arrayElement([ 'video', 'image', 'pdf', 'markdown' ]),
+                extension: faker.helpers.arrayElement([ '.mp4', '.png', '.pdf', '.md' ]),
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                deletedAt: undefined,
+                isDeleted: false,
             }) ]
         })
 
         expect(sut.props).toEqual(expect.objectContaining({
             id: expect.any(String),
-            name: expect.any(String),
+            title: expect.any(String),
+            description: expect.any(String),
             createdAt: expect.any(Date),
             updatedAt: expect.any(Date),
             deletedAt: undefined,
-            isDeleted: false,
+            isDeleted: expect.any(Boolean),
 
             profile: expect.any(Profile),
             subjects: expect.arrayContaining([
-                expect.any(Subject)
+                expect.any(Subject),
+            ]),
+            files: expect.arrayContaining([
+                expect.any(File),
             ]),
         }))
     })

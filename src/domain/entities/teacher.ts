@@ -1,6 +1,6 @@
 import { Entity, Profile, Subject } from ".";
 
-export interface IStudentProps {
+export interface ITeacherProps {
     id: string;
     name: string;
     createdAt: Date;
@@ -12,8 +12,8 @@ export interface IStudentProps {
     subjects?: Subject[];
 }
 
-export class Student extends Entity<IStudentProps> {
-    constructor (props: IStudentProps) {
+export class Teacher extends Entity<ITeacherProps> {
+    constructor (props: ITeacherProps) {
         super(props);
     }
 
@@ -44,7 +44,6 @@ export class Student extends Entity<IStudentProps> {
     get profile(): Profile | undefined {
         return this.props.profile || undefined;
     }
-
     get subjects(): Subject[] {
         return this.props.subjects || [];
     }

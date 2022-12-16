@@ -1,17 +1,16 @@
-import { Profile, Student, Subject } from "."
+import { Profile, Subject, Teacher } from "."
 
 import { faker } from '@faker-js/faker'
 
-describe('[Unit] Student Entity', () => {
+describe('[Unit] Teacher Entity', () => {
     it('should return with correct properties', () => {
-        const sut = new Student({
+        const sut = new Teacher({
             id: faker.datatype.uuid(),
             name: faker.name.fullName(),
             createdAt: new Date(),
             updatedAt: new Date(),
             deletedAt: undefined,
             isDeleted: false,
-
             profile: new Profile({
                 id: faker.datatype.uuid(),
                 email: faker.internet.email(),
@@ -32,7 +31,7 @@ describe('[Unit] Student Entity', () => {
                 updatedAt: new Date(),
                 deletedAt: undefined,
                 isDeleted: false,
-            }) ]
+            }) ],
         })
 
         expect(sut.props).toEqual(expect.objectContaining({
