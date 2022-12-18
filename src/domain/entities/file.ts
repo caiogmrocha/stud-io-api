@@ -1,4 +1,4 @@
-import { MimeType } from "../value-objects";
+import { FileExtension, MimeType } from "../value-objects";
 import { Entity, Post } from ".";
 
 export interface IFileProps {
@@ -6,7 +6,7 @@ export interface IFileProps {
   mimeType: MimeType;
   path: string;
   name: string;
-  extension: string;
+  extension: FileExtension;
   createdAt: Date;
   updatedAt: Date;
   deletedAt?: Date;
@@ -36,7 +36,7 @@ export class File extends Entity<IFileProps> {
     return this.props.name;
   }
 
-  get extension(): string {
+  get extension(): FileExtension {
     return this.props.extension;
   }
 

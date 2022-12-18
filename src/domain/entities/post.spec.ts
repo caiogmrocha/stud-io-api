@@ -1,7 +1,7 @@
 import { File, Post, Profile, Subject } from ".";
 
 import { faker } from "@faker-js/faker";
-import { MimeType } from "../value-objects";
+import { FileExtension, MimeType } from "../value-objects";
 
 describe('[Unit] Post Entity', () => {
   it('should return with correct properties', () => {
@@ -49,7 +49,16 @@ describe('[Unit] Post Entity', () => {
           MimeType.create('video/ogg').value,
           MimeType.create('application/pdf').value,
         ]) as MimeType,
-        extension: faker.helpers.arrayElement(['.mp4', '.png', '.pdf', '.md']),
+        extension: faker.helpers.arrayElement([
+          FileExtension.create('.txt').value,
+          FileExtension.create('.html').value,
+          FileExtension.create('.png').value,
+          FileExtension.create('.jpg').value,
+          FileExtension.create('.gif').value,
+          FileExtension.create('.mp4').value,
+          FileExtension.create('.mp3').value,
+          FileExtension.create('.pdf').value,
+        ]) as FileExtension,
         createdAt: new Date(),
         updatedAt: new Date(),
         deletedAt: undefined,
