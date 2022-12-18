@@ -8,6 +8,7 @@ export const validFileExtensions = [
   '.jpg',
   '.gif',
   '.mp4',
+  '.mp3',
   '.pdf',
 ]
 
