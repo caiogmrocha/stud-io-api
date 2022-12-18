@@ -25,13 +25,13 @@ export class MimeType {
     return right(value)
   }
 
-  static create(value: IValidMimeType): Either<InvalidMimeType, MimeType> {
+  static create(value: string): Either<InvalidMimeType, MimeType> {
     const valueValidation = this.validate(value)
 
-    if (valueValidation.isRight()) {
-      return right(new MimeType(value))
+    if (valueValidation.isLeft()) {
+      return left(valueValidation.value)
     }
 
-    return left(valueValidation.value)
+    return right(new MimeType(value))
   }
 }
