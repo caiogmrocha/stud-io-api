@@ -1,1 +1,1 @@
-export * from './media-type';
+export * from './mime-type';
