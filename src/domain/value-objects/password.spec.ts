@@ -13,4 +13,11 @@ describe('[Unit] Password Value Object', () => {
       expect(sut.value).toBeInstanceOf(InvalidPasswordError)
     })
   })
+
+  it('should accept valid password', () => {
+    const sut = Password.create('a'.repeat(12), false)
+
+    expect(sut.isRight()).toBeTruthy()
+    expect(sut.value).toBeInstanceOf(Password)
+  })
 })
