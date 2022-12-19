@@ -1,5 +1,5 @@
 import { Either, left, right } from "@/utils/logic/either";
-import { InvalidFileExtension } from "./errors/invalid-file-extension";
+import { InvalidFileExtensionError } from "./errors/invalid-file-extension";
 
 export const validFileExtensions = [
   '.txt',
@@ -17,15 +17,15 @@ export type IValidFileExtension = typeof validFileExtensions[number]
 export class FileExtension {
   private constructor (private readonly extension: string) {}
 
-  static validate(value: string): Either<InvalidFileExtension, IValidFileExtension> {
+  static validate(value: string): Either<InvalidFileExtensionError, IValidFileExtension> {
     if (!validFileExtensions.includes(value)) {
-      return left(new InvalidFileExtension(value))
+      return left(new InvalidFileExtensionError(value))
     }
 
     return right(value)
   }
 
-  static create(value: string) {
+  static create(value: string): Either<InvalidFileExtensionError, FileExtension> {
     const valueValidation = this.validate(value)
 
     if (valueValidation.isLeft()) {
