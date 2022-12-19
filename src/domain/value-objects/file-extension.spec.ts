@@ -1,4 +1,4 @@
-import { InvalidFileExtension } from "./errors/invalid-file-extension"
+import { InvalidFileExtensionError } from "./errors/invalid-file-extension"
 import { FileExtension } from "./file-extension"
 
 describe('[Unit] File Extension Value Object', () => {
@@ -28,7 +28,7 @@ describe('[Unit] File Extension Value Object', () => {
 
     suts.forEach(sut => {
       expect(sut.isLeft()).toBeTruthy()
-      expect(sut.value).toBeInstanceOf(InvalidFileExtension)
+      expect(sut.value).toBeInstanceOf(InvalidFileExtensionError)
     })
   })
 })

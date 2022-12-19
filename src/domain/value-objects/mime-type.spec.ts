@@ -1,4 +1,4 @@
-import { InvalidMimeType } from "./errors/invalid-mime-type"
+import { InvalidMimeTypeError } from "./errors/invalid-mime-type"
 import { MimeType } from "./mime-type"
 
 describe('[Unit] Media Type Value Object', () => {
@@ -29,7 +29,7 @@ describe('[Unit] Media Type Value Object', () => {
 
     suts.forEach(sut => {
       expect(sut.isLeft()).toBeTruthy()
-      expect(sut.value).toBeInstanceOf(InvalidMimeType)
+      expect(sut.value).toBeInstanceOf(InvalidMimeTypeError)
     })
   })
 })
