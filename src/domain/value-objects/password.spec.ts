@@ -20,4 +20,12 @@ describe('[Unit] Password Value Object', () => {
     expect(sut.isRight()).toBeTruthy()
     expect(sut.value).toBeInstanceOf(Password)
   })
+
+  it('should be able to return hashed password', async () => {
+    const password = Password.create('a'.repeat(12), false).value as Password
+
+    const sut = await password.getHashedValue()
+
+    expect(sut.length).toBe(60)
+  })
 })
