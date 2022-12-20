@@ -1,13 +1,13 @@
 import { Post, Profile, Student, Teacher } from "."
+import { Email, Password } from "../value-objects"
 
 import { faker } from '@faker-js/faker'
-import { Password } from "../value-objects"
 
 describe('[Unit] Profile Entity', () => {
   it('should return with correct properties', () => {
     const firstSut = new Profile({
       id: faker.datatype.uuid(),
-      email: faker.internet.email(),
+      email: Email.create(faker.internet.email()).value as Email,
       password: Password.create(faker.random.alphaNumeric(12), false).value as Password,
       level: Number(faker.random.numeric()),
       type: faker.helpers.arrayElement(['student', 'teacher']),
@@ -37,7 +37,7 @@ describe('[Unit] Profile Entity', () => {
     })
     const secondSut = new Profile({
       id: faker.datatype.uuid(),
-      email: faker.internet.email(),
+      email: Email.create(faker.internet.email()).value as Email,
       password: Password.create(faker.random.alphaNumeric(12), false).value as Password,
       level: Number(faker.random.numeric()),
       type: faker.helpers.arrayElement(['student', 'teacher']),
@@ -68,7 +68,7 @@ describe('[Unit] Profile Entity', () => {
 
     expect(firstSut.props).toEqual(expect.objectContaining({
       id: expect.any(String),
-      email: expect.any(String),
+      email: expect.any(Email),
       password: expect.any(Password),
       level: expect.any(Number),
       type: expect.any(String),
@@ -83,7 +83,7 @@ describe('[Unit] Profile Entity', () => {
     }))
     expect(secondSut.props).toEqual(expect.objectContaining({
       id: expect.any(String),
-      email: expect.any(String),
+      email: expect.any(Email),
       password: expect.any(Password),
       level: expect.any(Number),
       type: expect.any(String),

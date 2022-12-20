@@ -1,9 +1,9 @@
 import { Entity, Post, Student, Teacher } from ".";
-import { Password } from "../value-objects";
+import { Email, Password } from "../value-objects";
 
 export interface IProfileProps {
   id: string;
-  email: string;
+  email: Email;
   password: Password;
   level: number;
   type: 'student' | 'teacher';
@@ -25,7 +25,7 @@ export class Profile extends Entity<IProfileProps> {
     return this.props.id;
   }
 
-  get email(): string {
+  get email(): Email {
     return this.props.email;
   }
 

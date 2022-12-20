@@ -1,7 +1,7 @@
 import { Profile, Student, Subject } from "."
+import { Email, Password } from "../value-objects"
 
 import { faker } from '@faker-js/faker'
-import { Password } from "../value-objects"
 
 describe('[Unit] Student Entity', () => {
   it('should return with correct properties', () => {
@@ -15,7 +15,7 @@ describe('[Unit] Student Entity', () => {
 
       profile: new Profile({
         id: faker.datatype.uuid(),
-        email: faker.internet.email(),
+        email: Email.create(faker.internet.email()).value as Email,
         password: Password.create(faker.random.alphaNumeric(12), false).value as Password,
         level: Number(faker.random.numeric()),
         type: faker.helpers.arrayElement(['student', 'teacher']),

@@ -1,6 +1,7 @@
-import { faker } from "@faker-js/faker"
 import { File, Post } from "."
 import { FileExtension, MimeType } from "../value-objects"
+
+import { faker } from "@faker-js/faker"
 
 describe('[Unit] File Entity', () => {
   it('should return with correct properties', () => {
