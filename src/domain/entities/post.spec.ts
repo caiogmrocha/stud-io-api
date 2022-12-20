@@ -1,7 +1,7 @@
 import { File, Post, Profile, Subject } from ".";
 
 import { faker } from "@faker-js/faker";
-import { FileExtension, MimeType } from "../value-objects";
+import { FileExtension, MimeType, Password } from "../value-objects";
 
 describe('[Unit] Post Entity', () => {
   it('should return with correct properties', () => {
@@ -17,7 +17,7 @@ describe('[Unit] Post Entity', () => {
       profile: new Profile({
         id: faker.datatype.uuid(),
         email: faker.internet.email(),
-        password: faker.random.alphaNumeric(12),
+        password: Password.create(faker.random.alphaNumeric(12), false).value as Password,
         level: Number(faker.random.numeric()),
         type: faker.helpers.arrayElement(['student', 'teacher']),
         createdAt: new Date(),
