@@ -1,62 +1,62 @@
-import { MediaType } from "../value-objects";
+import { FileExtension, MimeType } from "../value-objects";
 import { Entity, Post } from ".";
 
 export interface IFileProps {
-    id: string;
-    mediaType: MediaType;
-    path: string;
-    name: string;
-    extension: string;
-    createdAt: Date;
-    updatedAt: Date;
-    deletedAt?: Date;
-    isDeleted: boolean;
+  id: string;
+  mimeType: MimeType;
+  path: string;
+  name: string;
+  extension: FileExtension;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt?: Date;
+  isDeleted: boolean;
 
-    post?: Post;
+  post?: Post;
 }
 
 export class File extends Entity<IFileProps> {
-    constructor (props: IFileProps) {
-        super(props);
-    }
+  constructor(props: IFileProps) {
+    super(props);
+  }
 
-    get id(): string {
-        return this.props.id;
-    }
+  get id(): string {
+    return this.props.id;
+  }
 
-    get mediaType(): MediaType {
-        return this.props.mediaType;
-    }
+  get mimeType(): MimeType {
+    return this.props.mimeType;
+  }
 
-    get path(): string {
-        return this.props.path;
-    }
+  get path(): string {
+    return this.props.path;
+  }
 
-    get name(): string {
-        return this.props.name;
-    }
+  get name(): string {
+    return this.props.name;
+  }
 
-    get extension(): string {
-        return this.props.extension;
-    }
+  get extension(): FileExtension {
+    return this.props.extension;
+  }
 
-    get createdAt(): Date {
-        return this.props.createdAt;
-    }
+  get createdAt(): Date {
+    return this.props.createdAt;
+  }
 
-    get updatedAt(): Date {
-        return this.props.updatedAt;
-    }
+  get updatedAt(): Date {
+    return this.props.updatedAt;
+  }
 
-    get deletedAt(): Date | undefined {
-        return this.props.deletedAt || undefined;
-    }
+  get deletedAt(): Date | undefined {
+    return this.props.deletedAt || undefined;
+  }
 
-    get isDeleted(): boolean {
-        return this.props.isDeleted;
-    }
+  get isDeleted(): boolean {
+    return this.props.isDeleted;
+  }
 
-    get post(): Post | undefined {
-        return this.props.post;
-    }
+  get post(): Post | undefined {
+    return this.props.post;
+  }
 }
