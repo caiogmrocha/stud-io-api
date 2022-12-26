@@ -14,7 +14,7 @@ enum ProfileType {
 
 model Profile {
   id       String      @id @default(uuid()) @db.Char(36)
-  email    String
+  email    String      @unique
   password String      @db.Char(60)
   level    Decimal     @default(0) @db.Decimal(5, 2)
   type     ProfileType @default(student)
@@ -24,6 +24,22 @@ model Profile {
   deletedAt DateTime? @map("deleted_at")
   isDeleted Boolean   @default(false) @map("is_deleted")
 
-  @@unique([email])
+  student Student?
+
   @@map("profiles")
+}
+
+model Student {
+  id   String @id @default(uuid()) @db.Char(36)
+  name String
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime? @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+  isDeleted Boolean   @default(false) @map("is_deleted")
+
+  profile   Profile @relation(fields: [profileId], references: [id])
+  profileId String  @unique @db.Char(36)
+
+  @@map("students")
 }
