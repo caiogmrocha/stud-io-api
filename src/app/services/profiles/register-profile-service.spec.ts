@@ -1,27 +1,60 @@
 import { RegisterProfileService } from "./register-profile-service";
-import { ProfileAlreadyExistsError } from "./errors/profile-already-exists-error";
 import { InMemoryGetProfilesRepository } from "@/../tests/mocks/infra/in-memory/profiles/in-memory-get-profiles-repository";
-import { IGetProfilesRepository } from "@/app/contracts/repositories/profiles/i-get-profiles-repository";
+import { InMemoryCreateProfileRepository } from "@/../tests/mocks/infra/in-memory/profiles/in-memory-create-profile-repository";
+import { InMemoryCreateStudentRepository } from "@/../tests/mocks/infra/in-memory/students/in-memory-create-student-repository";
+import { InMemoryCreateTeacherRepository } from "@/../tests/mocks/infra/in-memory/teachers/in-memory-create-teacher-repository";
+import { ProfileAlreadyExistsError } from "./errors/profile-already-exists-error";
 import { IProfileModel } from "@/app/contracts/repositories/profiles/i-profile-model";
 import { setupInMemoryDatabase } from "@/../tests/helpers/in-memory-database";
 
 import { faker } from "@faker-js/faker";
 
 type SutTypes = {
-  sut: RegisterProfileService,
-  profilesRepository: IGetProfilesRepository,
+  sut: RegisterProfileService
 }
 
 async function makeSut(profilesData: IProfileModel[] = []): Promise<SutTypes> {
-  await setupInMemoryDatabase({ profiles: profilesData });
+  await setupInMemoryDatabase({
+    profiles: profilesData,
+    students: [],
+    teachers: [],
+  });
 
-  const profilesRepository = new InMemoryGetProfilesRepository();
-  const sut = new RegisterProfileService(profilesRepository);
+  const getProfilesRepository = new InMemoryGetProfilesRepository();
+  const createProfileRepository = new InMemoryCreateProfileRepository();
+  const createStudentRepository = new InMemoryCreateStudentRepository();
+  const createTeacherRepository = new InMemoryCreateTeacherRepository();
+  const sut = new RegisterProfileService(
+    getProfilesRepository,
+    createProfileRepository,
+    createStudentRepository,
+    createTeacherRepository,
+  );
 
-  return { sut, profilesRepository };
+  return { sut };
 }
 
-describe('[Unit] Register Student Service', () => {
+describe('[Unit] Register Profile Service', () => {
+  it('should be able to register the provided profile', async () => {
+    const { sut } = await makeSut();
+
+    const output = await sut.execute({
+      email: faker.internet.email(),
+      password: faker.random.alphaNumeric(12),
+      name: faker.name.fullName(),
+      type: faker.helpers.arrayElement(['student', 'teacher']),
+      subjectsIds: [],
+    });
+
+    expect(output.isRight()).toBeTruthy();
+    expect(output.value).toEqual(expect.objectContaining({
+      profile: expect.objectContaining({
+        name: expect.any(String),
+        email: expect.any(String),
+      })
+    }));
+  });
+
   it('should return ProfileAlreadyExistsError if profile already exists', async () => {
     const commonData = {
       name: faker.name.fullName(),
@@ -39,6 +72,7 @@ describe('[Unit] Register Student Service', () => {
 
     const output = await sut.execute({
       ...commonData,
+      type: faker.helpers.arrayElement(['student', 'teacher']),
       subjectsIds: [],
     });
 
