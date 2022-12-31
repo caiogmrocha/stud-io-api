@@ -1,8 +1,8 @@
 import { RegisterProfileService } from "./register-profile-service";
 import { ProfileAlreadyExistsError } from "./errors/profile-already-exists-error";
 import { InMemoryGetProfilesRepository } from "@/../tests/mocks/infra/in-memory/in-memory-get-profiles-repository";
-import { IGetProfilesRepository } from "@/app/contracts/repositories/i-get-profiles-repository";
-import { IProfileModel } from "@/app/contracts/repositories/i-profile-model";
+import { IGetProfilesRepository } from "@/app/contracts/repositories/profiles/i-get-profiles-repository";
+import { IProfileModel } from "@/app/contracts/repositories/profiles/i-profile-model";
 
 import { faker } from "@faker-js/faker";
 

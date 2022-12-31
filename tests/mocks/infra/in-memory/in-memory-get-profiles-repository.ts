@@ -1,5 +1,5 @@
-import { IGetProfilesRepository, IGetProfilesRepositoryOptions } from "@/app/contracts/repositories/i-get-profiles-repository";
-import { IProfileModel } from "@/app/contracts/repositories/i-profile-model";
+import { IGetProfilesRepository, IGetProfilesRepositoryOptions } from "@/app/contracts/repositories/profiles/i-get-profiles-repository";
+import { IProfileModel } from "@/app/contracts/repositories/profiles/i-profile-model";
 
 export class InMemoryGetProfilesRepository implements IGetProfilesRepository {
   constructor (private rows: IProfileModel[] = []) {}

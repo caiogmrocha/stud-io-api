@@ -1,4 +1,4 @@
-import { IGetProfilesRepository } from "@/app/contracts/repositories/i-get-profiles-repository";
+import { IGetProfilesRepository } from "@/app/contracts/repositories/profiles/i-get-profiles-repository";
 import { IRegisterProfileUseCase, IRegisterProfileUseCaseInputBoundary, IRegisterProfileUseCaseOutPutBoundary } from "@/domain/usecases/profiles/i-register-profile-use-case";
 import { Either, left, right } from "@/utils/logic/either";
 import { ProfileAlreadyExistsError } from "./errors/profile-already-exists-error";
