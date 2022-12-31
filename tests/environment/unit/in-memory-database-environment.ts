@@ -1,15 +1,12 @@
-import { writeFile } from "fs/promises";
-import path from "path";
+import { setupInMemoryDatabase } from "../../helpers/in-memory-database";
 
 export class InMemoryDatabaseEnvironment {
-  private filePath: string;
-
-  constructor (filePath?: string) {
-    this.filePath = filePath || path.resolve(__dirname, '..', '..', 'mocks', 'infra', 'database', 'database.json');
-  }
-
   async setup(): Promise<void> {
-    await writeFile(this.filePath, JSON.stringify({}));
+    await setupInMemoryDatabase({
+      profiles: [],
+      students: [],
+      teachers: [],
+    });
   }
 
   async teardown(): Promise<void> {}

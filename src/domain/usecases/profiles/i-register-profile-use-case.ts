@@ -4,11 +4,11 @@ export type IRegisterProfileUseCaseInputBoundary = {
   name: string;
   email: string;
   password: string;
+  type: 'student' | 'teacher';
   subjectsIds: number[];
 }
 
 export type IRegisterProfileUseCaseOutPutBoundary = {
-  token: string;
   profile: {
     name: string;
     email: string;
