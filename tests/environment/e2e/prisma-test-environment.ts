@@ -24,6 +24,7 @@ export class PrismaTestEnvironment {
   }
 
   async setup(): Promise<void> {
+    console.log('this.connectionString: ', this.connectionString)
     process.env.DATABASE_URL = this.connectionString;
 
     await execAsync('npx prisma migrate deploy');
