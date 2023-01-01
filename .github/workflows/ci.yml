@@ -26,11 +26,6 @@ jobs:
   run-e2e-tests:
     name: Run e2e tests
     runs-on: ubuntu-latest
-    env:
-      DATABASE_USER: root
-      DATABASE_PASS: password
-      DATABASE_HOST: localhost
-      DATABASE_PORT: 3306
 
     steps:
       - name: Checkout repository
@@ -49,13 +44,6 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-
-      - name: Set .env.test variables
-        run: |
-          echo DATABASE_USER=$DATABASE_USER >> .env.test
-          echo DATABASE_PASS=$DATABASE_PASS >> .env.test
-          echo DATABASE_HOST=$DATABASE_HOST >> .env.test
-          echo DATABASE_PORT=$DATABASE_PORT >> .env.test
 
       - name: Run e2e tests
         run: npm run test:e2e
