@@ -3,6 +3,7 @@ import util from 'util';
 import { exec } from 'child_process';
 import { PrismaClient } from '@prisma/client';
 import dotenv from 'dotenv';
+import NodeEnvironment from 'jest-environment-node';
 
 dotenv.config({ path: '.env.test' });
 
@@ -23,9 +24,9 @@ export class PrismaTestEnvironment {
     this.connectionString = `${dbDriver}://${dbUser}:${dbPass}@${dbHost}:${dbPort}/${this.databaseName}`;
   }
 
-  async setup(): Promise<void> {
-    console.log('this.connectionString: ', this.connectionString)
+  async setup(mainEnvironment: NodeEnvironment): Promise<void> {
     process.env.DATABASE_URL = this.connectionString;
+    mainEnvironment.global.process.env.DATABASE_URL = this.connectionString
 
     await execAsync('npx prisma migrate deploy');
   }
