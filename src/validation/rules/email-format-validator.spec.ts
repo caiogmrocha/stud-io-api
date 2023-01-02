@@ -3,6 +3,15 @@ import { EmailFormatValidator } from "./email-format-validator";
 
 describe('[Unit] Email Format Validator', () => {
   it('should return EmailFormatError if the provided value is invalid', async () => {
+    const sut = new EmailFormatValidator('email', 'domain@email.com');
+
+    const result = await sut.validate();
+
+    expect(result.isRight()).toBeTruthy();
+    expect(result.value).toBeUndefined();
+  });
+
+  it('should return EmailFormatError if the provided value is invalid', async () => {
     const suts = [
       new EmailFormatValidator('email', '@email.com').validate(),
       new EmailFormatValidator('email', '.com').validate(),
