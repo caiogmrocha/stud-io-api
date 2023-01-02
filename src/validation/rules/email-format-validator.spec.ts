@@ -2,7 +2,7 @@ import { EmailFormatError } from "../errors/email-format-error";
 import { EmailFormatValidator } from "./email-format-validator";
 
 describe('[Unit] Email Format Validator', () => {
-  it('should return EmailFormatError if the provided value is invalid', async () => {
+  it('should return undefined if the provided value is valid', async () => {
     const sut = new EmailFormatValidator('email', 'domain@email.com');
 
     const result = await sut.validate();
