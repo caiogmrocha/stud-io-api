@@ -2,7 +2,7 @@ import { RequiredValueError } from "../errors/required-value-error";
 import { RequiredValueValidator } from "./required-value-validator";
 
 describe('[Unit] Required Value Validator', () => {
-  it('should return undefined if the provided value is invalid', async () => {
+  it('should return undefined if the provided value is valid', async () => {
     const sut = new RequiredValueValidator('name', 'John Doe');
 
     const result = await sut.validate();
