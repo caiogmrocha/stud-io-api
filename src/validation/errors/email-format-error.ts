@@ -1,6 +1,6 @@
 export class EmailFormatError extends Error {
-  constructor (fieldValue: unknown) {
-    super(`O valor "${fieldValue}" não é um e-mail válido.`);
+  constructor (fieldName: string) {
+    super(`O campo ${fieldName} precisa ser um e-mail válido.`);
     this.name = 'EmailFormatError';
   }
 }

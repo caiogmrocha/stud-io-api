@@ -10,7 +10,7 @@ export class RequiredValueValidator implements IValidator {
 
   async validate(): Promise<Either<RequiredValueError, void>> {
     if (this.fieldValue === undefined || this.fieldValue === null || this.fieldValue === '') {
-      return left(new RequiredValueError());
+      return left(new RequiredValueError(this.fieldName));
     }
 
     return right(undefined);

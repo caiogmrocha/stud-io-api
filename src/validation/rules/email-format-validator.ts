@@ -12,12 +12,12 @@ export class EmailFormatValidator implements IValidator {
   async validate(): Promise<Either<EmailFormatError, void>> {
     if (typeof this.fieldValue === 'string') {
       if (!emailRegex.test(this.fieldValue)) {
-        return left(new EmailFormatError(this.fieldValue));
+        return left(new EmailFormatError(this.fieldName));
       }
 
       return right(undefined);
     } else {
-      return left(new EmailFormatError(this.fieldValue));
+      return left(new EmailFormatError(this.fieldName));
     }
   }
 }
