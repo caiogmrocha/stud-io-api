@@ -1,10 +1,28 @@
 import { ProfileAlreadyExistsError } from '@/app/services/profiles/errors/profile-already-exists-error';
-import { prisma } from '@/infra/prisma/prisma';
+import { ValidationCompositeError } from '@/validation/errors/validation-composite-error';
 import { app } from '@/main/server';
+
+import { prisma } from '@/infra/prisma/prisma';
 import { faker } from '@faker-js/faker';
 import request from 'supertest';
 
 describe('[E2E] Register Profile Controller', () => {
+  it('should return 422 if the provided data is invalid', async () => {
+    const response = await request(app).post('/profiles').send({
+      name: 12314,
+      email: '@email.com',
+      password: '12345678',
+      subjectsIds: [],
+    });
+
+    expect(response.status).toBe(422);
+    expect(response.body).toEqual(expect.objectContaining({
+      error: expect.objectContaining({
+        name: ValidationCompositeError.name,
+      }),
+    }));
+  });
+
   it('should return 403 if the provided e-mail already was registered', async () => {
     const email = faker.internet.email();
 
@@ -12,6 +30,7 @@ describe('[E2E] Register Profile Controller', () => {
       data: {
         email,
         password: faker.random.alphaNumeric(12),
+        type: 'student',
         student: {
           create: {
             name: faker.name.fullName(),
@@ -24,6 +43,7 @@ describe('[E2E] Register Profile Controller', () => {
       name: faker.name.fullName(),
       email,
       password: faker.random.alphaNumeric(12),
+      type: 'student',
       subjectIds: [],
     });
 
