@@ -35,8 +35,6 @@ export class RegisterProfileController implements IController {
 
       const validationResult = await validationComposite.validate();
 
-      console.log({ validationResult })
-
       if (validationResult.isLeft()) {
         return unprocessable(validationResult.value);
       }

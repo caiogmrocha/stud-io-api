@@ -7,6 +7,19 @@ import { faker } from '@faker-js/faker';
 import request from 'supertest';
 
 describe('[E2E] Register Profile Controller', () => {
+  it('should return 201 if the profile has been registered', async () => {
+    const response = await request(app).post('/profiles').send({
+      name: 'John Doe',
+      email: 'john@doe.com',
+      password: 'abcdefghijkl',
+      type: 'student',
+      subjectsIds: [],
+    });
+
+    expect(response.status).toBe(201);
+    expect(response.body).toBeNull();
+  });
+
   it('should return 422 if the provided data is invalid', async () => {
     const response = await request(app).post('/profiles').send({
       name: 12314,
