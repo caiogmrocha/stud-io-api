@@ -1,12 +1,18 @@
 import { ICreateProfileRepository } from "@/app/contracts/repositories/profiles/i-create-profile-repository";
 import { IGetProfilesRepository } from "@/app/contracts/repositories/profiles/i-get-profiles-repository";
 import { ICreateStudentRepository } from "@/app/contracts/repositories/students/i-create-student-repository";
-import { IStudentModel } from "@/app/contracts/repositories/students/i-student-model";
 import { ICreateTeacherRepository } from "@/app/contracts/repositories/teachers/i-create-teacher-repository";
+import { IStudentModel } from "@/app/contracts/repositories/students/i-student-model";
 import { ITeacherModel } from "@/app/contracts/repositories/teachers/i-teacher-model";
-import { IRegisterProfileUseCase, IRegisterProfileUseCaseInputBoundary, IRegisterProfileUseCaseOutPutBoundary } from "@/domain/usecases/profiles/i-register-profile-use-case";
-import { Either, left, right } from "@/utils/logic/either";
 import { ProfileAlreadyExistsError } from "./errors/profile-already-exists-error";
+import {
+  IRegisterProfileUseCase,
+  IRegisterProfileUseCaseInputBoundary,
+  IRegisterProfileUseCaseOutPutBoundary
+} from "@/domain/usecases/profiles/i-register-profile-use-case";
+
+import { hash } from "@/utils/cryptography";
+import { Either, left, right } from "@/utils/logic/either";
 
 export class RegisterProfileService implements IRegisterProfileUseCase {
   constructor (
@@ -30,7 +36,7 @@ export class RegisterProfileService implements IRegisterProfileUseCase {
 
     const createdProfile = await this.createProfileRepository.create({
       email: input.email,
-      password: input.password,
+      password: await hash(input.password, 10),
       level: 0,
       type: input.type,
     });
