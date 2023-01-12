@@ -13,7 +13,7 @@ export default class E2ETestEnvironment extends NodeEnvironment {
 	}
 
 	async setup(): Promise<void> {
-    await this.prismaTestEnvironment.setup();
+    await this.prismaTestEnvironment.setup(this);
 
 		return super.setup();
 	}
