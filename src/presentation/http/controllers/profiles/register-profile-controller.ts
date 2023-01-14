@@ -6,7 +6,16 @@ import { MinimumValueValidator } from "@/validation/rules/minimum-value-validato
 import { RequiredValueValidator } from "@/validation/rules/required-value-validator";
 import { ValueInListValidator } from "@/validation/rules/value-in-list-validator";
 import { ValidationComposite } from "@/validation/validation-composite";
-import { clientError, conflict, created, IController, IHttpRequest, IHttpResponse, serverError, unprocessable } from "../contracts";
+import {
+  IController,
+  IHttpRequest,
+  IHttpResponse,
+  clientError,
+  conflict,
+  created,
+  serverError,
+  unprocessable
+} from "../../contracts";
 
 export type IRegisterProfileControllerRequestBody = {
   name: string;
