@@ -43,7 +43,7 @@ export class AuthenticateProfileController implements IController {
         }
       }
 
-      return ok(true);
+      return ok(result.value);
     } catch (error) {
       return serverError(error as Error);
     }

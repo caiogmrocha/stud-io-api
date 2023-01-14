@@ -4,7 +4,7 @@ import { IJWTAuthenticationProvider } from "@/app/contracts/auth/jwt/i-jwt-authe
 import { ProfileDoesNotExistsError } from "./errors/profile-does-not-exists-error";
 
 import { Either, left, right } from "@/utils/logic/either";
-import { compare } from "bcrypt";
+import { compare } from "@/utils/cryptography";
 
 export class AuthenticateProfileService implements IAuthenticateProfileUseCase {
   constructor (
