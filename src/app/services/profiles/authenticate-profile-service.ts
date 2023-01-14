@@ -29,6 +29,11 @@ export class AuthenticateProfileService implements IAuthenticateProfileUseCase {
       return left(new ProfileDoesNotExistsError());
     }
 
+    const token = await this.jwtAuthenticationProvider.sign({
+      id: profileFoundedByEmail.id,
+      ...input
+    }, 36000);
+
     return right({ token: 'string' });
   }
 }
