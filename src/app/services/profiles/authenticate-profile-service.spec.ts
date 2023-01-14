@@ -27,6 +27,29 @@ async function makeSut(profilesData: IProfileModel[] = []): Promise<SutTypes> {
 }
 
 describe('[Unit] Authenticate Profile Service', () => {
+  it('should return token if the provided e-mail and password match with some profile in data source', async () => {
+    const email = faker.internet.email();
+    const password = faker.random.alphaNumeric(12);
+    const { sut } = await makeSut([
+      {
+        id: faker.datatype.uuid(),
+        email,
+        password: await hash(password, 10),
+        type: 'student',
+        level: 10,
+        created_at: new Date(),
+        is_deleted: false,
+      }
+    ]);
+
+    const result = await sut.execute({ email, password });
+
+    expect(result.isRight()).toBeTruthy();
+    expect(result.value).toEqual(expect.objectContaining({
+      token: expect.any(String),
+    }));
+  });
+
   it('should return ProfileDoesNotExistsError if the provided e-mail and password does not exists in data source', async () => {
     const { sut } = await makeSut([
       {

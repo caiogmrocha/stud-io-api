@@ -1,9 +1,10 @@
-import { IJWTAuthenticationProvider } from "@/app/contracts/auth/jwt/i-jwt-authentication-provider";
-import { IGetProfilesRepository } from "@/app/contracts/repositories/profiles/i-get-profiles-repository";
 import { IAuthenticateProfileUseCase, IAuthenticateProfileUseCaseInputBoundary, IAuthenticateProfileUseCaseOutPutBoundary } from "@/domain/usecases/profiles/i-authentaticate-profile-use-case";
+import { IGetProfilesRepository } from "@/app/contracts/repositories/profiles/i-get-profiles-repository";
+import { IJWTAuthenticationProvider } from "@/app/contracts/auth/jwt/i-jwt-authentication-provider";
+import { ProfileDoesNotExistsError } from "./errors/profile-does-not-exists-error";
+
 import { Either, left, right } from "@/utils/logic/either";
 import { compare } from "bcrypt";
-import { ProfileDoesNotExistsError } from "./errors/profile-does-not-exists-error";
 
 export class AuthenticateProfileService implements IAuthenticateProfileUseCase {
   constructor (
@@ -34,6 +35,10 @@ export class AuthenticateProfileService implements IAuthenticateProfileUseCase {
       ...input
     }, 36000);
 
-    return right({ token: 'string' });
+    if (token.isLeft()) {
+      return left(token.value);
+    }
+
+    return right({ token: token.value });
   }
 }
