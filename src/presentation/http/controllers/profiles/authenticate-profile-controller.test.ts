@@ -1,23 +1,23 @@
 import { app } from '@/main/server';
 import { ValidationCompositeError } from '@/validation/errors/validation-composite-error';
+import { ProfileDoesNotExistsError } from '@/app/services/profiles/errors/profile-does-not-exists-error';
 
 import { faker } from '@faker-js/faker';
 import { prisma } from '@/infra/prisma/prisma';
 import request from 'supertest';
-import { ProfileDoesNotExistsError } from '@/app/services/profiles/errors/profile-does-not-exists-error';
+import { hash } from '@/utils/cryptography';
 
 describe('[E2E] Authenticate Profile Controller', () => {
-  let sharedData;
+  let sharedData = {
+    email: faker.internet.email(),
+    password: faker.random.alphaNumeric(12),
+  };
 
   beforeAll(async () => {
-    sharedData = {
-      email: faker.internet.email(),
-      password: faker.random.alphaNumeric(12),
-    };
-
     await prisma.profile.create({
       data: {
-        ...sharedData,
+        email: sharedData.email,
+        password: await hash(sharedData.password, 10),
         type: 'student',
         student: {
           create: {
@@ -26,6 +26,15 @@ describe('[E2E] Authenticate Profile Controller', () => {
         },
       },
     });
+  });
+
+  it('should return 200 if the authentication is a success', async () => {
+    const response = await request(app).post('/profiles/login').send(sharedData);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual(expect.objectContaining({
+      token: expect.any(String),
+    }));
   });
 
   it('should return 401 if the provided e-mail and password match with some profile in data source', async () => {
