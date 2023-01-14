@@ -1,9 +1,10 @@
+import { ProfileDoesNotExistsError } from "@/app/services/profiles/errors/profile-does-not-exists-error";
 import { IAuthenticateProfileUseCase } from "@/domain/usecases/profiles/i-authentaticate-profile-use-case";
 import { EmailFormatValidator } from "@/validation/rules/email-format-validator";
 import { MinimumValueValidator } from "@/validation/rules/minimum-value-validator";
 import { RequiredValueValidator } from "@/validation/rules/required-value-validator";
 import { ValidationComposite } from "@/validation/validation-composite";
-import { IController, IHttpRequest, IHttpResponse, ok, serverError, unprocessable } from "../../contracts";
+import { clientError, IController, IHttpRequest, IHttpResponse, ok, serverError, unauthorized, unprocessable } from "../../contracts";
 
 export type IAuthenticateProfileControllerRequestBody = {
   email: string;
@@ -26,6 +27,20 @@ export class AuthenticateProfileController implements IController {
 
       if (validationResult.isLeft()) {
         return unprocessable(validationResult.value);
+      }
+
+      const result = await this.authenticateProfileUseCase.execute(body);
+
+      if (result.isLeft()) {
+        const error = result.value;
+
+        switch (error.constructor) {
+          case ProfileDoesNotExistsError:
+            return unauthorized(error);
+
+          default:
+            return clientError(error);
+        }
       }
 
       return ok(true);
