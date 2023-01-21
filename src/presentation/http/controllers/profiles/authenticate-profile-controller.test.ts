@@ -5,7 +5,7 @@ import { ProfileDoesNotExistsError } from '@/app/services/profiles/errors/profil
 import { faker } from '@faker-js/faker';
 import { prisma } from '@/infra/prisma/prisma';
 import request from 'supertest';
-import { hash } from '@/utils/cryptography';
+import bcrypt from 'bcrypt';
 
 describe('[E2E] Authenticate Profile Controller', () => {
   let sharedData = {
@@ -17,7 +17,7 @@ describe('[E2E] Authenticate Profile Controller', () => {
     await prisma.profile.create({
       data: {
         email: sharedData.email,
-        password: await hash(sharedData.password, 10),
+        password: await bcrypt.hash(sharedData.password, 10),
         type: 'student',
         student: {
           create: {

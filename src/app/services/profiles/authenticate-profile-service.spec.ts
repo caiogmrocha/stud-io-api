@@ -1,12 +1,14 @@
-import { setupInMemoryDatabase } from "@/../tests/helpers/in-memory-database";
-import { FakeAuthenticationJWTProvider } from "@/../tests/mocks/infra/auth/jwt/fake-jwt-authentication-provider";
 import { InMemoryGetProfilesRepository } from "@/../tests/mocks/infra/in-memory/profiles/in-memory-get-profiles-repository";
 import { IProfileModel } from "@/app/contracts/repositories/profiles/i-profile-model";
 import { IAuthenticateProfileUseCase } from "@/domain/usecases/profiles/i-authentaticate-profile-use-case"
-import { faker } from "@faker-js/faker";
-import { hash } from "bcrypt";
+import { FakeAuthenticationJWTProvider } from "@/../tests/mocks/infra/auth/jwt/fake-jwt-authentication-provider";
+import { FakeBCryptProvider } from "@/../tests/mocks/infra/encription/bcrypt/fake-bcrypt-provider";
 import { AuthenticateProfileService } from "./authenticate-profile-service"
 import { ProfileDoesNotExistsError } from "./errors/profile-does-not-exists-error";
+import { setupInMemoryDatabase } from "@/../tests/helpers/in-memory-database";
+
+import { faker } from "@faker-js/faker";
+import bcrypt from 'bcrypt';
 
 type SutTypes = {
   sut: IAuthenticateProfileUseCase,
@@ -21,7 +23,12 @@ async function makeSut(profilesData: IProfileModel[] = []): Promise<SutTypes> {
 
   const getProfilesRepository = new InMemoryGetProfilesRepository();
   const jwtAuthenticationProvider = new FakeAuthenticationJWTProvider();
-  const sut = new AuthenticateProfileService(getProfilesRepository, jwtAuthenticationProvider);
+  const bcryptProvider = new FakeBCryptProvider();
+  const sut = new AuthenticateProfileService(
+    getProfilesRepository,
+    jwtAuthenticationProvider,
+    bcryptProvider,
+  );
 
   return { sut };
 }
@@ -34,7 +41,7 @@ describe('[Unit] Authenticate Profile Service', () => {
       {
         id: faker.datatype.uuid(),
         email,
-        password: await hash(password, 10),
+        password: await bcrypt.hash(password, 10),
         type: 'student',
         level: 10,
         created_at: new Date(),
@@ -55,7 +62,7 @@ describe('[Unit] Authenticate Profile Service', () => {
       {
         id: faker.datatype.uuid(),
         email: faker.internet.email(),
-        password: await hash(faker.random.alphaNumeric(12), 10),
+        password: await bcrypt.hash(faker.random.alphaNumeric(12), 10),
         type: 'student',
         level: 10,
         created_at: new Date(),

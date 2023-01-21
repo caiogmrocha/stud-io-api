@@ -1,15 +1,16 @@
 import { IAuthenticateProfileUseCase, IAuthenticateProfileUseCaseInputBoundary, IAuthenticateProfileUseCaseOutPutBoundary } from "@/domain/usecases/profiles/i-authentaticate-profile-use-case";
 import { IGetProfilesRepository } from "@/app/contracts/repositories/profiles/i-get-profiles-repository";
 import { IJWTAuthenticationProvider } from "@/app/contracts/auth/jwt/i-jwt-authentication-provider";
+import { IBCryptProvider } from "@/app/contracts/encription/bcrypt/i-bcrypt-provider";
 import { ProfileDoesNotExistsError } from "./errors/profile-does-not-exists-error";
 
 import { Either, left, right } from "@/utils/logic/either";
-import { compare } from "@/utils/cryptography";
 
 export class AuthenticateProfileService implements IAuthenticateProfileUseCase {
   constructor (
     private readonly getProfilesRepository: IGetProfilesRepository,
     private readonly jwtAuthenticationProvider: IJWTAuthenticationProvider,
+    private readonly bcryptHashProvider: IBCryptProvider,
   ) {}
 
   async execute(input: IAuthenticateProfileUseCaseInputBoundary): Promise<Either<
@@ -24,9 +25,9 @@ export class AuthenticateProfileService implements IAuthenticateProfileUseCase {
       return left(new ProfileDoesNotExistsError());
     }
 
-    const passwordMatchWithProfile = await compare(input.password, profileFoundedByEmail.password);
+    const passwordMatchWithProfile = await this.bcryptHashProvider.compare(input.password, profileFoundedByEmail.password);
 
-    if (!passwordMatchWithProfile) {
+    if ((passwordMatchWithProfile.isRight() && !passwordMatchWithProfile) || passwordMatchWithProfile.isLeft()) {
       return left(new ProfileDoesNotExistsError());
     }
 
