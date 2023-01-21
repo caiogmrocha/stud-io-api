@@ -34,6 +34,7 @@ jobs:
       DATABASE_USER: root
       DATABASE_PASS: password
       DATABASE_NAME: stud_io_test
+      JWT_SECRET: 795e3633541d6a898b8e1f135b916e17
 
     steps:
       - name: Checkout repository
@@ -62,6 +63,7 @@ jobs:
           echo DATABASE_USER=$DATABASE_USER >> .env.test
           echo DATABASE_PASS=$DATABASE_PASS >> .env.test
           echo DATABASE_PASS=$DATABASE_PASS >> .env.test
+          echo JWT_SECRET=$JWT_SECRET >> .env.test
 
       - name: Run e2e tests
         run: npm run test:e2e

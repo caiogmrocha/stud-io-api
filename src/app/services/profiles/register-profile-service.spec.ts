@@ -8,6 +8,7 @@ import { IProfileModel } from "@/app/contracts/repositories/profiles/i-profile-m
 import { setupInMemoryDatabase } from "@/../tests/helpers/in-memory-database";
 
 import { faker } from "@faker-js/faker";
+import { FakeBCryptProvider } from "@/../tests/mocks/infra/encription/bcrypt/fake-bcrypt-provider";
 
 type SutTypes = {
   sut: RegisterProfileService
@@ -24,11 +25,13 @@ async function makeSut(profilesData: IProfileModel[] = []): Promise<SutTypes> {
   const createProfileRepository = new InMemoryCreateProfileRepository();
   const createStudentRepository = new InMemoryCreateStudentRepository();
   const createTeacherRepository = new InMemoryCreateTeacherRepository();
+  const bcryptProvider = new FakeBCryptProvider();
   const sut = new RegisterProfileService(
     getProfilesRepository,
     createProfileRepository,
     createStudentRepository,
     createTeacherRepository,
+    bcryptProvider,
   );
 
   return { sut };

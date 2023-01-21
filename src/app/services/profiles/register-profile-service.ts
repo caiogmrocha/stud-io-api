@@ -4,14 +4,15 @@ import { ICreateStudentRepository } from "@/app/contracts/repositories/students/
 import { ICreateTeacherRepository } from "@/app/contracts/repositories/teachers/i-create-teacher-repository";
 import { IStudentModel } from "@/app/contracts/repositories/students/i-student-model";
 import { ITeacherModel } from "@/app/contracts/repositories/teachers/i-teacher-model";
+import { IBCryptProvider } from "@/app/contracts/encription/bcrypt/i-bcrypt-provider";
 import { ProfileAlreadyExistsError } from "./errors/profile-already-exists-error";
+import { BCryptHashError } from "@/app/contracts/encription/bcrypt/errors/bcrypt-hash-error";
 import {
   IRegisterProfileUseCase,
   IRegisterProfileUseCaseInputBoundary,
   IRegisterProfileUseCaseOutPutBoundary
 } from "@/domain/usecases/profiles/i-register-profile-use-case";
 
-import { hash } from "@/utils/cryptography";
 import { Either, left, right } from "@/utils/logic/either";
 
 export class RegisterProfileService implements IRegisterProfileUseCase {
@@ -19,11 +20,13 @@ export class RegisterProfileService implements IRegisterProfileUseCase {
     private readonly getProfilesRepository: IGetProfilesRepository,
     private readonly createProfileRepository: ICreateProfileRepository,
     private readonly createStudentRepository: ICreateStudentRepository,
-    private readonly createTeacherRepository: ICreateTeacherRepository
+    private readonly createTeacherRepository: ICreateTeacherRepository,
+    private readonly bcryptHashProvider: IBCryptProvider,
   ) {}
 
   async execute(input: IRegisterProfileUseCaseInputBoundary): Promise<Either<
-    ProfileAlreadyExistsError,
+    | ProfileAlreadyExistsError
+    | BCryptHashError,
     IRegisterProfileUseCaseOutPutBoundary
   >> {
     const profileAlreadyExists = await this.getProfilesRepository.get({
@@ -34,9 +37,15 @@ export class RegisterProfileService implements IRegisterProfileUseCase {
       return left(new ProfileAlreadyExistsError(input.email));
     }
 
+    const hashedPassword = await this.bcryptHashProvider.hash(input.password, 10);
+
+    if (hashedPassword.isLeft()) {
+      return left(hashedPassword.value);
+    }
+
     const createdProfile = await this.createProfileRepository.create({
       email: input.email,
-      password: await hash(input.password, 10),
+      password: hashedPassword.value,
       level: 0,
       type: input.type,
     });
