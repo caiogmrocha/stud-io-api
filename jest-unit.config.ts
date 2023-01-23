@@ -6,9 +6,10 @@ export default {
   collectCoverageFrom: [
     'src/**/*.ts'
   ],
-  testEnvironment: 'node',
+  testEnvironment: './tests/environment/unit/index.ts',
   moduleNameMapper: {
     '@/(.*)': '<rootDir>/src/$1'
   },
+  modulePathIgnorePatterns: ["<rootDir>/tests/mocks/infra/database"],
   testRegex: '.spec.ts$'
 };
