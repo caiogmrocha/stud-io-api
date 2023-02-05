@@ -8,7 +8,7 @@ export interface IProfileProps {
   level: number;
   type: 'student' | 'teacher';
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt?: Date;
   deletedAt?: Date;
   isDeleted: boolean;
 
@@ -45,7 +45,7 @@ export class Profile extends Entity<IProfileProps> {
     return this.props.createdAt;
   }
 
-  get updatedAt(): Date {
+  get updatedAt(): Date | undefined {
     return this.props.updatedAt;
   }
 
