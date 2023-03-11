@@ -4,11 +4,13 @@ export interface IStudentProps {
   id: string;
   name: string;
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt?: Date;
   deletedAt?: Date;
   isDeleted: boolean;
 
   profile?: Profile;
+  profileId: string;
+
   subjects?: Subject[];
 }
 
@@ -29,8 +31,8 @@ export class Student extends Entity<IStudentProps> {
     return this.props.createdAt;
   }
 
-  get updatedAt(): Date {
-    return this.props.updatedAt;
+  get updatedAt(): Date | undefined {
+    return this.props.updatedAt || undefined;
   }
 
   get deletedAt(): Date | undefined {
@@ -43,6 +45,10 @@ export class Student extends Entity<IStudentProps> {
 
   get profile(): Profile | undefined {
     return this.props.profile || undefined;
+  }
+
+  get profileId(): string {
+    return this.props.profileId;
   }
 
   get subjects(): Subject[] {

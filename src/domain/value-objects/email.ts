@@ -13,7 +13,7 @@ export class Email {
     return right(value)
   }
 
-  static create(value: string) {
+  static create(value: string): Either<InvalidEmailError, Email> {
     const valueValidation = this.validate(value)
 
     if (valueValidation.isLeft()) {
@@ -21,5 +21,9 @@ export class Email {
     }
 
     return right(new Email(valueValidation.value))
+  }
+
+  get value(): string {
+    return this.email;
   }
 }

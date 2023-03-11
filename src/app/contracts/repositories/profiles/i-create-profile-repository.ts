@@ -6,6 +6,8 @@ export type IProfileModelToCreate = Omit<IProfileModel, (
   | 'updated_at'
   | 'deleted_at'
   | 'is_deleted'
+  | 'student'
+  | 'teacher'
 )>;
 
 export interface ICreateProfileRepository {

@@ -6,6 +6,7 @@ export type ITeacherModelToCreate = Omit<ITeacherModel, (
   | 'updated_at'
   | 'deleted_at'
   | 'is_deleted'
+  | 'profile'
 )>;
 
 export interface ICreateTeacherRepository {

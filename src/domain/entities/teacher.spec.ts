@@ -12,6 +12,7 @@ describe('[Unit] Teacher Entity', () => {
       updatedAt: new Date(),
       deletedAt: undefined,
       isDeleted: false,
+
       profile: new Profile({
         id: faker.datatype.uuid(),
         email: Email.create(faker.internet.email()).value as Email,
@@ -23,6 +24,8 @@ describe('[Unit] Teacher Entity', () => {
         deletedAt: undefined,
         isDeleted: false,
       }),
+      profileId: faker.datatype.uuid(),
+
       subjects: [new Subject({
         id: faker.datatype.uuid(),
         name: faker.name.firstName(),

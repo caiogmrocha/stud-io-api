@@ -1,3 +1,5 @@
+import { IProfileModel } from "../profiles/i-profile-model";
+
 export type ITeacherModel = {
   id: string;
   name: string;
@@ -7,4 +9,5 @@ export type ITeacherModel = {
   is_deleted: boolean;
 
   profile_id: string;
+  profile?: IProfileModel;
 }
