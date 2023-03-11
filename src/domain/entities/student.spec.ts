@@ -24,6 +24,7 @@ describe('[Unit] Student Entity', () => {
         deletedAt: undefined,
         isDeleted: false,
       }),
+      profileId: faker.datatype.uuid(),
       subjects: [new Subject({
         id: faker.datatype.uuid(),
         name: faker.name.firstName(),

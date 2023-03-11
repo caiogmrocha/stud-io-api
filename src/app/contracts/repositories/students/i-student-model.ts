@@ -1,3 +1,5 @@
+import { IProfileModel } from "../profiles/i-profile-model";
+
 export type IStudentModel = {
   id: string;
   name: string;
@@ -7,4 +9,5 @@ export type IStudentModel = {
   is_deleted: boolean;
 
   profile_id: string;
+  profile?: IProfileModel;
 }

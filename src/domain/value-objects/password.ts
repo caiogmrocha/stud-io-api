@@ -33,4 +33,8 @@ export class Password {
 
     return await hash(this.password, 8)
   }
+
+  get value(): string {
+    return this.password;
+  }
 }

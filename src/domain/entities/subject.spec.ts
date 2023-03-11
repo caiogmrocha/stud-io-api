@@ -22,6 +22,7 @@ describe('[Unit] Subject Entity', () => {
         deletedAt: undefined,
         isDeleted: false,
         profile: undefined,
+        profileId: faker.datatype.uuid(),
       })],
       teachers: [new Teacher({
         id: faker.datatype.uuid(),
@@ -31,6 +32,7 @@ describe('[Unit] Subject Entity', () => {
         deletedAt: undefined,
         isDeleted: false,
         profile: undefined,
+        profileId: faker.datatype.uuid(),
       })],
       posts: [new Post({
         id: faker.datatype.uuid(),

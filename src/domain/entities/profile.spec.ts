@@ -24,6 +24,7 @@ describe('[Unit] Profile Entity', () => {
         deletedAt: undefined,
         isDeleted: false,
         profile: undefined,
+        profileId: faker.datatype.uuid(),
       }),
       posts: [new Post({
         id: faker.datatype.uuid(),
@@ -54,6 +55,7 @@ describe('[Unit] Profile Entity', () => {
         deletedAt: undefined,
         isDeleted: false,
         profile: undefined,
+        profileId: faker.datatype.uuid(),
       }),
       posts: [new Post({
         id: faker.datatype.uuid(),

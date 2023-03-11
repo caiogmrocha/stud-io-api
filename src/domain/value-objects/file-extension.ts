@@ -10,14 +10,14 @@ export const validFileExtensions = [
   '.mp4',
   '.mp3',
   '.pdf',
-]
+] as const;
 
 export type IValidFileExtension = typeof validFileExtensions[number]
 
 export class FileExtension {
-  private constructor (private readonly extension: string) {}
+  private constructor (private readonly extension: IValidFileExtension) {}
 
-  static validate(value: string): Either<InvalidFileExtensionError, IValidFileExtension> {
+  static validate(value: any): Either<InvalidFileExtensionError, IValidFileExtension> {
     if (!validFileExtensions.includes(value)) {
       return left(new InvalidFileExtensionError(value))
     }
@@ -25,7 +25,7 @@ export class FileExtension {
     return right(value)
   }
 
-  static create(value: string): Either<InvalidFileExtensionError, FileExtension> {
+  static create(value: any): Either<InvalidFileExtensionError, FileExtension> {
     const valueValidation = this.validate(value)
 
     if (valueValidation.isLeft()) {
@@ -33,5 +33,9 @@ export class FileExtension {
     }
 
     return right(new FileExtension(value))
+  }
+
+  get value(): IValidFileExtension {
+    return this.extension;
   }
 }

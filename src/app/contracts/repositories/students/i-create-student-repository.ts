@@ -6,6 +6,7 @@ export type IStudentModelToCreate = Omit<IStudentModel, (
   | 'updated_at'
   | 'deleted_at'
   | 'is_deleted'
+  | 'profile'
 )>;
 
 export interface ICreateStudentRepository {
