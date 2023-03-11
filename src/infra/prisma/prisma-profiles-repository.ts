@@ -36,6 +36,3 @@ export class PrismaProfilesRepository implements IGetProfilesRepository, ICreate
     return ProfileMapper.fromPrismaToModel(createdData);
   }
 };
-
-
-(new PrismaProfilesRepository).get().then(console.log)

@@ -8,7 +8,7 @@ import { ProfileDoesNotExistsError } from "./errors/profile-does-not-exists-erro
 export class GetProfileDetailsService implements IGetProfileDetailsUseCase {
   constructor (private readonly getProfilesRepository: IGetProfilesRepository) {}
 
-  async execute(input: IGetProfileDetailsUseCaseInputBoundary): Promise<Either<Error, Profile>> {
+  async execute(input: IGetProfileDetailsUseCaseInputBoundary): Promise<Either<ProfileDoesNotExistsError, Profile>> {
     const [ profileData ] = await this.getProfilesRepository.get({
       where: [ [ 'id', '=', input.profileId ] ],
       relations: {

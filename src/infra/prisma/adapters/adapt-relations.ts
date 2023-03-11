@@ -8,12 +8,10 @@ export function adaptRelations<
 >(withClause: IRelationsClauseOption<T>) {
   const adaptedObject = {};
 
-  for (const [model, options] of Object.entries(withClause)) {
-    const { fields } = options as { fields: string[] };
-
+  for (const [model, options] of Object.entries(withClause) as any) {
     Object.assign(adaptedObject, {
-      [model]: fields.includes('*') ? true : {
-        select: fields.reduce((accumulator, field) => {
+      [model]: typeof options === 'boolean' ? options : {
+        select: options.fields.reduce((accumulator: object, field: string) => {
           return Object.assign(accumulator, {
             [field]: true
           });
