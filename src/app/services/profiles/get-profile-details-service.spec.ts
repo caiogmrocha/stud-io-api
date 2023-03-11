@@ -20,7 +20,7 @@ async function makeSut(profilesData: IProfileModel[] = []) {
   return { sut }
 }
 
-describe('[] Get Profile Details Service', () => {
+describe('[Unit] Get Profile Details Service', () => {
   it('should return null if profile does not exists', async () => {
     const { sut } = await makeSut();
 
