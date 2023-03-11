@@ -22,4 +22,8 @@ export class Email {
 
     return right(new Email(valueValidation.value))
   }
+
+  get value(): string {
+    return this.email;
+  }
 }

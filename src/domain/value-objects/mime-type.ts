@@ -10,14 +10,14 @@ export const validMimeTypes = [
   'video/webm',
   'video/ogg',
   'application/pdf',
-];
+] as const;
 
 export type IValidMimeType = typeof validMimeTypes[number];
 
 export class MimeType {
-  private constructor(private readonly type: string) {}
+  private constructor(private readonly type: IValidMimeType) {}
 
-  static validate(value: string): Either<InvalidMimeTypeError, IValidMimeType> {
+  static validate(value: any): Either<InvalidMimeTypeError, IValidMimeType> {
     if (!validMimeTypes.includes(value)) {
       return left(new InvalidMimeTypeError(value))
     }
@@ -25,7 +25,7 @@ export class MimeType {
     return right(value)
   }
 
-  static create(value: string): Either<InvalidMimeTypeError, MimeType> {
+  static create(value: any): Either<InvalidMimeTypeError, MimeType> {
     const valueValidation = this.validate(value)
 
     if (valueValidation.isLeft()) {
@@ -33,5 +33,9 @@ export class MimeType {
     }
 
     return right(new MimeType(value))
+  }
+
+  get value(): IValidMimeType {
+    return this.type;
   }
 }
