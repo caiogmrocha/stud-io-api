@@ -3,7 +3,7 @@ import { IGetProfileDetailsUseCase } from "@/domain/usecases/profiles/i-get-prof
 import { clientError, IController, IHttpRequest, IHttpResponse, ok, serverError } from "../../contracts";
 
 export type IGetProfileDetailsControllerRequestParams = {
-  profileId: string,
+  id: string,
 };
 
 export type IGetProfileDetailsControllerResponseBody = {
@@ -20,10 +20,10 @@ export class GetProfileDetailsController implements IController {
     private readonly getProfileUseCase: IGetProfileDetailsUseCase,
   ) {}
 
-  async handle({ params }: IHttpRequest<null, IGetProfileDetailsControllerRequestParams>): Promise<IHttpResponse<IGetProfileDetailsControllerResponseBody>> {
+  async handle({ params, ...rest }: IHttpRequest<null, IGetProfileDetailsControllerRequestParams>): Promise<IHttpResponse<IGetProfileDetailsControllerResponseBody>> {
     try {
       const result = await this.getProfileUseCase.execute({
-        profileId: params.profileId,
+        profileId: params.id,
       });
 
       if (result.isLeft()) {
