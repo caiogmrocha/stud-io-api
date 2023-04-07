@@ -7,13 +7,16 @@ import { ProfileMapper } from "@/utils/mappers/profile-mapper";
 
 import { Prisma, Profile, Student, Teacher } from "@prisma/client";
 import { prisma } from "./prisma";
+import { IProfileModelToUpdate, IUpdateProfileRepository } from "@/app/contracts/repositories/profiles/i-update-profile-repository";
 
 type IPrismaProfileAdapted = Profile & {
   student?: Student;
   teacher?: Teacher;
 };
 
-export class PrismaProfilesRepository implements IGetProfilesRepository, ICreateProfileRepository {
+interface IProfilesRepository extends IGetProfilesRepository, ICreateProfileRepository, IUpdateProfileRepository {}
+
+export class PrismaProfilesRepository implements IProfilesRepository {
   async get({ where, relations }: IGetProfilesRepositoryOptions = {}): Promise<IProfileModel[]> {
     const rows = await prisma.profile.findMany({
       ...(where && { where: adaptWhere<IProfileModel, Prisma.ProfileWhereInput>(where) }),
@@ -34,5 +37,14 @@ export class PrismaProfilesRepository implements IGetProfilesRepository, ICreate
     });
 
     return ProfileMapper.fromPrismaToModel(createdData);
+  }
+
+  async update(id: string, data: IProfileModelToUpdate): Promise<IProfileModel> {
+    const updatedData = await prisma.profile.update({
+      where: { id },
+      data,
+    });
+
+    return ProfileMapper.fromPrismaToModel(updatedData);
   }
 };

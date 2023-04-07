@@ -7,12 +7,7 @@ export type IUpdateProfileRegistrationUseCaseInputBoundary = {
   subjectsIds: number[];
 }
 
-export type IUpdateProfileRegistrationUseCaseOutPutBoundary = {
-  profile: {
-    name: string;
-    email: string;
-  };
-}
+export type IUpdateProfileRegistrationUseCaseOutPutBoundary = null;
 
 export interface IUpdateProfileRegistrationUseCase {
   execute(input: IUpdateProfileRegistrationUseCaseInputBoundary): Promise<Either<
