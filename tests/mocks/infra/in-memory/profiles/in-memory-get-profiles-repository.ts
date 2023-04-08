@@ -1,7 +1,6 @@
 import { getInMemoryDatabase } from "@/../tests/helpers/in-memory-database";
 import { IGetProfilesRepository, IGetProfilesRepositoryOptions } from "@/app/contracts/repositories/profiles/i-get-profiles-repository";
 import { IProfileModel } from "@/app/contracts/repositories/profiles/i-profile-model";
-import { IStudentModel } from "@/app/contracts/repositories/students/i-student-model";
 
 export class InMemoryGetProfilesRepository implements IGetProfilesRepository {
   async get({ where, relations }: IGetProfilesRepositoryOptions): Promise<IProfileModel[]> {
@@ -54,7 +53,6 @@ export class InMemoryGetProfilesRepository implements IGetProfilesRepository {
           for (const key of relations.teacher.fields) {
             filteredTeacherData[key!] = teacherData[key!];
           }
-
 
           profile.teacher = filteredTeacherData;
         }

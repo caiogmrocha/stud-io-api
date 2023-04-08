@@ -1,4 +1,3 @@
-import { prisma } from "@/infra/prisma/prisma";
 import { IWhereClauseOption } from "../common/i-where-clause-option";
 import { IRelationsClauseOption } from "../common/i-relations-clause-option";
 import { IProfileModel } from "./i-profile-model";
