@@ -77,9 +77,9 @@ model Subject {
 }
 
 model ProfilesOnSubjects {
-  profileId String  @db.Char(36)
+  profileId String  @db.Char(36) @map("profile_id")
   profile   Profile @relation(fields: [profileId], references: [id])
-  subjectId Int
+  subjectId Int @map("subject_id")
   subject   Subject @relation(fields: [subjectId], references: [id])
 
   createdAt DateTime  @default(now()) @map("created_at")

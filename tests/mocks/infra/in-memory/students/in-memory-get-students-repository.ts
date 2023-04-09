@@ -18,6 +18,7 @@ export class InMemoryGetStudentsRepository implements IGetStudentsRepository {
             case operator === '>=': counter.push(row[column]! >= value!); break;
             case operator === '>': counter.push(row[column]! > value!); break;
             case operator === '<>': counter.push(row[column]! != value!); break;
+						case operator === 'in': counter.push(Array.isArray(value) && value.includes(row[column])); break;
           }
         }
       }

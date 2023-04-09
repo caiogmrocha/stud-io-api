@@ -1,12 +1,12 @@
 import { getInMemoryDatabase } from "@/../tests/helpers/in-memory-database";
-import { IGetTeachersRepository, IGetTeachersRepositoryOptions } from "@/app/contracts/repositories/teachers/i-get-teachers-repository";
-import { ITeacherModel } from "@/app/contracts/repositories/teachers/i-teacher-model";
+import { IGetProfilesSubjectsRepository, IGetProfilesSubjectsRepositoryOptions } from "@/app/contracts/repositories/profiles-subjects/i-get-profiles-subjects-repository";
+import { IProfileSubjectModel } from "@/app/contracts/repositories/profiles-subjects/i-profile-subject-model";
 
-export class InMemoryGetTeachersRepository implements IGetTeachersRepository {
-  async get({ where }: IGetTeachersRepositoryOptions): Promise<ITeacherModel[]> {
+export class InMemoryGetProfilesSubjectsRepository implements IGetProfilesSubjectsRepository {
+  async get({ where }: IGetProfilesSubjectsRepositoryOptions): Promise<IProfileSubjectModel[]> {
     const database = await getInMemoryDatabase();
 
-    const filteredTeachers = database.teachers.filter(row => {
+    const filteredProfilesSubjects = database.profile_subjects.filter(row => {
       const counter: boolean[] = [];
 
       if (where && where?.length > 0) {
@@ -26,6 +26,6 @@ export class InMemoryGetTeachersRepository implements IGetTeachersRepository {
       return counter.every(condition => condition === true);
     });
 
-    return filteredTeachers;
+    return filteredProfilesSubjects;
   }
 }

@@ -1,5 +1,3 @@
-import { IConditionalOperators } from "./i-conditional-operators";
-
 /**
  * This is used to generically typing the internal where
  * clause standard for "get" method of repositories.
@@ -10,8 +8,24 @@ import { IConditionalOperators } from "./i-conditional-operators";
  *
  * @param {Object} M - generic data source model
  */
-export type IWhereClauseOption<M> = [
-  column: keyof M,
-  operator: IConditionalOperators,
-  value: M[keyof M],
-];
+export type IWhereClauseOption<M> = (
+	| [
+			column: keyof M,
+			operator: IGenericConditionalOperators,
+			value: M[keyof M],
+		]
+	| [
+			column: keyof M,
+			operator: 'in',
+			value: M[keyof M][],
+		]
+);
+
+export type IGenericConditionalOperators = (
+  | '<'
+  | '<='
+  | '='
+  | '>='
+  | '>'
+  | '<>'
+);

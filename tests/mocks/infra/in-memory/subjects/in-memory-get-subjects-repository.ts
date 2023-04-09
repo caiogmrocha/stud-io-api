@@ -1,12 +1,12 @@
 import { getInMemoryDatabase } from "@/../tests/helpers/in-memory-database";
-import { IGetTeachersRepository, IGetTeachersRepositoryOptions } from "@/app/contracts/repositories/teachers/i-get-teachers-repository";
-import { ITeacherModel } from "@/app/contracts/repositories/teachers/i-teacher-model";
+import { IGetSubjectsRepository, IGetSubjectsRepositoryOptions } from "@/app/contracts/repositories/subjects/i-get-subjects-repository";
+import { ISubjectModel } from "@/app/contracts/repositories/subjects/i-subject-model";
 
-export class InMemoryGetTeachersRepository implements IGetTeachersRepository {
-  async get({ where }: IGetTeachersRepositoryOptions): Promise<ITeacherModel[]> {
+export class InMemoryGetSubjectsRepository implements IGetSubjectsRepository {
+  async get({ where }: IGetSubjectsRepositoryOptions): Promise<ISubjectModel[]> {
     const database = await getInMemoryDatabase();
 
-    const filteredTeachers = database.teachers.filter(row => {
+    const filteredSubjects = database.subjects.filter(row => {
       const counter: boolean[] = [];
 
       if (where && where?.length > 0) {
@@ -26,6 +26,6 @@ export class InMemoryGetTeachersRepository implements IGetTeachersRepository {
       return counter.every(condition => condition === true);
     });
 
-    return filteredTeachers;
+    return filteredSubjects;
   }
 }

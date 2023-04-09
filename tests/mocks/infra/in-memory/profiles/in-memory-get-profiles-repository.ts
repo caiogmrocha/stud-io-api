@@ -1,6 +1,8 @@
 import { getInMemoryDatabase } from "@/../tests/helpers/in-memory-database";
+import { IWhereClauseOption } from "@/app/contracts/repositories/common/i-where-clause-option";
 import { IGetProfilesRepository, IGetProfilesRepositoryOptions } from "@/app/contracts/repositories/profiles/i-get-profiles-repository";
 import { IProfileModel } from "@/app/contracts/repositories/profiles/i-profile-model";
+import { ISubjectModel } from "@/app/contracts/repositories/subjects/i-subject-model";
 
 export class InMemoryGetProfilesRepository implements IGetProfilesRepository {
   async get({ where, relations }: IGetProfilesRepositoryOptions): Promise<IProfileModel[]> {
@@ -18,6 +20,7 @@ export class InMemoryGetProfilesRepository implements IGetProfilesRepository {
             case operator === '>=': counter.push(row[column]! >= value!); break;
             case operator === '>': counter.push(row[column]! > value!); break;
             case operator === '<>': counter.push(row[column]! != value!); break;
+            case operator === 'in': counter.push(Array.isArray(value) && value.includes(row[column])); break;
           }
         }
       }
@@ -57,6 +60,33 @@ export class InMemoryGetProfilesRepository implements IGetProfilesRepository {
           profile.teacher = filteredTeacherData;
         }
       }
+
+			// Subjects
+			if (relations?.subjects === true) {
+				const subjectsIds = database.profile_subjects
+					.filter(profileSubject => profileSubject.profile_id === profile.id)
+					.map(profileSubject => profileSubject.subject_id);
+
+				profile.subjects = database.subjects.filter(subject => subjectsIds.includes(subject.id));
+			} else if (typeof relations?.subjects === 'object') {
+				const subjectsIds = database.profile_subjects
+					.filter(profileSubject => profileSubject.profile_id === profile.id)
+					.map(profileSubject => profileSubject.subject_id);
+
+				const filteredSubjects: ISubjectModel[] = [];
+
+				for (const subject of database.subjects.filter(subject => subjectsIds.includes(subject.id))) {
+					const filteredSubjectData = {} as any;
+
+					for (const key of relations.subjects.fields) {
+						filteredSubjectData[key!] = subject[key!];
+					}
+
+					filteredSubjects.push(filteredSubjectData);
+				}
+
+				profile.subjects = filteredSubjects;
+			}
 
       return profile;
     });
