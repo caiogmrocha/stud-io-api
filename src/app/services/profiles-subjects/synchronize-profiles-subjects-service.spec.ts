@@ -145,7 +145,53 @@ describe('[Unit] Synchronize Profiles Subjects Service', () => {
 		expect(output.value).toBeInstanceOf(SubjectsDoesNotExistsError);
 	});
 
-	// it('should be able to synchronize the profiles with the subjects', async () => {
+	it('should be able to synchronize the profiles with the subjects', async () => {
+		const subjectId = faker.datatype.number();
+		const profileId = faker.datatype.uuid();
 
-	// });
+		await setupInMemoryDatabase({
+			profiles: [
+				{
+					id: profileId,
+					email: faker.internet.email(),
+					password: faker.random.alphaNumeric(12),
+					type: 'teacher',
+					level: 12,
+					created_at: new Date(),
+					is_deleted: false,
+				}
+			],
+			students: [],
+			teachers: [],
+			subjects: [
+				{
+					id: subjectId,
+					name: faker.name.fullName(),
+					display_name: faker.name.fullName(),
+					description: faker.random.words(6),
+					is_deleted: false,
+					created_at: new Date(),
+				}
+			],
+			profile_subjects: [
+				{
+					profile_id: profileId,
+					subject_id: subjectId,
+					created_at: new Date(),
+				}
+			],
+		});
+
+		const { sut } = makeSut();
+
+		const input: ISynchronizeProfilesSubjectsUseCaseInputBoundary = {
+			profilesIds: [ profileId ],
+			subjectsIds: [ subjectId ],
+		};
+
+		const output = await sut.execute(input);
+
+		expect(output.isRight()).toBeTruthy();
+		expect(output.value).toBeNull();
+	});
 });
