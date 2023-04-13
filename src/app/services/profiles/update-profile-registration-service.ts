@@ -16,6 +16,7 @@ import { StudentDoesNotExistsError } from "../students/errors/student-does-not-e
 import { TeacherDoesNotExistsError } from "../teachers/errors/teacher-does-not-exists-error";
 
 import { Either, left, right } from "@/utils/logic/either";
+import { ISynchronizeProfilesSubjectsUseCase } from "@/domain/usecases/profiles-subjects/i-synchronize-profiles-subjects-use-case";
 
 type IUpdateProfileRegistrationServicePossibleErrors = (
   | ProfileDoesNotExistsError
@@ -28,20 +29,16 @@ export class UpdateProfileRegistrationService implements IUpdateProfileRegistrat
     private readonly getProfilesRepository: IGetProfilesRepository,
     private readonly getStudentsRepository: IGetStudentsRepository,
     private readonly getTeachersRepository: IGetTeachersRepository,
-		private readonly getSubjectsRepository: IGetSubjectsRepository,
-		private readonly getProfilesSubjectsRepository: IGetProfilesSubjectsRepository,
-		private readonly createProfileSubjectRepository: ICreateProfileSubjectRepository,
-		private readonly deleteProfileSubjectRepository: IDeleteProfileSubjectRepository,
     private readonly updateProfileRepository: IUpdateProfileRepository,
     private readonly updateStudentRepository: IUpdateStudentRepository,
     private readonly updateTeacherRepository: IUpdateTeacherRepository,
+		private readonly synchronizeProfilesSubjectsService: ISynchronizeProfilesSubjectsUseCase,
   ) {}
 
   async execute(input: IUpdateProfileRegistrationUseCaseInputBoundary): Promise<Either<
     IUpdateProfileRegistrationServicePossibleErrors,
     IUpdateProfileRegistrationUseCaseOutPutBoundary
   >> {
-		// Profile interations
     const [ profile ] = await this.getProfilesRepository.get({
       where: [['id', '=', input.id]],
     });
@@ -54,7 +51,6 @@ export class UpdateProfileRegistrationService implements IUpdateProfileRegistrat
       email: input.email,
     });
 
-		// Student/Teacher interations
     let owner: IStudentModel | ITeacherModel | undefined;
 
     if (profile.type === 'student') {
@@ -83,38 +79,10 @@ export class UpdateProfileRegistrationService implements IUpdateProfileRegistrat
       });
     }
 
-		// Subjects interactions
-		const subjects = await this.getSubjectsRepository.get({
-			where: [['id', 'in', input.subjectsIds]]
+		await this.synchronizeProfilesSubjectsService.execute({
+			profilesIds: [ profile.id ],
+			subjectsIds: input.subjectsIds,
 		});
-
-		if (!input.subjectsIds.every(id => subjects.some(subject => subject.id === id))) {
-			const subjectsIdsNotFounded = input.subjectsIds.filter(id => !subjects.some(subject => subject.id === id));
-
-			return left(new Error('Não foram encontrados assuntos para os ids: ' + subjectsIdsNotFounded.join(', ')));
-		}
-
-		const profilesSubjects = await this.getProfilesSubjectsRepository.get({
-			where: [['profile_id', '=', profile.id]],
-		});
-
-		const subjectsIdsToDelete = input.subjectsIds.filter(id => profilesSubjects.some(profileSubject => profileSubject.subject_id === id));
-
-		await Promise.all(
-			subjectsIdsToDelete.map(subjectId => this.deleteProfileSubjectRepository.delete(
-				profile.id,
-				subjectId,
-			)),
-		);
-
-		const subjectsIdsToCreate = input.subjectsIds.filter(id => !profilesSubjects.some(profileSubject => profileSubject.subject_id === id));
-
-		await Promise.all(
-			subjectsIdsToCreate.map(subjectId => this.createProfileSubjectRepository.create({
-				profile_id: profile.id,
-				subject_id: subjectId,
-			})),
-		);
 
     return right(null);
   }

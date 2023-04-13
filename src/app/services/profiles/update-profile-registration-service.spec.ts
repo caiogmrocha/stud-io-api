@@ -18,6 +18,7 @@ import { ProfileDoesNotExistsError } from "./errors/profile-does-not-exists-erro
 
 import { setupInMemoryDatabase } from "@/../tests/helpers/in-memory-database";
 import { faker } from "@faker-js/faker";
+import { SynchronizeProfilesSubjectsService } from "../profiles-subjects/synchronize-profiles-subjects-service";
 
 type SutTypes = {
   getProfilesRepository: InMemoryGetProfilesRepository;
@@ -49,17 +50,21 @@ async function makeSut(
   const updateProfileRepository = new InMemoryUpdateProfileRepository();
   const updateStudentRepository = new InMemoryUpdateStudentRepository();
   const updateTeacherRepository = new InMemoryUpdateTeacherRepository();
-  const sut = new UpdateProfileRegistrationService(
-    getProfilesRepository,
-    getStudentsRepository,
-    getTeachersRepository,
+	const synchronizeProfilesSubjectsService = new SynchronizeProfilesSubjectsService(
+		getProfilesRepository,
 		getSubjectsRepository,
 		getProfilesSubjectsRepository,
 		createProfileSubjectRepository,
 		deleteProfileSubjectRepository,
+	);
+  const sut = new UpdateProfileRegistrationService(
+    getProfilesRepository,
+    getStudentsRepository,
+    getTeachersRepository,
     updateProfileRepository,
     updateStudentRepository,
-    updateTeacherRepository
+    updateTeacherRepository,
+		synchronizeProfilesSubjectsService,
   );
 
   return { sut, getProfilesRepository };
