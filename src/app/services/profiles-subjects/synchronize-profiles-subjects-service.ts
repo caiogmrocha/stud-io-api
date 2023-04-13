@@ -6,6 +6,7 @@ import { IGetProfilesRepository } from "@/app/contracts/repositories/profiles/i-
 import { IGetSubjectsRepository } from "@/app/contracts/repositories/subjects/i-get-subjects-repository";
 import { Either, left, right } from "@/utils/logic/either";
 import { ProfilesDoesNotExistsError } from "../profiles/errors/profiles-does-not-exists-error";
+import { SubjectsDoesNotExistsError } from "../subjects/errors/subjects-does-not-exists-error";
 
 export class SynchronizeProfilesSubjectsService implements ISynchronizeProfilesSubjectsUseCase {
 	constructor (
@@ -34,7 +35,7 @@ export class SynchronizeProfilesSubjectsService implements ISynchronizeProfilesS
 		if (!input.subjectsIds.every(id => subjects.some(subject => subject.id === id))) {
 			const subjectsIdsNotFounded = input.subjectsIds.filter(id => !subjects.some(subject => subject.id === id));
 
-			return left(new Error('Não foram encontrados assuntos para os ids: ' + subjectsIdsNotFounded.join(', ')));
+			return left(new SubjectsDoesNotExistsError({ ids: subjectsIdsNotFounded }));
 		}
 
 		const profilesSubjects = await this.getProfilesSubjectsRepository.get({
