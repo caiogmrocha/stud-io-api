@@ -4,17 +4,18 @@ import { ITeacherModel } from "@/app/contracts/repositories/teachers/i-teacher-m
 import { IGetProfilesRepository } from "@/app/contracts/repositories/profiles/i-get-profiles-repository";
 import { IGetStudentsRepository } from "@/app/contracts/repositories/students/i-get-students-repository";
 import { IGetTeachersRepository } from "@/app/contracts/repositories/teachers/i-get-teachers-repository";
+import { IGetSubjectsRepository } from "@/app/contracts/repositories/subjects/i-get-subjects-repository";
+import { IGetProfilesSubjectsRepository } from "@/app/contracts/repositories/profiles-subjects/i-get-profiles-subjects-repository";
 import { IUpdateProfileRepository } from "@/app/contracts/repositories/profiles/i-update-profile-repository";
+import { IUpdateStudentRepository } from "@/app/contracts/repositories/students/i-update-student-repository";
+import { IUpdateTeacherRepository } from "@/app/contracts/repositories/teachers/i-update-teacher-repository";
+import { ICreateProfileSubjectRepository } from "@/app/contracts/repositories/profiles-subjects/i-create-profile-subject-repository";
+import { IDeleteProfileSubjectRepository } from "@/app/contracts/repositories/profiles-subjects/i-delete-profile-subject-repository";
 import { ProfileDoesNotExistsError } from "./errors/profile-does-not-exists-error";
 import { StudentDoesNotExistsError } from "../students/errors/student-does-not-exists-error";
 import { TeacherDoesNotExistsError } from "../teachers/errors/teacher-does-not-exists-error";
+
 import { Either, left, right } from "@/utils/logic/either";
-import { IUpdateStudentRepository } from "@/app/contracts/repositories/students/i-update-student-repository";
-import { IUpdateTeacherRepository } from "@/app/contracts/repositories/teachers/i-update-teacher-repository";
-import { IGetSubjectsRepository } from "@/app/contracts/repositories/subjects/i-get-subjects-repository";
-import { ICreateProfileSubjectRepository } from "@/app/contracts/repositories/profiles-subjects/i-create-profile-subject-repository";
-import { IDeleteProfileSubjectRepository } from "@/app/contracts/repositories/profiles-subjects/i-delete-profile-subject-repository";
-import { IGetProfilesSubjectsRepository } from "@/app/contracts/repositories/profiles-subjects/i-get-profiles-subjects-repository";
 
 type IUpdateProfileRegistrationServicePossibleErrors = (
   | ProfileDoesNotExistsError
@@ -34,7 +35,6 @@ export class UpdateProfileRegistrationService implements IUpdateProfileRegistrat
     private readonly updateProfileRepository: IUpdateProfileRepository,
     private readonly updateStudentRepository: IUpdateStudentRepository,
     private readonly updateTeacherRepository: IUpdateTeacherRepository,
-
   ) {}
 
   async execute(input: IUpdateProfileRegistrationUseCaseInputBoundary): Promise<Either<
