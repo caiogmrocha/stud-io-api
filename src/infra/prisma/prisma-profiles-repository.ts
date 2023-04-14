@@ -5,16 +5,21 @@ import { adaptWhere } from "./adapters/adapt-where";
 import { adaptRelations } from "./adapters/adapt-relations";
 import { ProfileMapper } from "@/utils/mappers/profile-mapper";
 
-import { Prisma, Profile, Student, Teacher } from "@prisma/client";
+import { Prisma, Profile, Student, Subject, Teacher } from "@prisma/client";
 import { prisma } from "./prisma";
 import { IProfileModelToUpdate, IUpdateProfileRepository } from "@/app/contracts/repositories/profiles/i-update-profile-repository";
 
 type IPrismaProfileAdapted = Profile & {
   student?: Student;
   teacher?: Teacher;
+	subjects?: Subject[];
 };
 
-interface IProfilesRepository extends IGetProfilesRepository, ICreateProfileRepository, IUpdateProfileRepository {}
+type IProfilesRepository = (
+	& IGetProfilesRepository
+	& ICreateProfileRepository
+	& IUpdateProfileRepository
+);
 
 export class PrismaProfilesRepository implements IProfilesRepository {
   async get({ where, relations }: IGetProfilesRepositoryOptions = {}): Promise<IProfileModel[]> {

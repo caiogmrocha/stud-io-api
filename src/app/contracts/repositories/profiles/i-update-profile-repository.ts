@@ -8,6 +8,7 @@ export type IProfileModelToUpdate = Partial<Omit<IProfileModel, (
   | 'is_deleted'
   | 'student'
   | 'teacher'
+	| 'subjects'
 )>>;
 
 export interface IUpdateProfileRepository {

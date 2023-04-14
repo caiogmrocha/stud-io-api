@@ -25,16 +25,6 @@ describe('[Unit] Student Entity', () => {
         isDeleted: false,
       }),
       profileId: faker.datatype.uuid(),
-      subjects: [new Subject({
-        id: faker.datatype.uuid(),
-        name: faker.name.firstName(),
-        displayName: faker.name.fullName(),
-        description: faker.random.words(7),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: undefined,
-        isDeleted: false,
-      })]
     })
 
     expect(sut.props).toEqual(expect.objectContaining({
@@ -46,9 +36,6 @@ describe('[Unit] Student Entity', () => {
       isDeleted: false,
 
       profile: expect.any(Profile),
-      subjects: expect.arrayContaining([
-        expect.any(Subject)
-      ]),
     }))
   })
 })

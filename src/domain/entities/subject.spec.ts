@@ -5,7 +5,7 @@ import { faker } from "@faker-js/faker"
 describe('[Unit] Subject Entity', () => {
   it('should return with correct properties', () => {
     const sut = new Subject({
-      id: faker.datatype.uuid(),
+      id: faker.datatype.number(),
       name: faker.name.firstName(),
       displayName: faker.name.fullName(),
       description: faker.random.words(7),
@@ -46,7 +46,7 @@ describe('[Unit] Subject Entity', () => {
     })
 
     expect(sut.props).toEqual(expect.objectContaining({
-      id: expect.any(String),
+      id: expect.any(Number),
       name: expect.any(String),
       displayName: expect.any(String),
       description: expect.any(String),
