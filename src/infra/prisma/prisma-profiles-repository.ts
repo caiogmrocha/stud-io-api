@@ -1,13 +1,13 @@
+import { IProfileModelToUpdate, IUpdateProfileRepository } from "@/app/contracts/repositories/profiles/i-update-profile-repository";
 import { ICreateProfileRepository, IProfileModelToCreate } from "@/app/contracts/repositories/profiles/i-create-profile-repository";
 import { IGetProfilesRepository, IGetProfilesRepositoryOptions } from "@/app/contracts/repositories/profiles/i-get-profiles-repository";
 import { IProfileModel } from "@/app/contracts/repositories/profiles/i-profile-model";
-import { adaptWhere } from "./adapters/adapt-where";
-import { adaptRelations } from "./adapters/adapt-relations";
 import { ProfileMapper } from "@/utils/mappers/profile-mapper";
 
 import { Prisma, Profile, Student, Subject, Teacher } from "@prisma/client";
 import { prisma } from "./prisma";
-import { IProfileModelToUpdate, IUpdateProfileRepository } from "@/app/contracts/repositories/profiles/i-update-profile-repository";
+import { adaptWhere } from "./adapters/adapt-where";
+import { adaptRelations } from "./adapters/adapt-relations";
 
 type IPrismaProfileAdapted = Profile & {
   student?: Student;
