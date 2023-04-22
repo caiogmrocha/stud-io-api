@@ -25,45 +25,49 @@ export class UpdateProfileRegistrationController implements Http.IController {
 	) {}
 
 	async handle({ body, headers }: IUpdateProfileRegistrationRequest): Promise<Http.IHttpResponse> {
-		const authenticationVerification = await this.jwtAuthenticationProvider.verify(headers.Authorization || '');
+		try {
+			const authenticationVerification = await this.jwtAuthenticationProvider.verify(headers.Authorization || '');
 
-		if (authenticationVerification.isLeft()) {
-			const error = authenticationVerification.value;
+			if (authenticationVerification.isLeft()) {
+				const error = authenticationVerification.value;
 
-			switch (error.constructor) {
-				case JWTVerifyError:
-					return Http.unauthorized(new Http.UnauthorizedError());
+				switch (error.constructor) {
+					case JWTVerifyError:
+						return Http.unauthorized('');
 
-				default:
-					return Http.serverError(new Http.InternalServerError());
+					default:
+						return Http.serverError();
+				}
 			}
-		}
 
-		const updateProfileRegistrationResult = await this.updateProfileRegistrationService.execute({
-			id: authenticationVerification.value.id,
-			email: body.email,
-			name: body.name,
-			subjectsIds: body.subjectsIds,
-		});
+			const updateProfileRegistrationResult = await this.updateProfileRegistrationService.execute({
+				id: authenticationVerification.value.id,
+				email: body.email,
+				name: body.name,
+				subjectsIds: body.subjectsIds,
+			});
 
-		if (updateProfileRegistrationResult.isLeft()) {
-			const error = updateProfileRegistrationResult.value;
+			if (updateProfileRegistrationResult.isLeft()) {
+				const error = updateProfileRegistrationResult.value;
 
-			switch (error.constructor) {
-				case ProfileDoesNotExistsError:
-					return Http.notFound(error);
+				switch (error.constructor) {
+					case ProfileDoesNotExistsError:
+						return Http.notFound('Perfil não encontrado.');
 
-				case TeacherDoesNotExistsError:
-					return Http.notFound(error);
+					case TeacherDoesNotExistsError:
+						return Http.notFound('Perfil não encontrado, solicite ajuda ao suporte.');
 
-				case StudentDoesNotExistsError:
-					return Http.notFound(error);
+					case StudentDoesNotExistsError:
+						return Http.notFound('Perfil não encontrado, solicite ajuda ao suporte.');
 
-				default:
-					return Http.serverError(error);
+					default:
+						return Http.badRequest();
+				}
 			}
-		}
 
-		return Http.ok(null);
+			return Http.ok(null);
+		} catch (error) {
+		return Http.serverError();
+		}
 	}
 }

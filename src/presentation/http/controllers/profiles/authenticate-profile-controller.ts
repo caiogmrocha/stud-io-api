@@ -42,16 +42,16 @@ export class AuthenticateProfileController implements Http.IController {
 
         switch (error.constructor) {
           case ProfileDoesNotExistsError:
-            return Http.unauthorized(error);
+            return Http.unauthorized();
 
           default:
-            return Http.clientError(error);
+            return Http.badRequest();
         }
       }
 
       return Http.ok(result.value);
     } catch (error) {
-      return Http.serverError(error as Error);
+      return Http.serverError();
     }
   }
 }

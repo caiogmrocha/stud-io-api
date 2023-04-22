@@ -18,16 +18,16 @@ export class ProfileIsAuthenticatedMiddleware implements Http.IMiddleware {
 
 				switch (error.constructor) {
 					case JWTVerifyError:
-						return Http.unauthorized(new Http.UnauthorizedError());
+						return Http.unauthorized();
 
 					default:
-						return Http.serverError(new Http.InternalServerError());
+						return Http.badRequest();
 				}
 			}
 
 			return Http.ok({ profileId: result.value.id });
 		} catch (error) {
-			return Http.serverError(error as Error);
+			return Http.serverError();
 		}
 	}
 }

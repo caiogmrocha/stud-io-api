@@ -21,7 +21,9 @@ export class RegisterProfileController implements Http.IController {
     private readonly registerProfileUseCase: IRegisterProfileUseCase,
 	) {}
 
-  async handle({ body }: Http.IHttpRequest<IRegisterProfileControllerRequestBody>): Promise<Http.IHttpResponse<void>> {
+  async handle({ body }: Http.IHttpRequest<IRegisterProfileControllerRequestBody>): Promise<
+		Http.IHttpResponse<void>
+	> {
     try {
       const validationComposite = new ValidationComposite([
         new RequiredValueValidator('name', body.name),
@@ -46,19 +48,16 @@ export class RegisterProfileController implements Http.IController {
 
         switch (error.constructor) {
           case ProfileAlreadyExistsError:
-            return Http.conflict(error);
-
-          case ValidationCompositeError:
-            return Http.unprocessable(error);
+            return Http.forbidden(error.message);
 
           default:
-            return Http.clientError(error);
+            return Http.badRequest();
         }
       }
 
       return Http.created();
     } catch (error) {
-      return Http.serverError(error as Error);
+      return Http.serverError();
     }
   }
 }

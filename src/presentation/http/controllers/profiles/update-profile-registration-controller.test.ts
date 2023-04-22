@@ -1,9 +1,9 @@
+import { UnauthorizedError } from '../../contracts';
 import { app } from '@/main/server';
 
 import { prisma } from '@/infra/prisma/prisma';
 import { faker } from '@faker-js/faker';
 import request from 'supertest';
-import { UnauthorizedError } from '../../contracts';
 
 describe('[E2E] Update Profile Registration Controller', () => {
 	it('should return 401 if profile is not authenticated', async () => {

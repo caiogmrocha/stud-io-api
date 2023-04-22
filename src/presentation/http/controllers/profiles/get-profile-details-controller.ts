@@ -33,10 +33,10 @@ export class GetProfileDetailsController implements Http.IController {
 
         switch (error.constructor) {
           case ProfileDoesNotExistsError:
-            return Http.clientError(error);
+            return Http.notFound('Perfil não encontrado');
 
           default:
-            return Http.clientError(error);
+            return Http.clientError();
         }
       }
 
@@ -51,7 +51,7 @@ export class GetProfileDetailsController implements Http.IController {
         createdAt: profile.createdAt,
       });
     } catch (error) {
-      return Http.serverError(error as Error);
+      return Http.serverError();
     }
   }
 }
