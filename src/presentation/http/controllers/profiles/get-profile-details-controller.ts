@@ -1,6 +1,6 @@
 import { ProfileDoesNotExistsError } from "@/app/services/profiles/errors/profile-does-not-exists-error";
 import { IGetProfileDetailsUseCase } from "@/domain/usecases/profiles/i-get-profile-details";
-import { clientError, IController, IHttpRequest, IHttpResponse, ok, serverError } from "../../contracts";
+import * as Http from "../../contracts";
 
 export type IGetProfileDetailsControllerRequestParams = {
   id: string,
@@ -15,12 +15,14 @@ export type IGetProfileDetailsControllerResponseBody = {
   createdAt: string,
 }
 
-export class GetProfileDetailsController implements IController {
+export class GetProfileDetailsController implements Http.IController {
   constructor (
     private readonly getProfileUseCase: IGetProfileDetailsUseCase,
   ) {}
 
-  async handle({ params, ...rest }: IHttpRequest<null, IGetProfileDetailsControllerRequestParams>): Promise<IHttpResponse<IGetProfileDetailsControllerResponseBody>> {
+  async handle({ params }: Http.IHttpRequest<null, IGetProfileDetailsControllerRequestParams>): Promise<
+		Http.IHttpResponse<IGetProfileDetailsControllerResponseBody>
+	> {
     try {
       const result = await this.getProfileUseCase.execute({
         profileId: params.id,
@@ -31,16 +33,16 @@ export class GetProfileDetailsController implements IController {
 
         switch (error.constructor) {
           case ProfileDoesNotExistsError:
-            return clientError(error);
+            return Http.clientError(error);
 
           default:
-            return clientError(error);
+            return Http.clientError(error);
         }
       }
 
       const profile = result.value;
 
-      return ok({
+      return Http.ok({
         id: profile.id,
         name: profile.owner!.name,
         email: profile.email.value,
@@ -49,8 +51,7 @@ export class GetProfileDetailsController implements IController {
         createdAt: profile.createdAt,
       });
     } catch (error) {
-      console.error(error)
-      return serverError(error as Error);
+      return Http.serverError(error as Error);
     }
   }
 }

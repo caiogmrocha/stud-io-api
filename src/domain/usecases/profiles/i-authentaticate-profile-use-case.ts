@@ -9,6 +9,11 @@ export type IAuthenticateProfileUseCaseOutPutBoundary = {
   token: string;
 }
 
+export type IAuthenticatedProfilePayload = {
+	id: string;
+	email: string;
+}
+
 export interface IAuthenticateProfileUseCase {
   execute(input: IAuthenticateProfileUseCaseInputBoundary): Promise<Either<
     Error,
