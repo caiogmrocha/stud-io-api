@@ -36,7 +36,7 @@ export class GetProfileDetailsController implements Http.IController {
             return Http.notFound('Perfil não encontrado');
 
           default:
-            return Http.clientError();
+            return Http.badRequest();
         }
       }
 
