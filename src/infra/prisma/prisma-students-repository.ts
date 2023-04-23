@@ -43,7 +43,10 @@ export class PrismaStudentsRepository implements IStudentsRepository {
 	async update(id: string, data: IStudentModelToUpdate): Promise<IStudentModel> {
 		const updatedData = await prisma.student.update({
       where: { id },
-      data,
+      data: {
+				...data,
+				updatedAt: new Date(),
+			},
     });
 
     return StudentMapper.fromPrismaToModel(updatedData);

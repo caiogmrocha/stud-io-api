@@ -2,46 +2,43 @@ import { IUpdateProfileRegistrationUseCase } from '@/domain/usecases/profiles/i-
 import { ProfileDoesNotExistsError } from '@/app/services/profiles/errors/profile-does-not-exists-error';
 import { TeacherDoesNotExistsError } from '@/app/services/teachers/errors/teacher-does-not-exists-error';
 import { StudentDoesNotExistsError } from '@/app/services/students/errors/student-does-not-exists-error';
-import { IJWTAuthenticationProvider } from '@/app/contracts/auth/jwt/i-jwt-authentication-provider';
-import { JWTVerifyError } from '@/app/contracts/auth/jwt/errors/jwt-verify-error';
-
 import * as Http from '../../contracts';
+import { ValidationComposite } from '@/validation/validation-composite';
+import { RequiredValueValidator } from '@/validation/rules/required-value-validator';
+import { EmailFormatValidator } from '@/validation/rules/email-format-validator';
+import { MinimumValueValidator } from '@/validation/rules/minimum-value-validator';
+import { ValueInListValidator } from '@/validation/rules/value-in-list-validator';
 
-export type IUpdateProfileRegistrationRequest = Http.IHttpRequest<
-	{
-		name: string;
-		email: string;
-		subjectsIds: number[];
-	},
-	{
-		id: string;
-	}
->;
+export type IUpdateProfileRegistrationRequest = Http.IHttpRequest<{
+	profileId: string;
+	name: string;
+	email: string;
+	subjectsIds: number[];
+}>;
 
 export class UpdateProfileRegistrationController implements Http.IController {
 	constructor (
-		private readonly jwtAuthenticationProvider: IJWTAuthenticationProvider,
 		private readonly updateProfileRegistrationService: IUpdateProfileRegistrationUseCase,
 	) {}
 
-	async handle({ body, headers }: IUpdateProfileRegistrationRequest): Promise<Http.IHttpResponse> {
+	async handle({ body }: IUpdateProfileRegistrationRequest): Promise<Http.IHttpResponse> {
 		try {
-			const authenticationVerification = await this.jwtAuthenticationProvider.verify(headers.Authorization || '');
+			const validationComposite = new ValidationComposite([
+        new RequiredValueValidator('name', body.name),
+        new RequiredValueValidator('email', body.email),
+        new RequiredValueValidator('subjectsIds', body.subjectsIds),
+        new EmailFormatValidator('email', body.email),
+        /** @todo */ // new ValueInListValidator('type', body.subjectsIds, []),
+      ]);
 
-			if (authenticationVerification.isLeft()) {
-				const error = authenticationVerification.value;
+      const validationResult = await validationComposite.validate();
 
-				switch (error.constructor) {
-					case JWTVerifyError:
-						return Http.unauthorized('');
-
-					default:
-						return Http.serverError();
-				}
-			}
+      if (validationResult.isLeft()) {
+        return Http.unprocessable(validationResult.value);
+      }
 
 			const updateProfileRegistrationResult = await this.updateProfileRegistrationService.execute({
-				id: authenticationVerification.value.id,
+				id: body.profileId,
 				email: body.email,
 				name: body.name,
 				subjectsIds: body.subjectsIds,
@@ -52,13 +49,9 @@ export class UpdateProfileRegistrationController implements Http.IController {
 
 				switch (error.constructor) {
 					case ProfileDoesNotExistsError:
-						return Http.notFound('Perfil não encontrado.');
-
 					case TeacherDoesNotExistsError:
-						return Http.notFound('Perfil não encontrado, solicite ajuda ao suporte.');
-
 					case StudentDoesNotExistsError:
-						return Http.notFound('Perfil não encontrado, solicite ajuda ao suporte.');
+						return Http.notFound('Perfil não encontrado.');
 
 					default:
 						return Http.badRequest();
@@ -67,7 +60,7 @@ export class UpdateProfileRegistrationController implements Http.IController {
 
 			return Http.ok(null);
 		} catch (error) {
-		return Http.serverError();
+			return Http.serverError();
 		}
 	}
 }

@@ -47,7 +47,10 @@ export class PrismaProfilesRepository implements IProfilesRepository {
   async update(id: string, data: IProfileModelToUpdate): Promise<IProfileModel> {
     const updatedData = await prisma.profile.update({
       where: { id },
-      data,
+      data: {
+				...data,
+				updatedAt: new Date(),
+			},
     });
 
     return ProfileMapper.fromPrismaToModel(updatedData);

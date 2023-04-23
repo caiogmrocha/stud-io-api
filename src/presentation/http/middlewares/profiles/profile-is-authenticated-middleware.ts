@@ -9,7 +9,7 @@ export class ProfileIsAuthenticatedMiddleware implements Http.IMiddleware {
 
 	async handle({ headers }: Http.IHttpRequest): Promise<Http.IHttpResponse> {
 		try {
-			const token = headers.Authorization?.split('Bearer ')?.[0] || '';
+			const token = headers.Authorization?.split('Bearer ')?.[1] || '';
 
 			const result = await this.jwtAuthenticationProvider.verify(token);
 
@@ -24,7 +24,6 @@ export class ProfileIsAuthenticatedMiddleware implements Http.IMiddleware {
 						return Http.badRequest();
 				}
 			}
-
 			return Http.ok({ profileId: result.value.id });
 		} catch (error) {
 			return Http.serverError();

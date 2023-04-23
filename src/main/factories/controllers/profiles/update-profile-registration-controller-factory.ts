@@ -31,9 +31,7 @@ export function updateProfileRegistrationControllerFactory() {
 		prismaTeachersRepository,
 		synchronizeProfilesSubjectsService,
 	);
-	const jwtAuthenticationProvider = new JWTAuthenticationProvider<IAuthenticatedProfilePayload>();
 	const updateProfileRegistrationController = new UpdateProfileRegistrationController(
-		jwtAuthenticationProvider,
 		updateProfileRegistrationService,
 	);
 

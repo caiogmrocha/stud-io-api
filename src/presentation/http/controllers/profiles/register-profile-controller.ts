@@ -1,6 +1,5 @@
 import { ProfileAlreadyExistsError } from "@/app/services/profiles/errors/profile-already-exists-error";
 import { IRegisterProfileUseCase } from "@/domain/usecases/profiles/i-register-profile-use-case";
-import { ValidationCompositeError } from "@/validation/errors/validation-composite-error";
 import { EmailFormatValidator } from "@/validation/rules/email-format-validator";
 import { MinimumValueValidator } from "@/validation/rules/minimum-value-validator";
 import { RequiredValueValidator } from "@/validation/rules/required-value-validator";

@@ -43,7 +43,10 @@ export class PrismaTeachersRepository implements ITeachersRepository {
 	async update(id: string, data: ITeacherModelToUpdate): Promise<ITeacherModel> {
 		const updatedData = await prisma.teacher.update({
       where: { id },
-      data,
+      data: {
+				...data,
+				updatedAt: new Date(),
+			},
     });
 
     return TeacherMapper.fromPrismaToModel(updatedData);
