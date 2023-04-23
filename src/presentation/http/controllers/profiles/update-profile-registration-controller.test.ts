@@ -1,4 +1,5 @@
 import * as Http from '../../contracts';
+import { ValidationCompositeError } from '@/validation/errors/validation-composite-error';
 import { app } from '@/main/server';
 
 import { prisma } from '@/infra/prisma/prisma';
@@ -6,7 +7,46 @@ import { faker } from '@faker-js/faker';
 import request from 'supertest';
 
 describe('[E2E] Update Profile Registration Controller', () => {
-	it('should return 404 if profile does not exists', async () => {
+	it('should return 422 if the provided data is invalid', async () => {
+		const email = faker.internet.email();
+		const password = faker.random.alphaNumeric(12);
+
+		await prisma.profile.create({
+			data: {
+				email,
+				password,
+				type: 'student',
+				student: {
+					create: {
+						name: faker.name.fullName(),
+					},
+				},
+			},
+		});
+
+		const profileAuthenticationResponse = await request(app)
+			.post('/profiles/login')
+			.send({ email, password });
+
+		const updateProfileRegistrationResponse = await request(app)
+			.put(`/profiles`)
+			.send({
+				name: 123412441,
+				email: '@email.com',
+				subjects: [],
+			})
+			.set('Authorization', 'Bearer ' + profileAuthenticationResponse.body.token)
+
+		expect(updateProfileRegistrationResponse.status).toBe(422);
+		expect(updateProfileRegistrationResponse.body).toEqual(expect.objectContaining({
+			error: expect.objectContaining({
+				name: ValidationCompositeError.name,
+				errors: expect.any(Object),
+			}),
+		}));
+	});
+
+	it('should return 404 if the profile does not exists', async () => {
 		const email = faker.internet.email();
 		const password = faker.random.alphaNumeric(12);
 
@@ -37,9 +77,10 @@ describe('[E2E] Update Profile Registration Controller', () => {
 			.put(`/profiles`)
 			.send({
 				name: faker.name.fullName(),
-				subjects: [],
+				email: faker.internet.email(),
+				subjectsIds: [],
 			})
-			.set('Authorization', profileAuthenticationResponse.body.token)
+			.set('Authorization', 'Bearer ' + profileAuthenticationResponse.body.token)
 
 		expect(updateProfileRegistrationResponse.status).toBe(404);
 		expect(updateProfileRegistrationResponse.body).toEqual(expect.objectContaining({
@@ -49,7 +90,7 @@ describe('[E2E] Update Profile Registration Controller', () => {
 		}));
 	});
 
-	it('should return 401 if profile is not authenticated', async () => {
+	it('should return 401 if the profile is not authenticated', async () => {
 		await prisma.profile.create({
 			data: {
 				email: faker.internet.email(),
@@ -67,7 +108,8 @@ describe('[E2E] Update Profile Registration Controller', () => {
 			.put(`/profiles`)
 			.send({
 				name: faker.name.fullName(),
-				subjects: Array(5).map(() => faker.random.alphaNumeric()),
+				email: faker.internet.email(),
+				subjectsIds: [],
 			});
 
 		expect(updateProfileRegistrationResponse.status).toBe(401);
