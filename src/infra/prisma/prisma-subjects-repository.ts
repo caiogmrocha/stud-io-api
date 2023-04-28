@@ -16,10 +16,12 @@ type ISubjectsRepository = (
 );
 
 export class PrismaSubjectsRepository implements ISubjectsRepository {
-	async get({ where, relations }: IGetSubjectsRepositoryOptions): Promise<ISubjectModel[]> {
+	async get(params: IGetSubjectsRepositoryOptions): Promise<ISubjectModel[]> {
 		const rows = await prisma.subject.findMany({
-      ...(where && { where: adaptWhere<ISubjectModel, Prisma.SubjectWhereInput>(where) }),
-      ...(relations && { include: adaptRelations(relations) }),
+      ...(params.where && { where: adaptWhere<ISubjectModel, Prisma.SubjectWhereInput>(params.where) }),
+      ...(params.relations && { include: adaptRelations(params.relations) }),
+			...(params.offset && { skip: params.offset }),
+			...(params.limit && { take: params.limit }),
     }) as IPrismaSubjectAdapted[];
 
     return rows.map(SubjectMapper.fromPrismaToModel);

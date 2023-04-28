@@ -5,6 +5,8 @@ import { ISubjectModel } from "./i-subject-model";
 export type IGetSubjectsRepositoryOptions = {
   where?: IWhereClauseOption<Omit<ISubjectModel, 'students' | 'teachers'>>[];
   relations?: IRelationsClauseOption<'profiles'>;
+	limit?: number;
+	offset?: number;
 };
 
 export interface IGetSubjectsRepository {
