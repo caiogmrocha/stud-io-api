@@ -2,6 +2,7 @@ import { setupInMemoryDatabase } from "@/../tests/helpers/in-memory-database";
 import { GetSubjectsService } from "./get-subjects-service";
 import { InMemoryGetSubjectsRepository } from "@/../tests/mocks/infra/in-memory/subjects/in-memory-get-subjects-repository";
 import { faker } from "@faker-js/faker";
+import { Subject } from "@/domain/entities";
 
 type SutTypes = {
 	sut: GetSubjectsService;
@@ -15,6 +16,33 @@ function makeSut(): SutTypes {
 }
 
 describe('[Unit] GetSubjectsService', () => {
+	it('should return all subjects of database', async () => {
+		await setupInMemoryDatabase({
+			profile_subjects: [],
+			profiles: [],
+			students: [],
+			subjects: faker.datatype.array(10).map(() => ({
+				id: faker.datatype.number(),
+				name: faker.name.fullName(),
+				display_name: faker.name.fullName(),
+				description: faker.random.words(6),
+				is_deleted: false,
+				created_at: new Date(),
+			})),
+			teachers: [],
+		});
+
+		const { sut } = makeSut();
+
+		const output1 = await sut.execute();
+
+		expect(output1.isRight()).toBeTruthy();
+		expect(output1.value).toEqual(expect.arrayContaining([
+			expect.any(Subject),
+		]));
+		expect(output1.value).toHaveLength(10);
+	});
+
 	it('should return only the selected interval of subjects', async () => {
 		await setupInMemoryDatabase({
 			profile_subjects: [],
