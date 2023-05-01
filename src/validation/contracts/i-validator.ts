@@ -1,7 +1,7 @@
 import { Either } from "@/utils/logic/either";
 import { ValidationComposite } from "../validation-composite";
 
-export type IValidatorCallback = (fieldName: string, fieldValue: unknown) => ValidationComposite;
+export type IValidatorCallback = (fieldName: string, fieldValue: unknown) => Promise<ValidationComposite>;
 
 export interface IValidator {
   fieldName: string;

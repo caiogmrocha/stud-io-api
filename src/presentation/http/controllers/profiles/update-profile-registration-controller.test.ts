@@ -24,6 +24,15 @@ describe('[E2E] Update Profile Registration Controller', () => {
 			},
 		});
 
+		await prisma.subject.createMany({
+			data: Array(10).map(() => ({
+				name: faker.name.fullName(),
+				displayName: faker.name.fullName(),
+			})),
+		});
+
+		const subjectsIds = (await prisma.subject.findMany()).map(subject => subject.id);
+
 		const profileAuthenticationResponse = await request(app)
 			.post('/profiles/login')
 			.send({ email, password });
@@ -31,11 +40,13 @@ describe('[E2E] Update Profile Registration Controller', () => {
 		const updateProfileRegistrationResponse = await request(app)
 			.put(`/profiles`)
 			.send({
-				name: 123412441,
-				email: '@email.com',
-				subjects: [],
+				name: '123412441',
+				email: 'email@email.com',
+				subjectsIds: [30],
 			})
 			.set('Authorization', 'Bearer ' + profileAuthenticationResponse.body.token)
+
+		console.log(updateProfileRegistrationResponse.body)
 
 		expect(updateProfileRegistrationResponse.status).toBe(422);
 		expect(updateProfileRegistrationResponse.body).toEqual(expect.objectContaining({

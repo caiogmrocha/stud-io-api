@@ -6,7 +6,7 @@ import { ValidationCompositeError } from "@/validation/errors/validation-composi
 
 describe('[Unit] Is Array Validator', () => {
 	it('should accept one parameter as a callback to validate the array items', async () => {
-		const sut1 = await new IsArrayValidator('anyField', ['any_text'], (fieldName, fieldValue) => {
+		const sut1 = await new IsArrayValidator('anyField', ['any_text'], async (fieldName, fieldValue) => {
 			return new ValidationComposite([
 				new ValueInListValidator(fieldName, fieldValue, ['other_text']),
 			]);
