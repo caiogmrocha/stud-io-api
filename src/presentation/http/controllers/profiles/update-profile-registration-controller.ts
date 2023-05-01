@@ -8,6 +8,9 @@ import { RequiredValueValidator } from '@/validation/rules/required-value-valida
 import { EmailFormatValidator } from '@/validation/rules/email-format-validator';
 import { MinimumValueValidator } from '@/validation/rules/minimum-value-validator';
 import { ValueInListValidator } from '@/validation/rules/value-in-list-validator';
+import { IGetSubjectsUseCase } from '@/domain/usecases/subjects/i-get-all-subjects-use-case';
+import { Subject } from '@/domain/entities';
+import { IsArrayValidator } from '@/validation/rules/primitive-types/is-array-validator';
 
 export type IUpdateProfileRegistrationRequest = Http.IHttpRequest<{
 	profileId: string;
@@ -18,6 +21,7 @@ export type IUpdateProfileRegistrationRequest = Http.IHttpRequest<{
 
 export class UpdateProfileRegistrationController implements Http.IController {
 	constructor (
+		private readonly getSubjectsService: IGetSubjectsUseCase,
 		private readonly updateProfileRegistrationService: IUpdateProfileRegistrationUseCase,
 	) {}
 
@@ -26,9 +30,21 @@ export class UpdateProfileRegistrationController implements Http.IController {
 			const validationComposite = new ValidationComposite([
         new RequiredValueValidator('name', body.name),
         new RequiredValueValidator('email', body.email),
-        new RequiredValueValidator('subjectsIds', body.subjectsIds),
         new EmailFormatValidator('email', body.email),
-        /** @todo */ // new ValueInListValidator('type', body.subjectsIds, []),
+        new RequiredValueValidator('subjectsIds', body.subjectsIds),
+				new IsArrayValidator('subjectsIds', body.subjectsIds, async (fieldName: string, fieldValue: unknown) => {
+					const validators = [];
+
+					const getSubjectsServiceResult = await this.getSubjectsService.execute();
+
+					if (getSubjectsServiceResult.isRight() && getSubjectsServiceResult.value.length > 0) {
+						const subjectsIds = getSubjectsServiceResult.value.map(subject => subject.id);
+
+						validators.push(new ValueInListValidator('subjectsIds', fieldValue, subjectsIds));
+					}
+
+					return new ValidationComposite(validators);
+				}),
       ]);
 
       const validationResult = await validationComposite.validate();

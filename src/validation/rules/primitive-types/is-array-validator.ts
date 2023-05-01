@@ -19,7 +19,9 @@ export class IsArrayValidator implements IValidator {
 		}
 
 		const itemsValidators = this.fieldValue.map((item, index) => {
-			return this.cb!(`${this.fieldName}[${index}]`, item).validate();
+			return this.cb!(`${this.fieldName}[${index}]`, item).then(validator => {
+				return validator.validate()
+			});
 		});
 
 		for await (const validation of itemsValidators) {
