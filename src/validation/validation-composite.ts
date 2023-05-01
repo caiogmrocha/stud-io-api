@@ -19,7 +19,13 @@ export class ValidationComposite {
           errors[validation.fieldName] = [];
         }
 
-        errors[validation.fieldName].push(error.message);
+				if (result.value instanceof ValidationCompositeError) {
+					Object.values(result.value.errors).forEach(errorMessages => {
+						return errors[validation.fieldName].push(...errorMessages);
+					});
+				} else {
+					errors[validation.fieldName].push(error.message);
+				}
       }
     }
 
