@@ -44,6 +44,8 @@ describe('[E2E] Update Profile Registration Controller', () => {
 			})
 			.set('Authorization', 'Bearer ' + profileAuthenticationResponse.body.token)
 
+		console.log(updateProfileRegistrationResponse.body)
+
 		expect(updateProfileRegistrationResponse.status).toBe(422);
 		expect(updateProfileRegistrationResponse.body).toEqual(expect.objectContaining({
 			error: expect.objectContaining({

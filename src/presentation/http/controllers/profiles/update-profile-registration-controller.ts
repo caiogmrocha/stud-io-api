@@ -76,6 +76,7 @@ export class UpdateProfileRegistrationController implements Http.IController {
 
 			return Http.ok(null);
 		} catch (error) {
+			console.log({error})
 			return Http.serverError();
 		}
 	}
