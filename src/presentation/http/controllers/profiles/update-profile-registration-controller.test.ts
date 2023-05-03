@@ -7,6 +7,49 @@ import { faker } from '@faker-js/faker';
 import request from 'supertest';
 
 describe('[E2E] Update Profile Registration Controller', () => {
+	it('should return 200 if the provided data has been updated', async () => {
+		const email = faker.internet.email();
+		const password = faker.random.alphaNumeric(12);
+
+		await prisma.profile.create({
+			data: {
+				email,
+				password,
+				type: 'student',
+				student: {
+					create: {
+						name: faker.name.fullName(),
+					},
+				},
+			},
+		});
+
+		await prisma.subject.createMany({
+			data: faker.datatype.array(10).map(() => ({
+				name: faker.name.fullName(),
+				displayName: faker.name.fullName(),
+			})),
+		});
+
+		const subjectsIds = (await prisma.subject.findMany() || []).map(subject => subject.id);
+
+		const profileAuthenticationResponse = await request(app)
+			.post('/profiles/login')
+			.send({ email, password });
+
+		const updateProfileRegistrationResponse = await request(app)
+			.put(`/profiles`)
+			.send({
+				name: faker.name.fullName(),
+				email: faker.internet.email(),
+				subjectsIds,
+			})
+			.set('Authorization', 'Bearer ' + profileAuthenticationResponse.body.token)
+
+		expect(updateProfileRegistrationResponse.status).toBe(200);
+		expect(updateProfileRegistrationResponse.body).toBeNull();
+	});
+
 	it('should return 422 if the provided data is invalid', async () => {
 		const email = faker.internet.email();
 		const password = faker.random.alphaNumeric(12);
@@ -43,8 +86,6 @@ describe('[E2E] Update Profile Registration Controller', () => {
 				subjectsIds: [30],
 			})
 			.set('Authorization', 'Bearer ' + profileAuthenticationResponse.body.token)
-
-		console.log(updateProfileRegistrationResponse.body)
 
 		expect(updateProfileRegistrationResponse.status).toBe(422);
 		expect(updateProfileRegistrationResponse.body).toEqual(expect.objectContaining({
