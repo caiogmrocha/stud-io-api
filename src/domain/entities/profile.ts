@@ -1,4 +1,4 @@
-import { Entity, Post, Student, Teacher } from ".";
+import { Entity, Post, Student, Subject, Teacher } from ".";
 import { Email, Password } from "../value-objects";
 
 export interface IProfileProps {
@@ -14,6 +14,7 @@ export interface IProfileProps {
 
   owner?: Student | Teacher;
   posts?: Post[];
+	subjects?: Subject[];
 }
 
 export class Profile extends Entity<IProfileProps> {
@@ -60,7 +61,12 @@ export class Profile extends Entity<IProfileProps> {
   get owner(): Student | Teacher | undefined {
     return this.props.owner;
   }
+
   get posts(): Post[] {
     return this.props.posts || [];
+  }
+
+  get subjects(): Subject[] {
+    return this.props.subjects || [];
   }
 }

@@ -1,16 +1,24 @@
-import { Profile, Student, Teacher } from "@/domain/entities";
+import { Profile, Student, Subject, Teacher } from "@/domain/entities";
 import { Email, Password } from "@/domain/value-objects";
 import { IProfileModel } from "@/app/contracts/repositories/profiles/i-profile-model";
-import { Profile as PrismaProfile, Student as PrismaStudent, Teacher as PrismaTeacher } from "@prisma/client";
+import {
+	Profile as PrismaProfile,
+	Student as PrismaStudent,
+	Teacher as PrismaTeacher,
+	Subject as PrismaSubject,
+} from "@prisma/client";
 
 import { StudentMapper } from "./student-mapper";
 import { TeacherMapper } from "./teacher-mapper";
 import { ITeacherModel } from "@/app/contracts/repositories/teachers/i-teacher-model";
 import { IStudentModel } from "@/app/contracts/repositories/students/i-student-model";
+import { ISubjectModel } from "@/app/contracts/repositories/subjects/i-subject-model";
+import { SubjectMapper } from "./subject-mapper";
 
 type IAdaptedPrismaProfile = PrismaProfile & {
   student?: PrismaStudent;
   teacher?: PrismaTeacher;
+	subjects?: PrismaSubject[];
 }
 
 export class ProfileMapper {
@@ -18,6 +26,7 @@ export class ProfileMapper {
     // Relations
     let student: IStudentModel | undefined;
     let teacher: ITeacherModel | undefined;
+		let subjects: ISubjectModel[] | undefined;
 
     if (from.owner) {
       if (from.type === 'student') {
@@ -26,6 +35,10 @@ export class ProfileMapper {
         teacher = StudentMapper.fromEntityToModel(from.owner);
       }
     }
+
+		if (from.subjects && from.subjects.length > 0) {
+			subjects = from.subjects.map(SubjectMapper.fromEntityToModel);
+		}
 
     // Profile
     const profile: IProfileModel = {
@@ -40,6 +53,7 @@ export class ProfileMapper {
       deleted_at: from.deletedAt,
       student,
       teacher,
+			subjects,
     };
 
     return profile;
@@ -48,12 +62,17 @@ export class ProfileMapper {
   static fromModeltoEntity(from: IProfileModel): Profile {
     // Relations
     let owner: Student | Teacher | undefined;
+		let subjects: Subject[] | undefined;
 
     if (from.type === 'student' && from.student) {
       owner = StudentMapper.fromModeltoEntity(from.student);
     } else if (from.type === 'teacher' && from.teacher) {
       owner = TeacherMapper.fromModeltoEntity(from.teacher);
     }
+
+		if (from.subjects && from.subjects.length > 0) {
+			subjects = from.subjects.map(SubjectMapper.fromModeltoEntity);
+		}
 
     // Profile
     const email = Email.create(from.email);
@@ -78,7 +97,8 @@ export class ProfileMapper {
       updatedAt: from.updated_at,
       deletedAt: from.deleted_at,
       isDeleted: from.is_deleted,
-      owner
+      owner,
+			subjects,
     });
 
     return profile;
@@ -88,12 +108,17 @@ export class ProfileMapper {
     // Relations
     let student: IStudentModel | undefined;
     let teacher: ITeacherModel | undefined;
+		let subjects: ISubjectModel[] | undefined
 
     if (from.type === 'student' && from.student) {
-      student = StudentMapper.fromPrismaToModel(from.student);
+			student = StudentMapper.fromPrismaToModel(from.student);
     } else if (from.type === 'teacher' && from.teacher) {
-      teacher = TeacherMapper.fromPrismaToModel(from.teacher);
+			teacher = TeacherMapper.fromPrismaToModel(from.teacher);
     }
+
+		if (from.subjects && from.subjects.length > 0) {
+			subjects = from.subjects.map(SubjectMapper.fromPrismaToModel);
+		}
 
     // Profile
     const profile: IProfileModel = {
@@ -108,6 +133,7 @@ export class ProfileMapper {
       deleted_at: from.deletedAt || undefined,
       student,
       teacher,
+			subjects,
     };
 
     return profile;

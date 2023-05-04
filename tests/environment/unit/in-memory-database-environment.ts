@@ -6,6 +6,8 @@ export class InMemoryDatabaseEnvironment {
       profiles: [],
       students: [],
       teachers: [],
+			profile_subjects: [],
+			subjects: [],
     });
   }
 

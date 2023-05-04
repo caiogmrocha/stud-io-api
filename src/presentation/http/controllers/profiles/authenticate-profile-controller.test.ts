@@ -1,11 +1,11 @@
 import { app } from '@/main/server';
 import { ValidationCompositeError } from '@/validation/errors/validation-composite-error';
-import { ProfileDoesNotExistsError } from '@/app/services/profiles/errors/profile-does-not-exists-error';
 
 import { faker } from '@faker-js/faker';
 import { prisma } from '@/infra/prisma/prisma';
 import request from 'supertest';
 import bcrypt from 'bcrypt';
+import { UnauthorizedError } from '../../contracts';
 
 describe('[E2E] Authenticate Profile Controller', () => {
   let sharedData = {
@@ -46,7 +46,7 @@ describe('[E2E] Authenticate Profile Controller', () => {
     expect(response.status).toBe(401);
     expect(response.body).toEqual(expect.objectContaining({
       error: expect.objectContaining({
-        name: ProfileDoesNotExistsError.name,
+        name: UnauthorizedError.name,
       }),
     }));
   });

@@ -1,4 +1,4 @@
-import { Post, Profile, Student, Teacher } from "."
+import { Post, Profile, Student, Subject, Teacher } from "."
 import { Email, Password } from "../value-objects"
 
 import { faker } from '@faker-js/faker'
@@ -26,16 +26,31 @@ describe('[Unit] Profile Entity', () => {
         profile: undefined,
         profileId: faker.datatype.uuid(),
       }),
-      posts: [new Post({
-        id: faker.datatype.uuid(),
-        title: faker.name.fullName(),
-        description: faker.random.words(7),
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        deletedAt: undefined,
-        isDeleted: false,
-      })],
-    })
+      posts: [
+				new Post({
+					id: faker.datatype.uuid(),
+					title: faker.name.fullName(),
+					description: faker.random.words(7),
+					createdAt: new Date(),
+					updatedAt: new Date(),
+					deletedAt: undefined,
+					isDeleted: false,
+				})
+			],
+			subjects: [
+				new Subject({
+					id: faker.datatype.number(),
+					name: faker.name.fullName(),
+					displayName: faker.name.fullName(),
+					description: faker.datatype.string(50),
+					createdAt: new Date(),
+					updatedAt: new Date(),
+					isDeleted: false,
+					deletedAt: undefined,
+				}),
+			],
+    });
+
     const secondSut = new Profile({
       id: faker.datatype.uuid(),
       email: Email.create(faker.internet.email()).value as Email,
@@ -66,6 +81,18 @@ describe('[Unit] Profile Entity', () => {
         deletedAt: undefined,
         isDeleted: false,
       })],
+			subjects: [
+				new Subject({
+					id: faker.datatype.number(),
+					name: faker.name.fullName(),
+					displayName: faker.name.fullName(),
+					description: faker.datatype.string(50),
+					createdAt: new Date(),
+					updatedAt: new Date(),
+					isDeleted: false,
+					deletedAt: undefined,
+				}),
+			],
     })
 
     expect(firstSut.props).toEqual(expect.objectContaining({
@@ -82,7 +109,10 @@ describe('[Unit] Profile Entity', () => {
       posts: expect.arrayContaining([
         expect.any(Post),
       ]),
-    }))
+      subjects: expect.arrayContaining([
+        expect.any(Subject),
+      ]),
+    }));
     expect(secondSut.props).toEqual(expect.objectContaining({
       id: expect.any(String),
       email: expect.any(Email),
@@ -97,6 +127,9 @@ describe('[Unit] Profile Entity', () => {
       posts: expect.arrayContaining([
         expect.any(Post),
       ]),
-    }))
+			subjects: expect.arrayContaining([
+        expect.any(Subject),
+      ]),
+    }));
   })
 })

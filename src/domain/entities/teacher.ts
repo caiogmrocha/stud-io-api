@@ -10,8 +10,6 @@ export interface ITeacherProps {
 
   profile?: Profile;
   profileId: string;
-
-  subjects?: Subject[];
 }
 
 export class Teacher extends Entity<ITeacherProps> {
@@ -49,9 +47,5 @@ export class Teacher extends Entity<ITeacherProps> {
 
   get profileId(): string {
     return this.props.profileId;
-  }
-
-  get subjects(): Subject[] {
-    return this.props.subjects || [];
   }
 }

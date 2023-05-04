@@ -1,5 +1,6 @@
 import { IProfileModel } from "../profiles/i-profile-model";
 import { IStudentModel } from "../students/i-student-model";
+import { ISubjectModel } from "../subjects/i-subject-model";
 import { ITeacherModel } from "../teachers/i-teacher-model";
 
 export type IAvailableModelsWithColumns = {
@@ -9,6 +10,8 @@ export type IAvailableModelsWithColumns = {
   students: keyof IStudentModel;
   teacher: keyof ITeacherModel;
   teachers: keyof ITeacherModel;
+	subject: keyof ISubjectModel;
+	subjects: keyof ISubjectModel;
 };
 
 /**

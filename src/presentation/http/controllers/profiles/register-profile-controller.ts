@@ -1,21 +1,11 @@
 import { ProfileAlreadyExistsError } from "@/app/services/profiles/errors/profile-already-exists-error";
 import { IRegisterProfileUseCase } from "@/domain/usecases/profiles/i-register-profile-use-case";
-import { ValidationCompositeError } from "@/validation/errors/validation-composite-error";
 import { EmailFormatValidator } from "@/validation/rules/email-format-validator";
 import { MinimumValueValidator } from "@/validation/rules/minimum-value-validator";
 import { RequiredValueValidator } from "@/validation/rules/required-value-validator";
 import { ValueInListValidator } from "@/validation/rules/value-in-list-validator";
 import { ValidationComposite } from "@/validation/validation-composite";
-import {
-  IController,
-  IHttpRequest,
-  IHttpResponse,
-  clientError,
-  conflict,
-  created,
-  serverError,
-  unprocessable
-} from "../../contracts";
+import * as Http from "../../contracts";
 
 export type IRegisterProfileControllerRequestBody = {
   name: string;
@@ -25,12 +15,14 @@ export type IRegisterProfileControllerRequestBody = {
   subjectsIds: number[];
 };
 
-export class RegisterProfileController implements IController {
+export class RegisterProfileController implements Http.IController {
   constructor (
     private readonly registerProfileUseCase: IRegisterProfileUseCase,
-    ) {}
+	) {}
 
-  async handle({ body }: IHttpRequest<IRegisterProfileControllerRequestBody>): Promise<IHttpResponse<void>> {
+  async handle({ body }: Http.IHttpRequest<IRegisterProfileControllerRequestBody>): Promise<
+		Http.IHttpResponse<void>
+	> {
     try {
       const validationComposite = new ValidationComposite([
         new RequiredValueValidator('name', body.name),
@@ -45,7 +37,7 @@ export class RegisterProfileController implements IController {
       const validationResult = await validationComposite.validate();
 
       if (validationResult.isLeft()) {
-        return unprocessable(validationResult.value);
+        return Http.unprocessable(validationResult.value);
       }
 
       const result = await this.registerProfileUseCase.execute(body);
@@ -55,19 +47,16 @@ export class RegisterProfileController implements IController {
 
         switch (error.constructor) {
           case ProfileAlreadyExistsError:
-            return conflict(error);
-
-          case ValidationCompositeError:
-            return unprocessable(error);
+            return Http.forbidden(error.message);
 
           default:
-            return clientError(error);
+            return Http.badRequest();
         }
       }
 
-      return created();
+      return Http.created();
     } catch (error) {
-      return serverError(error as Error);
+      return Http.serverError();
     }
   }
 }
