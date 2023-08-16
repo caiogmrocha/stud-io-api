@@ -3,7 +3,7 @@ version: "3"
 services:
   api:
     build:
-      context: .
+      context: ./docker/dockerfiles
       dockerfile: Dockerfile.api
     container_name: studio-api
     ports:
@@ -18,7 +18,7 @@ services:
       - prisma
     links:
       - mysql:mysql
-  
+
   mysql:
     image: mysql:8
     container_name: mysql
@@ -31,8 +31,8 @@ services:
       - MYSQL_ROOT_PASSWORD=password
 
   prisma:
-    build: 
-      context: .
+    build:
+      context: ./docker/dockerfiles
       dockerfile:  Dockerfile.prisma
     volumes:
       - .:/usr/app

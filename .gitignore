@@ -10,5 +10,4 @@ prisma/*.sqlite
 
 tests/mocks/infra/database/database.json
 
-docker/*
-!docker/volumes/mysql/.gitkeep
+docker/volumes
