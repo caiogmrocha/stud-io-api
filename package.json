@@ -1,12 +1,15 @@
 {
   "name": "stud-io",
   "version": "1.0.0",
-  "description": "",
+  "description": "The API datasource for Stud.io platform",
   "main": "index.js",
+  "engines": {
+    "node": "18.15.0"
+  },
   "scripts": {
     "build": "npx tsx esbuild.config.ts",
     "start": "node ./dist/index.js",
-    "dev": "tsx watch --ignore ./node_modules ./src/main/index.ts",
+    "dev": "tsx watch --ignore ./node_modules --clear-screen=false ./src/main/index.ts",
     "test:unit": "jest --config ./jest-unit.config.ts --passWithNoTests --runInBand --no-cache",
     "test:unit:watch": "npm run test:unit -- --watch",
     "test:e2e": "jest --config ./jest-e2e.config.ts --passWithNoTests --runInBand --no-cache",
@@ -14,7 +17,11 @@
     "prepare": "husky install"
   },
   "keywords": [],
-  "author": "",
+  "author": {
+    "name": "Caio Rocha",
+    "email": "caioguilherme739@gmail.com",
+    "url": "https://github.com/caiogmrocha"
+  },
   "license": "ISC",
   "devDependencies": {
     "@esbuild-plugins/tsconfig-paths": "^0.1.2",
@@ -38,7 +45,7 @@
     "husky": "^8.0.2",
     "jest": "^29.3.1",
     "lint-staged": "^13.1.0",
-    "prisma": "^4.7.1",
+    "prisma": "^4.16.2",
     "supertest": "^6.3.3",
     "ts-jest": "^29.0.3",
     "ts-node": "^10.9.1",
@@ -46,7 +53,7 @@
     "typescript": "^4.9.3"
   },
   "dependencies": {
-    "@prisma/client": "^4.7.1",
+    "@prisma/client": "^4.16.2",
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "dayjs": "^1.11.7",
