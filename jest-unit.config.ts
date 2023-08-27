@@ -10,6 +10,10 @@ export default {
   moduleNameMapper: {
     '@/(.*)': '<rootDir>/src/$1'
   },
-  modulePathIgnorePatterns: ["<rootDir>/tests/mocks/infra/database"],
+  modulePathIgnorePatterns: [
+		"<rootDir>/tests/mocks/infra/database",
+		"<rootDir>/docker/",
+		"<rootDir>/node_modules/",
+	],
   testRegex: '.spec.ts$'
 };
