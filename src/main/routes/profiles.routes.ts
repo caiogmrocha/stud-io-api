@@ -7,6 +7,7 @@ import { getProfileDetailsControllerFactory } from "../factories/controllers/pro
 import { adaptMiddleware } from "../adapters/express-middleware-adapter";
 import { profileIsAuthenticatedMiddlewareFactory } from "../factories/middlewares/profiles/profile-is-authenticated-middleware-factory";
 import { updateProfileRegistrationControllerFactory } from "../factories/controllers/profiles/update-profile-registration-controller-factory";
+import { sendCodeToProfileEmailControllerFactory } from "../factories/controllers/profiles/passwords-recoveries/send-code-to-profile-email";
 
 const profileRouter = Router();
 
@@ -18,5 +19,6 @@ profileRouter.put(
 	adaptMiddleware(profileIsAuthenticatedMiddlewareFactory()),
 	adaptRoute(updateProfileRegistrationControllerFactory()),
 );
+profileRouter.post('/password-recovery/send-code-to-profile-email', adaptRoute(sendCodeToProfileEmailControllerFactory()));
 
 export { profileRouter };
