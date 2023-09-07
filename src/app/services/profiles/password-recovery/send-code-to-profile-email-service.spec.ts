@@ -4,9 +4,7 @@ import { ProfileDoesNotExistsError } from "../errors/profile-does-not-exists-err
 import { SendCodeToProfileEmailService } from "./send-code-to-profile-email-service";
 import { IGetProfilesRepository } from "@/app/contracts/repositories/profiles/i-get-profiles-repository";
 import { ICreatePasswordRecoveryRequestRepository } from "@/app/contracts/repositories/passwords-recoveries/i-create-password-recovery-request-repository";
-import { IPasswordRecoveryModel } from "@/app/contracts/repositories/passwords-recoveries/i-password-recovery-model";
 import { IJWTAuthenticationProvider } from "@/app/contracts/auth/jwt/i-jwt-authentication-provider";
-import { JWTAuthenticationProvider } from "@/infra/jwt/jwt-authentication-provider";
 
 describe('[Unit] SendCodeToProfileEmailService', () => {
 	it('should return ProfileDoesNotExistsError if the provided e-mail does not exists in data source', async () => {
