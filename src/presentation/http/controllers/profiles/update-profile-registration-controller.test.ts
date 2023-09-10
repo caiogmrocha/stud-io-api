@@ -1,5 +1,4 @@
 import * as Http from '../../contracts';
-import { ValidationCompositeError } from '@/validation/errors/validation-composite-error';
 import { app } from '@/main/server';
 
 import { prisma } from '@/infra/prisma/prisma';
@@ -90,7 +89,7 @@ describe('[E2E] Update Profile Registration Controller', () => {
 		expect(updateProfileRegistrationResponse.status).toBe(422);
 		expect(updateProfileRegistrationResponse.body).toEqual(expect.objectContaining({
 			error: expect.objectContaining({
-				name: ValidationCompositeError.name,
+				name: Http.UnprocessableEntityError.name,
 				errors: expect.any(Object),
 			}),
 		}));

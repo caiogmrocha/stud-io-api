@@ -1,10 +1,10 @@
 import { ForbiddenError } from '../../contracts/errors/forbidden-error';
-import { ValidationCompositeError } from '@/validation/errors/validation-composite-error';
 import { app } from '@/main/server';
 
 import { prisma } from '@/infra/prisma/prisma';
 import { faker } from '@faker-js/faker';
 import request from 'supertest';
+import { UnprocessableEntityError } from '../../contracts';
 
 describe('[E2E] Register Profile Controller', () => {
   it('should return 201 if the profile has been registered', async () => {
@@ -31,7 +31,7 @@ describe('[E2E] Register Profile Controller', () => {
     expect(response.status).toBe(422);
     expect(response.body).toEqual(expect.objectContaining({
       error: expect.objectContaining({
-        name: ValidationCompositeError.name,
+        name: UnprocessableEntityError.name,
       }),
     }));
   });

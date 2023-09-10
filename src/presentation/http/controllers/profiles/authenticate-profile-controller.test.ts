@@ -1,11 +1,10 @@
 import { app } from '@/main/server';
-import { ValidationCompositeError } from '@/validation/errors/validation-composite-error';
 
 import { faker } from '@faker-js/faker';
 import { prisma } from '@/infra/prisma/prisma';
 import request from 'supertest';
 import bcrypt from 'bcrypt';
-import { UnauthorizedError } from '../../contracts';
+import { UnauthorizedError, UnprocessableEntityError } from '../../contracts';
 
 describe('[E2E] Authenticate Profile Controller', () => {
   let sharedData = {
@@ -60,7 +59,7 @@ describe('[E2E] Authenticate Profile Controller', () => {
     expect(response.status).toBe(422);
     expect(response.body).toEqual(expect.objectContaining({
       error: expect.objectContaining({
-        name: ValidationCompositeError.name,
+        name: UnprocessableEntityError.name,
       }),
     }));
   });

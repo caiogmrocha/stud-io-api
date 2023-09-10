@@ -39,5 +39,18 @@ describe('[E2E] SendCodeToProfileEmailController', () => {
 		}));
 	});
 
+	it('should return 422 if the provided request data is invalid', async () => {
+		const response = await request(app).post('/profiles/password-recovery/send-code-to-profile-email').send({
+			email: 'any-email',
+		});
+
+		expect(response.status).toBe(422);
+		expect(response.body).toEqual(expect.objectContaining({
+			error: expect.objectContaining({
+				name: Errors.UnprocessableEntityError.name,
+			}),
+		}));
+	});
+
 	it.todo('should return 200 if is able to send the code to the provided profile e-mail');
 });
