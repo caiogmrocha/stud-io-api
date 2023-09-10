@@ -48,6 +48,7 @@ export class SendCodeToProfileEmailController implements Http.IController {
 
 			return Http.ok({
 				message: `Código enviado para o e-mail ${body.email}.`,
+				token: result.value.token,
 			});
 		} catch (error) {
 			return Http.serverError();
