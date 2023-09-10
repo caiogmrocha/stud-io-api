@@ -6,13 +6,13 @@ import { ITeacherModel } from "@/app/contracts/repositories/teachers/i-teacher-m
 import { readFile, writeFile } from "fs/promises"
 import path from "path";
 
-type IInMemoryDatabaseModel = {
+type IInMemoryDatabaseModel = Partial<{
   profiles: IProfileModel[],
   students: IStudentModel[],
   teachers: ITeacherModel[],
 	subjects: ISubjectModel[],
 	profile_subjects: IProfileSubjectModel[];
-}
+}>
 
 export const IN_MEMORY_DATABASE_PATH = path.resolve(__dirname, '..', 'mocks', 'infra', 'database', 'database.json');
 

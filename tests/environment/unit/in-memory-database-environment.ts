@@ -11,5 +11,7 @@ export class InMemoryDatabaseEnvironment {
     });
   }
 
-  async teardown(): Promise<void> {}
+  async teardown(): Promise<void> {
+		await setupInMemoryDatabase({});
+	}
 }
