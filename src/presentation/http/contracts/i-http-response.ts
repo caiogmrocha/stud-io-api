@@ -1,5 +1,5 @@
 import { ValidationCompositeError } from "@/validation/errors/validation-composite-error";
-import { InternalServerError, UnauthorizedError } from "./errors";
+import { InternalServerError, UnauthorizedError, UnprocessableEntityError } from "./errors";
 import { NotFoundError } from "./errors/not-found-error";
 import { BadRequestError } from "./errors/bad-request-error";
 import { ForbiddenError } from "./errors/forbidden-error";
@@ -53,7 +53,9 @@ export const forbidden = (message?: string): IHttpResponse => {
 
 export const unprocessable = (error: ValidationCompositeError): IHttpResponse => {
   return {
-    body: { error },
+    body: {
+			error: new UnprocessableEntityError("Os dados enviados são inválidos.", error.errors)
+		},
     status: 422,
   };
 };
