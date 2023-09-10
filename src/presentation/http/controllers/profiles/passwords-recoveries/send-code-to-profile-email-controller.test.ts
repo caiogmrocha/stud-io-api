@@ -60,6 +60,7 @@ describe('[E2E] SendCodeToProfileEmailController', () => {
 		expect(response.status).toBe(200);
 		expect(response.body).toEqual(expect.objectContaining({
 			message: `Código enviado para o e-mail ${sharedData.email}.`,
+			token: expect.any(String),
 		}));
 	});
 });

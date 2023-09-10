@@ -87,4 +87,6 @@ describe('[Unit] SendCodeToProfileEmailService', () => {
 			expires_at: expect.any(Date),
 		});
 	});
+
+	it.todo('should call smtpProvider.send() with the correct params');
 });
