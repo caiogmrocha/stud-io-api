@@ -23,7 +23,7 @@ export class SendCodeToProfileEmailService implements ISendCodeToProfileEmailUse
 			return left(new ProfileDoesNotExistsError());
 		}
 
-		const expirationTimeInMilisseconds = 3 * 60 * 60;
+		const expirationTimeInMilisseconds = 3 * 60 * 60 * 1000;
 
 		const token = await this.jwtAuthenticationProvider.sign({
 			id: profile.id,
