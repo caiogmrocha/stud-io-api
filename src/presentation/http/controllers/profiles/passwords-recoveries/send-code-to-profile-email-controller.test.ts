@@ -52,5 +52,14 @@ describe('[E2E] SendCodeToProfileEmailController', () => {
 		}));
 	});
 
-	it.todo('should return 200 if is able to send the code to the provided profile e-mail');
+	it('should return 200 if is able to send the code to the provided profile e-mail', async () => {
+		const response = await request(app).post('/profiles/password-recovery/send-code-to-profile-email').send({
+			email: sharedData.email,
+		});
+
+		expect(response.status).toBe(200);
+		expect(response.body).toEqual(expect.objectContaining({
+			message: `Código enviado para o e-mail ${sharedData.email}.`,
+		}));
+	});
 });
