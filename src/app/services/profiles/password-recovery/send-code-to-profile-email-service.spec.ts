@@ -5,6 +5,7 @@ import { SendCodeToProfileEmailService } from "./send-code-to-profile-email-serv
 import { IGetProfilesRepository } from "@/app/contracts/repositories/profiles/i-get-profiles-repository";
 import { ICreatePasswordRecoveryRequestRepository } from "@/app/contracts/repositories/passwords-recoveries/i-create-password-recovery-request-repository";
 import { IJWTAuthenticationProvider } from "@/app/contracts/auth/jwt/i-jwt-authentication-provider";
+import { IQueueProvider } from "@/app/contracts/queue/i-queue-provider";
 
 describe('[Unit] SendCodeToProfileEmailService', () => {
 	it('should return ProfileDoesNotExistsError if the provided e-mail does not exists in data source', async () => {
@@ -19,12 +20,18 @@ describe('[Unit] SendCodeToProfileEmailService', () => {
 		const fakeJwtAuthenticationProvider = {
 			sign: jest.fn(),
 			verify: jest.fn(),
-		} as IJWTAuthenticationProvider
+		} as IJWTAuthenticationProvider;
+
+		const fakeQueueProvider = {
+			addJob: jest.fn(),
+			removeJob: jest.fn(),
+		} as IQueueProvider;
 
 		const sut = new SendCodeToProfileEmailService(
 			getProfilesRepository,
 			createPasswordRecoveryRequestRepository,
 			fakeJwtAuthenticationProvider,
+			fakeQueueProvider,
 		);
 
 		const result = await sut.execute({
@@ -62,12 +69,18 @@ describe('[Unit] SendCodeToProfileEmailService', () => {
 				value: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMjMsInVzZXJuYW1lIjoiam9obiIsImVtYWlsIjoiam9obkBleGFtcGxlLmNvbSIsImV4cCI6MTYzMTk3MzAwMH0.yQy-b2hPWACy_Ldj0T49ynBe6XhG4F3Rr4lSmlzEtBo'
 			} as Awaited<ReturnType<IJWTAuthenticationProvider['sign']>>),
 			verify: jest.fn(),
-		} as IJWTAuthenticationProvider
+		} as IJWTAuthenticationProvider;
+
+		const fakeQueueProvider = {
+			addJob: jest.fn(),
+			removeJob: jest.fn(),
+		} as IQueueProvider;
 
 		const sut = new SendCodeToProfileEmailService(
 			getProfilesRepository,
 			createPasswordRecoveryRequestRepository,
 			fakeJwtAuthenticationProvider,
+			fakeQueueProvider,
 		);
 
 		const result = await sut.execute({
@@ -80,6 +93,7 @@ describe('[Unit] SendCodeToProfileEmailService', () => {
 			token: expect.any(String),
 		}));
 		expect(fakeJwtAuthenticationProvider.sign).toHaveBeenCalled();
+		expect(fakeQueueProvider.addJob).toHaveBeenCalled();
 		expect(createPasswordRecoveryRequestRepository.createPasswordRecoveryRegister).toHaveBeenCalledWith({
 			profile_id: 'any-id',
 			code: expect.any(String),
@@ -88,5 +102,5 @@ describe('[Unit] SendCodeToProfileEmailService', () => {
 		});
 	});
 
-	it.todo('should call smtpProvider.send() with the correct params');
+	it.todo('should send an e-mail job to the queue with the code and the token');
 });
