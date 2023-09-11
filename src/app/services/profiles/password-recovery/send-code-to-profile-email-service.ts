@@ -4,12 +4,14 @@ import { IGetProfilesRepository } from "@/app/contracts/repositories/profiles/i-
 import { ProfileDoesNotExistsError } from "../errors/profile-does-not-exists-error";
 import { ICreatePasswordRecoveryRequestRepository } from "@/app/contracts/repositories/passwords-recoveries/i-create-password-recovery-request-repository";
 import { IJWTAuthenticationProvider } from "@/app/contracts/auth/jwt/i-jwt-authentication-provider";
+import { IQueueProvider } from "@/app/contracts/queue/i-queue-provider";
 
 export class SendCodeToProfileEmailService implements ISendCodeToProfileEmailUseCase {
 	constructor(
 		private readonly getProfilesRepository: IGetProfilesRepository,
 		private readonly createPasswordRecoveryRequestRepository: ICreatePasswordRecoveryRequestRepository,
 		private readonly jwtAuthenticationProvider: IJWTAuthenticationProvider,
+		private readonly queueProvider: IQueueProvider,
 	) {}
 
 	async execute(input: ISendCodeToProfileEmailUseCaseInputBoundary): Promise<ISendCodeToProfileEmailServiceResult> {
@@ -35,6 +37,16 @@ export class SendCodeToProfileEmailService implements ISendCodeToProfileEmailUse
 		}
 
 		const code = Math.floor(100000 + Math.random() * 900000).toString();
+
+		await this.queueProvider.addJob('SendEmailQueue', {
+			to: input.email,
+			subject: 'Recuperação de senha',
+			template: 'password-recovery',
+		}, {
+			id: profile.id,
+			delay: 10000,
+			attempts: 3,
+		});
 
 		await this.createPasswordRecoveryRequestRepository.createPasswordRecoveryRegister({
 			profile_id: profile.id,
