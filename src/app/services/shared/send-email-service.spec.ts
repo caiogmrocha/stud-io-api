@@ -31,4 +31,7 @@ describe('[Unit] SendEmailService', () => {
 		expect(output.isLeft()).toBeTruthy();
 		expect(output.value).toBeInstanceOf(SendEmailServiceError);
 	});
+
+	it.todo('should return an SendEmailServiceError if TemplateProvider throws an error');
+	it.todo('should return undefined if SendEmailProvider has sent the e-mail with success');
 });
