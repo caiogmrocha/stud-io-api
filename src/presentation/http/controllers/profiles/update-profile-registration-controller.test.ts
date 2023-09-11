@@ -1,5 +1,5 @@
 import * as Http from '../../contracts';
-import { app } from '@/main/server';
+import { app } from '@/main/http';
 
 import { prisma } from '@/infra/prisma/prisma';
 import { faker } from '@faker-js/faker';

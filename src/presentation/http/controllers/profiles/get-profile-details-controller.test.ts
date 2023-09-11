@@ -1,5 +1,5 @@
 import { NotFoundError } from '../../contracts/errors/not-found-error';
-import { app } from '@/main/server';
+import { app } from '@/main/http';
 
 import { prisma } from '@/infra/prisma/prisma';
 import { faker } from '@faker-js/faker';

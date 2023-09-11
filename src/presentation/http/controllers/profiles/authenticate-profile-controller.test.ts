@@ -1,4 +1,4 @@
-import { app } from '@/main/server';
+import { app } from '@/main/http';
 
 import { faker } from '@faker-js/faker';
 import { prisma } from '@/infra/prisma/prisma';

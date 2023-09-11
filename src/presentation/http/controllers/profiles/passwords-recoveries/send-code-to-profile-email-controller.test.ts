@@ -1,4 +1,4 @@
-import { app } from '@/main/server';
+import { app } from '@/main/http';
 import * as Errors from '@/presentation/http/contracts';
 
 import request from 'supertest';
