@@ -1,4 +1,4 @@
-import { app } from "./server";
+import { app } from "./http";
 
 const HOST = process.env.HTTP_HOST;
 const PORT = process.env.HTTP_PORT;

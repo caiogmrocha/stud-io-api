@@ -20,15 +20,9 @@ export type IJobOptions = {
 	delay?: number;
 	priority?: number;
 	attempts?: number;
-
-	repeat?: (
-		| { every: number; limit?: number; }
-		| { cron: string; }
-	);
 }
 
 export const defaultJobOptions: Omit<IJobOptions, 'id'> = {
-	repeat: undefined,
 	removeOnComplete: true,
 	removeOnFail: true,
 	lifo: false,
