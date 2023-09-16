@@ -59,5 +59,29 @@ describe('[Unit] SendEmailService', () => {
 		expect(output.value).toBeInstanceOf(SendEmailServiceError);
 	});
 
-	it.todo('should return undefined if SendEmailProvider has sent the e-mail with success');
+	it('should return undefined if SendEmailProvider has sent the e-mail with success', async () => {
+		const fakeTemplateProvider = {
+			render: jest.fn().mockResolvedValue(right(undefined)),
+		};
+
+		const fakeSendEmailProvider = {
+			send: jest.fn().mockResolvedValue(right(undefined)),
+		} as ISendEmailProvider;
+
+		const sut = new SendEmailService(
+			fakeTemplateProvider,
+			fakeSendEmailProvider,
+		);
+
+		const output = await sut.execute({
+			to: faker.internet.email(),
+			from: faker.internet.email(),
+			subject: faker.random.words(5),
+			templatePath: 'any-path',
+			templateData: {},
+		});
+
+		expect(output.isRight()).toBeTruthy();
+		expect(output.value).toBeUndefined();
+	});
 });
