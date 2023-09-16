@@ -42,7 +42,7 @@ describe('[Unit] SendCodeToProfileEmailService', () => {
 		expect(result.value).toBeInstanceOf(ProfileDoesNotExistsError);
 	});
 
-	it('should return the 6 digits code and authorization token if the e-mail exists in data source', async () => {
+	it('should return the 6 digits code and authorization token and have to sent send e-mail job to SendEmailQueue if the e-mail exists in data source', async () => {
 		const getProfilesRepository = {
 			get: jest.fn().mockResolvedValue([
 				{
@@ -93,7 +93,13 @@ describe('[Unit] SendCodeToProfileEmailService', () => {
 			token: expect.any(String),
 		}));
 		expect(fakeJwtAuthenticationProvider.sign).toHaveBeenCalled();
-		expect(fakeQueueProvider.addJob).toHaveBeenCalled();
+		expect(fakeQueueProvider.addJob).toHaveBeenCalledWith(
+			'SendEmailQueue',
+			expect.objectContaining({
+				template: 'password-recovery'
+			}),
+			expect.any(Object)
+		);
 		expect(createPasswordRecoveryRequestRepository.createPasswordRecoveryRegister).toHaveBeenCalledWith({
 			profile_id: 'any-id',
 			code: expect.any(String),
@@ -101,6 +107,4 @@ describe('[Unit] SendCodeToProfileEmailService', () => {
 			expires_at: expect.any(Date),
 		});
 	});
-
-	it.todo('should send an e-mail job to the queue with the code and the token');
 });
