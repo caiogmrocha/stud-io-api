@@ -1,13 +1,13 @@
 import { Either } from "@/utils/logic/either";
 import { CanNotRenderTemplateError } from "./errors/can-not-render-template-error";
 
-export type ITemplateProviderInputBoundary<T extends any = any> = {
+export type ITemplateProviderInputBoundary = {
 	templatePath: string;
-	templateData: T;
+	templateData: any;
 }
 
 export type ITemplateProviderOutputBoundary = Either<CanNotRenderTemplateError, string>;
 
 export interface ITemplateProvider {
-	render<T extends any = any>(input: ITemplateProviderInputBoundary<T>): Promise<ITemplateProviderOutputBoundary>;
+	render(input: ITemplateProviderInputBoundary): Promise<ITemplateProviderOutputBoundary>;
 }

@@ -18,7 +18,11 @@ export class SendCodeToProfileEmailService implements ISendCodeToProfileEmailUse
 		const [ profile ] = await this.getProfilesRepository.get({
 			where: [
 				['email', '=', input.email]
-			]
+			],
+			relations: {
+				student: { fields: ['name'] },
+				teacher: { fields: ['name'] },
+			},
 		});
 
 		if (!profile) {
@@ -38,10 +42,14 @@ export class SendCodeToProfileEmailService implements ISendCodeToProfileEmailUse
 
 		const code = Math.floor(100000 + Math.random() * 900000).toString();
 
-		await this.queueProvider.addJob('SendEmailQueue', {
+		await this.queueProvider.addJob('send-email-queue', {
 			to: input.email,
 			subject: 'Recuperação de senha',
-			template: 'password-recovery',
+			templatePath: 'password-recovery',
+			templateData: {
+				profileOwnerName: profile.type === 'student' ? profile.student!.name : profile.teacher!.name,
+				code,
+			},
 		}, {
 			id: profile.id,
 			delay: 10000,

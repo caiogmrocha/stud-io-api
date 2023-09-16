@@ -4,6 +4,7 @@ import { SendCodeToProfileEmailService } from "@/app/services/profiles/password-
 import { JWTAuthenticationProvider } from "@/infra/jwt/jwt-authentication-provider";
 import { PrismaProfilesRepository } from "@/infra/prisma/prisma-profiles-repository";
 import { PrismaPasswordRecoveriesRepository } from "@/infra/prisma/prisma-passwords-recoveries-repository";
+import { BullQueueProvider } from "@/infra/bull/bull-queue-provider";
 
 export function sendCodeToProfileEmailControllerFactory(): IController {
 	const sendCodeToProfileEmailController = new SendCodeToProfileEmailController(
@@ -11,6 +12,7 @@ export function sendCodeToProfileEmailControllerFactory(): IController {
 			new PrismaProfilesRepository(),
 			new PrismaPasswordRecoveriesRepository(),
 			new JWTAuthenticationProvider(),
+			new BullQueueProvider(),
 		),
 	);
 

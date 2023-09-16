@@ -94,7 +94,7 @@ describe('[Unit] SendCodeToProfileEmailService', () => {
 		}));
 		expect(fakeJwtAuthenticationProvider.sign).toHaveBeenCalled();
 		expect(fakeQueueProvider.addJob).toHaveBeenCalledWith(
-			'SendEmailQueue',
+			'send-email-queue',
 			expect.objectContaining({
 				template: 'password-recovery'
 			}),
