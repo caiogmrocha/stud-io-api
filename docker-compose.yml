@@ -19,6 +19,25 @@ services:
       - redis
     links:
       - mysql:mysql
+      - redis:redis
+
+  queue:
+    build:
+      context: ./
+      dockerfile: ./docker/dockerfiles/Dockerfile.queue
+    container_name: studio-queue
+    restart: always
+    environment:
+      - NODE_ENV=development
+    volumes:
+      - .:/usr/app
+    depends_on:
+      - mysql
+      - prisma
+      - redis
+    links:
+      - mysql:mysql
+      - redis:redis
 
   mysql:
     image: mysql:8

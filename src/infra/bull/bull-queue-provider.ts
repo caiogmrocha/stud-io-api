@@ -8,15 +8,16 @@ import { env } from '@/utils/env';
 import Redis from 'ioredis';
 import { JobsOptions, Queue } from "bullmq";
 
-const redis = new Redis({
+export const redisConnection = new Redis({
 	host: env.REDIS_HOST,
 	port: env.REDIS_PORT,
+	maxRetriesPerRequest: null,
 });
 
 export class BullQueueProvider implements IQueueProvider {
 	async addJob<T extends unknown = any>(queue: IAvailableQueues, data: T, options: IJobOptions): Promise<Either<CanNotAddJobError, void>> {
 		try {
-			const queueInstance = new Queue(queue, { connection: redis });
+			const queueInstance = new Queue(queue, { connection: redisConnection });
 
 			const preparedJopOptions: JobsOptions = {
 				removeOnComplete: typeof options.removeOnComplete === 'boolean' ? options.removeOnComplete : defaultJobOptions.removeOnComplete,
@@ -38,7 +39,7 @@ export class BullQueueProvider implements IQueueProvider {
 
 	async removeJob(queue: IAvailableQueues, jobId: string): Promise<Either<CanNotRemoveJobError, void>> {
 		try {
-			const queueInstance = new Queue(queue, { connection: redis });
+			const queueInstance = new Queue(queue, { connection: redisConnection });
 
 			await queueInstance.remove(jobId);
 
