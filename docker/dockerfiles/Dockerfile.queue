@@ -8,6 +8,4 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 3333
-
-CMD ["npm", "run", "dev:http"]
+CMD ["npm", "run", "dev:queue"]

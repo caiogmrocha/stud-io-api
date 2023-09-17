@@ -9,7 +9,7 @@ const envSchema = z.object({
 	HTTP_HOST: z.string().nonempty().ip(),
 	HTTP_PORT: z.string().nonempty().regex(/[0-9]+/).transform(Number),
 	JWT_SECRET: z.string().nonempty(),
-	REDIS_HOST: z.string().nonempty().ip(),
+	REDIS_HOST: z.string().nonempty(),
 	REDIS_PORT: z.string().nonempty().regex(/[0-9]+/).transform(Number),
 	SMTP_HOST: z.string().nonempty(),
 	SMTP_PORT: z.string().nonempty().regex(/[0-9]+/).transform(Number),
