@@ -54,6 +54,9 @@ describe('[Unit] SendCodeToProfileEmailService', () => {
 					is_deleted: false,
 					level: 0,
 					type: 'student',
+					student: {
+						name: 'any-name',
+					},
 				}
 			] as IProfileModel[]),
 		} as unknown as IGetProfilesRepository;
@@ -96,7 +99,11 @@ describe('[Unit] SendCodeToProfileEmailService', () => {
 		expect(fakeQueueProvider.addJob).toHaveBeenCalledWith(
 			'send-email-queue',
 			expect.objectContaining({
-				template: 'password-recovery'
+				templatePath: 'password-recovery',
+				templateData: expect.objectContaining({
+					profileOwnerName: 'any-name',
+					code: expect.any(String),
+				}),
 			}),
 			expect.any(Object)
 		);
