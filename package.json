@@ -1,15 +1,16 @@
 {
-  "name": "stud-io",
+  "name": "stud-io-api",
   "version": "1.0.0",
   "description": "The API datasource for Stud.io platform",
-  "main": "index.js",
+  "main": "src/main/index.ts",
   "engines": {
     "node": "18.15.0"
   },
   "scripts": {
     "build": "npx tsx esbuild.config.ts",
     "start": "node ./dist/index.js",
-    "dev": "tsx watch --ignore ./node_modules --clear-screen=false ./src/main/index.ts",
+    "dev:http": "tsx watch --ignore ./node_modules --clear-screen=false ./src/main/http.ts",
+    "dev:queue": "tsx watch --ignore ./node_modules --clear-screen=false ./src/main/queue.ts",
     "test:unit": "jest --config ./jest-unit.config.ts --passWithNoTests --runInBand --no-cache",
     "test:unit:watch": "npm run test:unit -- --watch",
     "test:e2e": "jest --config ./jest-e2e.config.ts --passWithNoTests --runInBand --no-cache",

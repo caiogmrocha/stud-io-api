@@ -1,5 +1,5 @@
 import { ForbiddenError } from '../../contracts/errors/forbidden-error';
-import { app } from '@/main/http';
+import { app } from '@/main/config/http';
 
 import { prisma } from '@/infra/prisma/prisma';
 import { faker } from '@faker-js/faker';

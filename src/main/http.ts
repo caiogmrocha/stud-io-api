@@ -1,25 +1,24 @@
-import express, { NextFunction, Request, Response } from 'express';
-import cors from 'cors';
-import dotenv from 'dotenv';
-import { router } from './routes';
-import { InternalServerError } from '@/presentation/http/contracts';
+import { app } from "./config/http";
 
-dotenv.config({ path: '.env' });
+const HOST = process.env.HTTP_HOST;
+const PORT = process.env.HTTP_PORT;
 
-const app = express();
+(async (): Promise<void> => {
+	try {
+		const server = app.listen(PORT, () => console.log(`Server is running at http://${HOST}:${PORT}`));
 
-app.use(cors());
+		const exitSignal: NodeJS.Signals[] = ["SIGINT", "SIGTERM", "SIGQUIT"];
 
-app.use(express.json({
-	type: ['application/json']
-}));
+		exitSignal.forEach((signal) => process.on(signal, async () => {
+			console.info(`Web API service received signal: ${signal}, exiting gracefully...`);
 
-app.use((error: Error, request: Request, response: Response, next: NextFunction) => {
-	return response.status(500).json({
-		error: new InternalServerError(),
-	});
-});
+			server.close();
 
-app.use(router);
+			process.exit(0);
+		}));
+	} catch (error) {
+		console.info('Web API service exited with status error: ', error);
 
-export { app };
+		process.exit(1);
+	}
+})();
