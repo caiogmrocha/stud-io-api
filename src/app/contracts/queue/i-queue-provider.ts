@@ -31,6 +31,8 @@ export const defaultJobOptions: Omit<IJobOptions, 'id'> = {
 	attempts: 1,
 };
 
+export type IAvailableQueues = "send-email-queue";
+
 /**
  * @classdesc
  *
@@ -48,7 +50,7 @@ export interface IQueueProvider {
 	 *
 	 * @returns void
 	 */
-	addJob<T extends any = any>(queue: string, data: T, options: IJobOptions): Promise<Either<CanNotAddJobError, void>>;
+	addJob<T extends any = any>(queue: IAvailableQueues, data: T, options: IJobOptions): Promise<Either<CanNotAddJobError, void>>;
 
 	/**
 	 * Remove a job from the specified queue.
@@ -56,5 +58,5 @@ export interface IQueueProvider {
 	 * @param queue queue name
 	 * @param jobId job identifier
 	 */
-	removeJob(queue: string, jobId: string): Promise<Either<CanNotRemoveJobError, void>>;
+	removeJob(queue: string, jobId: IAvailableQueues): Promise<Either<CanNotRemoveJobError, void>>;
 }

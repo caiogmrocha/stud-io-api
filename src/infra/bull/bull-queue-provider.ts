@@ -1,11 +1,12 @@
-import Redis from 'ioredis';
-import { JobsOptions, Queue } from "bullmq";
 
-import { IJobOptions, IQueueProvider, defaultJobOptions } from "@/app/contracts/queue/i-queue-provider";
+import { IAvailableQueues, IJobOptions, IQueueProvider, defaultJobOptions } from "@/app/contracts/queue/i-queue-provider";
 import { CanNotAddJobError } from "@/app/contracts/queue/errors/can-not-add-job-error";
 import { CanNotRemoveJobError } from "@/app/contracts/queue/errors/can-not-remove-job-error";
 import { Either, left, right } from "@/utils/logic/either";
 import { env } from '@/utils/env';
+
+import Redis from 'ioredis';
+import { JobsOptions, Queue } from "bullmq";
 
 const redis = new Redis({
 	host: env.REDIS_HOST,
@@ -13,7 +14,7 @@ const redis = new Redis({
 });
 
 export class BullQueueProvider implements IQueueProvider {
-	async addJob<T extends unknown = any>(queue: string, data: T, options: IJobOptions): Promise<Either<CanNotAddJobError, void>> {
+	async addJob<T extends unknown = any>(queue: IAvailableQueues, data: T, options: IJobOptions): Promise<Either<CanNotAddJobError, void>> {
 		try {
 			const queueInstance = new Queue(queue, { connection: redis });
 
@@ -35,7 +36,7 @@ export class BullQueueProvider implements IQueueProvider {
 		}
 	}
 
-	async removeJob(queue: string, jobId: string): Promise<Either<CanNotRemoveJobError, void>> {
+	async removeJob(queue: IAvailableQueues, jobId: string): Promise<Either<CanNotRemoveJobError, void>> {
 		try {
 			const queueInstance = new Queue(queue, { connection: redis });
 
