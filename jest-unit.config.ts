@@ -26,7 +26,8 @@ export default {
   ],
   testEnvironment: './tests/environment/unit/index.ts',
   moduleNameMapper: {
-    '@/(.*)': '<rootDir>/src/$1'
+    '@/(.*)': '<rootDir>/src/$1',
+    '~/(.*)': '<rootDir>/tests/$1'
   },
   modulePathIgnorePatterns: [
 		"<rootDir>/tests/mocks/infra/database",

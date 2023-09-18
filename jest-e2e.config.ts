@@ -8,7 +8,8 @@ export default {
   ],
   testEnvironment: './tests/environment/e2e/index.ts',
   moduleNameMapper: {
-    '@/(.*)': '<rootDir>/src/$1'
+    '@/(.*)': '<rootDir>/src/$1',
+    '~/(.*)': '<rootDir>/tests/$1'
   },
   testRegex: '.test.ts$',
 	modulePathIgnorePatterns: [

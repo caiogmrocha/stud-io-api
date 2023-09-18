@@ -7,7 +7,7 @@ import { registerProfileControllerFactory } from "@/main/factories/controllers/p
 import { getProfileDetailsControllerFactory } from "@/main/factories/controllers/profiles/get-profile-details-controller-factory";
 import { profileIsAuthenticatedMiddlewareFactory } from "@/main/factories/middlewares/profiles/profile-is-authenticated-middleware-factory";
 import { updateProfileRegistrationControllerFactory } from "@/main/factories/controllers/profiles/update-profile-registration-controller-factory";
-import { sendCodeToProfileEmailControllerFactory } from "@/main/factories/controllers/profiles/passwords-recoveries/send-code-to-profile-email";
+import { sendCodeToProfileEmailControllerFactory } from "@/main/factories/controllers/profiles/passwords-recoveries/send-code-to-profile-email-controller-factory";
 
 const profileRouter = Router();
 

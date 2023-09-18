@@ -1,10 +1,10 @@
-import { Either, left, right } from "@/utils/logic/either";
 import { ISendCodeToProfileEmailServiceResult, ISendCodeToProfileEmailUseCase, ISendCodeToProfileEmailUseCaseInputBoundary } from "@/domain/usecases/profiles/password-recovery/i-send-code-to-profile-email-use-case";
 import { IGetProfilesRepository } from "@/app/contracts/repositories/profiles/i-get-profiles-repository";
-import { ProfileDoesNotExistsError } from "../errors/profile-does-not-exists-error";
 import { ICreatePasswordRecoveryRequestRepository } from "@/app/contracts/repositories/passwords-recoveries/i-create-password-recovery-request-repository";
 import { IJWTAuthenticationProvider } from "@/app/contracts/auth/jwt/i-jwt-authentication-provider";
 import { IQueueProvider } from "@/app/contracts/queue/i-queue-provider";
+import { ProfileDoesNotExistsError } from "../errors/profile-does-not-exists-error";
+import { left, right } from "@/utils/logic/either";
 
 export class SendCodeToProfileEmailService implements ISendCodeToProfileEmailUseCase {
 	constructor(

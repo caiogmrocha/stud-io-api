@@ -6,6 +6,8 @@ import { faker } from '@faker-js/faker';
 import bcrypt from 'bcrypt';
 import { prisma } from '@/infra/prisma/prisma';
 
+jest.mock('@/infra/bull/bull-queue-provider', () => require('~/mocks/infra/bullmq/fake-bull-queue-provider'));
+
 describe('[E2E] SendCodeToProfileEmailController', () => {
 	let sharedData = {
     email: faker.internet.email(),

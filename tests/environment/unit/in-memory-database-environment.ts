@@ -12,6 +12,12 @@ export class InMemoryDatabaseEnvironment {
   }
 
   async teardown(): Promise<void> {
-		await setupInMemoryDatabase({});
+		await setupInMemoryDatabase({
+			profile_subjects: [],
+			profiles: [],
+			students: [],
+			subjects: [],
+			teachers: [],
+		});
 	}
 }
