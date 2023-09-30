@@ -9,7 +9,7 @@ import { Either, left, right } from "@/utils/logic/either";
 export class AuthenticateProfileService implements IAuthenticateProfileUseCase {
   constructor (
     private readonly getProfilesRepository: IGetProfilesRepository,
-    private readonly jwtAuthenticationProvider: IJWTAuthenticationProvider<IAuthenticatedProfilePayload>,
+    private readonly jwtAuthenticationProvider: IJWTAuthenticationProvider,
     private readonly bcryptHashProvider: IBCryptProvider,
   ) {}
 

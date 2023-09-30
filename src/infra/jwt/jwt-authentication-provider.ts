@@ -7,9 +7,9 @@ import jwt from 'jsonwebtoken';
 
 const secret = process.env.JWT_SECRET as string;
 
-export class JWTAuthenticationProvider<IPayload extends string | object | Buffer> implements IJWTAuthenticationProvider<IPayload> {
-  async sign(params: IPayload, expiresIn: number): Promise<Either<
-    JWTSignError<IPayload>,
+export class JWTAuthenticationProvider implements IJWTAuthenticationProvider {
+  async sign(params: any, expiresIn: number): Promise<Either<
+    JWTSignError<any>,
     string
   >> {
     try {
@@ -23,9 +23,9 @@ export class JWTAuthenticationProvider<IPayload extends string | object | Buffer
     }
   }
 
-  async verify(accessToken: string): Promise<Either<JWTVerifyError, IPayload>> {
+  async verify(accessToken: string): Promise<Either<JWTVerifyError, any>> {
     try {
-      const decoded = jwt.verify(accessToken, secret) as IPayload;
+      const decoded = jwt.verify(accessToken, secret) as any;
 
       return right(decoded);
     } catch (error) {
