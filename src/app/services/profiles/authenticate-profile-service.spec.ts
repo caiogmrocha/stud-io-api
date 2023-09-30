@@ -24,7 +24,7 @@ async function makeSut(profilesData: IProfileModel[] = []): Promise<SutTypes> {
   });
 
   const getProfilesRepository = new InMemoryGetProfilesRepository();
-  const jwtAuthenticationProvider = new FakeAuthenticationJWTProvider<IAuthenticatedProfilePayload>();
+  const jwtAuthenticationProvider = new FakeAuthenticationJWTProvider();
   const bcryptProvider = new FakeBCryptProvider();
   const sut = new AuthenticateProfileService(
     getProfilesRepository,
