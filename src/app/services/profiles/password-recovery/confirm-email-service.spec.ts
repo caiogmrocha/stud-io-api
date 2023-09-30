@@ -73,6 +73,7 @@ describe('[Unit] ConfirmEmailService', () => {
 		expect(result.isLeft()).toBeTruthy();
 		expect(result.value).toBeInstanceOf(JWTVerifyError);
 	});
+
 	it.todo('should return MaxAttemptsExceededError if the provided authorization token has exceeded 3 attempts');
 	it.todo('should return ProfileDoesNotExistsError if the provided email does not exist');
 	it.todo('should return the authorization token if the provided code is valid');

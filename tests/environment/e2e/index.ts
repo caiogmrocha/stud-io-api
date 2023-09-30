@@ -1,6 +1,5 @@
 import type { EnvironmentContext, JestEnvironmentConfig } from '@jest/environment';
 import NodeEnvironment from 'jest-environment-node';
-import RedisMock from 'ioredis-mock';
 
 import { PrismaTestEnvironment } from './prisma-test-environment';
 
