@@ -5,7 +5,7 @@ const PORT = process.env.HTTP_PORT;
 
 (async (): Promise<void> => {
 	try {
-		const server = app.listen(PORT, () => console.log(`Server is running at http://${HOST}:${PORT}`));
+		const server = app.listen(PORT, () => console.log(`Web API service is running at http://${HOST}:${PORT}`));
 
 		const exitSignal: NodeJS.Signals[] = ["SIGINT", "SIGTERM", "SIGQUIT"];
 
