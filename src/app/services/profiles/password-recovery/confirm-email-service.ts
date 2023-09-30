@@ -3,10 +3,13 @@ import { IGetPasswordRecoveryByCodeRepository } from "@/app/contracts/repositori
 import { IJWTAuthenticationProvider } from "@/app/contracts/auth/jwt/i-jwt-authentication-provider";
 import { left, right } from "@/utils/logic/either";
 import { CodeDoesNotExistError } from "./errors/code-does-not-exists-error";
+import { IIncrementPasswordRecoveryAttemptsRepository } from "@/app/contracts/repositories/passwords-recoveries/i-increment-password-recovery-attempts";
+import { MaximumCodeVerificationAttemptsReachedError } from "./errors/maximum-code-verification-attempts-reached-error";
 
 export class ConfirmEmailService implements IConfirmEmailCodeUseCase {
 	constructor (
 		private readonly getPasswordRecoveryByCodeRepository: IGetPasswordRecoveryByCodeRepository,
+		private readonly incrementPasswordRecoveryAttemptsRepository: IIncrementPasswordRecoveryAttemptsRepository,
 		private readonly jwtAuthenticationProvider: IJWTAuthenticationProvider,
 	) {}
 
@@ -15,6 +18,12 @@ export class ConfirmEmailService implements IConfirmEmailCodeUseCase {
 
 		if (!passwordRecoveryRegister) {
 			return left(new CodeDoesNotExistError(params.code));
+		}
+
+		const currentAttempts = await this.incrementPasswordRecoveryAttemptsRepository.increment(passwordRecoveryRegister.id);
+
+		if (currentAttempts >= 3) {
+			return left(new MaximumCodeVerificationAttemptsReachedError());
 		}
 
 		const jwtVerifyResult = await this.jwtAuthenticationProvider.verify(passwordRecoveryRegister.send_code_token);

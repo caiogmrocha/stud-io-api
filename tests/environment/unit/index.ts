@@ -1,5 +1,10 @@
+import path from 'node:path';
+
+import dotenv from 'dotenv';
 import type { EnvironmentContext, JestEnvironmentConfig } from '@jest/environment';
 import NodeEnvironment from 'jest-environment-node';
+
+dotenv.config({ path: path.resolve(__dirname, '..', '..', '..', '.env') });
 
 import { InMemoryDatabaseEnvironment } from './in-memory-database-environment';
 
