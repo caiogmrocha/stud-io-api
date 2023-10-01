@@ -9,6 +9,7 @@ import { JWTAuthenticationProvider } from "@/infra/jwt/jwt-authentication-provid
 import { IGetPasswordRecoveryByCodeRepository } from "@/app/contracts/repositories/passwords-recoveries/i-get-by-code-repository";
 import { MaximumCodeVerificationAttemptsReachedError } from "./errors/maximum-code-verification-attempts-reached-error";
 import { IIncrementPasswordRecoveryAttemptsRepository } from "@/app/contracts/repositories/passwords-recoveries/i-increment-password-recovery-attempts";
+import { IUpdatePasswordRecoveryRepository } from "@/app/contracts/repositories/passwords-recoveries/i-update";
 
 describe('[Unit] ConfirmEmailService', () => {
 	it('should return CodeDoesNotExistError if the provided code does not exist', async () => {
@@ -23,9 +24,14 @@ describe('[Unit] ConfirmEmailService', () => {
 			increment: jest.fn().mockImplementation(async () => 1),
 		} as IIncrementPasswordRecoveryAttemptsRepository;
 
+		const fakeUpdatePasswordRecoveryRepository = {
+			update: jest.fn(),
+		} as IUpdatePasswordRecoveryRepository;
+
 		const sut = new ConfirmEmailService(
 			fakeGetPasswordRecoveryByCodeRepository,
 			fakeIncrementPasswordRecoveryAttemptsRepository,
+			fakeUpdatePasswordRecoveryRepository,
 			jwtAuthenticationProvider,
 		);
 
@@ -68,9 +74,14 @@ describe('[Unit] ConfirmEmailService', () => {
 			increment: jest.fn().mockResolvedValue(1),
 		} as IIncrementPasswordRecoveryAttemptsRepository;
 
+		const fakeUpdatePasswordRecoveryRepository = {
+			update: jest.fn(),
+		} as IUpdatePasswordRecoveryRepository;
+
 		const sut = new ConfirmEmailService(
 			fakeGetPasswordRecoveryByCodeRepository,
 			fakeIncrementPasswordRecoveryAttemptsRepository,
+			fakeUpdatePasswordRecoveryRepository,
 			jwtAuthenticationProvider,
 		);
 
@@ -113,9 +124,14 @@ describe('[Unit] ConfirmEmailService', () => {
 			increment: jest.fn().mockImplementation(async () => storedAttempts++),
 		} as IIncrementPasswordRecoveryAttemptsRepository;
 
+		const fakeUpdatePasswordRecoveryRepository = {
+			update: jest.fn(),
+		} as IUpdatePasswordRecoveryRepository;
+
 		const sut = new ConfirmEmailService(
 			fakeGetPasswordRecoveryByCodeRepository,
 			fakeIncrementPasswordRecoveryAttemptsRepository,
+			fakeUpdatePasswordRecoveryRepository,
 			jwtAuthenticationProvider,
 		);
 
@@ -139,8 +155,59 @@ describe('[Unit] ConfirmEmailService', () => {
 		expect(result.value).toBeInstanceOf(MaximumCodeVerificationAttemptsReachedError);
 	});
 
+	it('should store and return the authorization token if the provided code is valid', async () => {
+		// Arrange
+		const fakeId = crypto.randomUUID();
+		const fakeCode = faker.random.numeric(6);
+		const fakeEmail = faker.internet.email();
+
+		const jwtAuthenticationProvider = new JWTAuthenticationProvider();
+
+		const fakeToken = await jwtAuthenticationProvider.sign({
+			id: fakeId,
+			email: fakeEmail,
+		}, 3 * 60 * 60 * 1000);
+
+		const fakeGetPasswordRecoveryByCodeRepository = {
+			getByCode: jest.fn().mockResolvedValue({
+				id: crypto.randomUUID() as string,
+				code: fakeCode,
+				send_code_token: fakeToken.value,
+				profile_id: faker.random.alphaNumeric(10),
+			} as Awaited<ReturnType<IGetPasswordRecoveryByCodeRepository['getByCode']>>),
+		} as IGetPasswordRecoveryByCodeRepository;
+
+		const fakeUpdatePasswordRecoveryRepository = {
+			update: jest.fn(),
+		} as IUpdatePasswordRecoveryRepository;
+
+		let storedAttempts = 0;
+
+		const fakeIncrementPasswordRecoveryAttemptsRepository = {
+			increment: jest.fn().mockImplementation(async () => storedAttempts++),
+		} as IIncrementPasswordRecoveryAttemptsRepository;
+
+		const sut = new ConfirmEmailService(
+			fakeGetPasswordRecoveryByCodeRepository,
+			fakeIncrementPasswordRecoveryAttemptsRepository,
+			fakeUpdatePasswordRecoveryRepository,
+			jwtAuthenticationProvider,
+		);
+
+		// Act
+		const result = await sut.execute({
+			code: fakeCode,
+			email: fakeEmail,
+		});
+
+		// Assert
+		expect(result.isRight()).toBeTruthy();
+		expect(result.value).toEqual(expect.objectContaining({
+			token: expect.any(String),
+		}));
+	});
+
 	it.todo('should return ProfileDoesNotExistsError if the provided email does not exist');
-	it.todo('should return the authorization token if the provided code is valid');
 });
 
 
