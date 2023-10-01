@@ -1,8 +1,6 @@
 import { SynchronizeProfilesSubjectsService } from "@/app/services/profiles-subjects/synchronize-profiles-subjects-service";
 import { UpdateProfileRegistrationService } from "@/app/services/profiles/update-profile-registration-service";
 import { GetSubjectsService } from "@/app/services/subjects/get-subjects-service";
-import { IAuthenticatedProfilePayload } from "@/domain/usecases/profiles/i-authentaticate-profile-use-case";
-import { JWTAuthenticationProvider } from "@/infra/jwt/jwt-authentication-provider";
 import { PrismaProfilesRepository } from "@/infra/prisma/prisma-profiles-repository";
 import { PrismaProfilesSubjectsRepository } from "@/infra/prisma/prisma-profiles-subjects-repository";
 import { PrismaStudentsRepository } from "@/infra/prisma/prisma-students-repository";

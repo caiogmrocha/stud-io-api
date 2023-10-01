@@ -7,7 +7,7 @@ import { IAuthenticatedProfilePayload } from "@/domain/usecases/profiles/i-authe
 
 export function authenticateProfileControllerFactory(): AuthenticateProfileController {
   const prismaGetProfilesRepository = new PrismaProfilesRepository();
-  const jwtAuthenticationProvider = new JWTAuthenticationProvider<IAuthenticatedProfilePayload>();
+  const jwtAuthenticationProvider = new JWTAuthenticationProvider();
   const bcryptHashProvider = new BCryptHashProvider();
   const authenticateProfileService = new AuthenticateProfileService(
     prismaGetProfilesRepository,
