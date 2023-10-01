@@ -112,6 +112,7 @@ describe('[Unit] SendCodeToProfileEmailService', () => {
 			code: expect.any(String),
 			send_code_token: expect.any(String),
 			expires_at: expect.any(Date),
+			attempts: 0,
 		});
 	});
 });

@@ -20,17 +20,12 @@ describe('[Unit] ConfirmEmailService', () => {
 
 		const jwtAuthenticationProvider = new JWTAuthenticationProvider();
 
-		const fakeIncrementPasswordRecoveryAttemptsRepository = {
-			increment: jest.fn().mockImplementation(async () => 1),
-		} as IIncrementPasswordRecoveryAttemptsRepository;
-
 		const fakeUpdatePasswordRecoveryRepository = {
 			update: jest.fn(),
 		} as IUpdatePasswordRecoveryRepository;
 
 		const sut = new ConfirmEmailService(
 			fakeGetPasswordRecoveryByCodeRepository,
-			fakeIncrementPasswordRecoveryAttemptsRepository,
 			fakeUpdatePasswordRecoveryRepository,
 			jwtAuthenticationProvider,
 		);
@@ -70,17 +65,12 @@ describe('[Unit] ConfirmEmailService', () => {
 			} as Awaited<ReturnType<IGetPasswordRecoveryByCodeRepository['getByCode']>>),
 		};
 
-		const fakeIncrementPasswordRecoveryAttemptsRepository = {
-			increment: jest.fn().mockResolvedValue(1),
-		} as IIncrementPasswordRecoveryAttemptsRepository;
-
 		const fakeUpdatePasswordRecoveryRepository = {
 			update: jest.fn(),
 		} as IUpdatePasswordRecoveryRepository;
 
 		const sut = new ConfirmEmailService(
 			fakeGetPasswordRecoveryByCodeRepository,
-			fakeIncrementPasswordRecoveryAttemptsRepository,
 			fakeUpdatePasswordRecoveryRepository,
 			jwtAuthenticationProvider,
 		);
@@ -115,14 +105,9 @@ describe('[Unit] ConfirmEmailService', () => {
 				code: fakeCode,
 				send_code_token: fakeToken.value,
 				profile_id: faker.random.alphaNumeric(10),
+				attempts: 3,
 			} as Awaited<ReturnType<IGetPasswordRecoveryByCodeRepository['getByCode']>>),
 		} as IGetPasswordRecoveryByCodeRepository;
-
-		let storedAttempts = 0;
-
-		const fakeIncrementPasswordRecoveryAttemptsRepository = {
-			increment: jest.fn().mockImplementation(async () => storedAttempts++),
-		} as IIncrementPasswordRecoveryAttemptsRepository;
 
 		const fakeUpdatePasswordRecoveryRepository = {
 			update: jest.fn(),
@@ -130,21 +115,11 @@ describe('[Unit] ConfirmEmailService', () => {
 
 		const sut = new ConfirmEmailService(
 			fakeGetPasswordRecoveryByCodeRepository,
-			fakeIncrementPasswordRecoveryAttemptsRepository,
 			fakeUpdatePasswordRecoveryRepository,
 			jwtAuthenticationProvider,
 		);
 
 		// Act
-		const MAX_ATTEMPTS = 3;
-
-		for (let i = 0; i < MAX_ATTEMPTS; i++) {
-			await sut.execute({
-				code: fakeCode,
-				email: fakeEmail,
-			});
-		}
-
 		const result = await sut.execute({
 			code: fakeCode,
 			email: fakeEmail,
@@ -181,15 +156,8 @@ describe('[Unit] ConfirmEmailService', () => {
 			update: jest.fn(),
 		} as IUpdatePasswordRecoveryRepository;
 
-		let storedAttempts = 0;
-
-		const fakeIncrementPasswordRecoveryAttemptsRepository = {
-			increment: jest.fn().mockImplementation(async () => storedAttempts++),
-		} as IIncrementPasswordRecoveryAttemptsRepository;
-
 		const sut = new ConfirmEmailService(
 			fakeGetPasswordRecoveryByCodeRepository,
-			fakeIncrementPasswordRecoveryAttemptsRepository,
 			fakeUpdatePasswordRecoveryRepository,
 			jwtAuthenticationProvider,
 		);

@@ -10,7 +10,6 @@ import { IUpdatePasswordRecoveryRepository } from "@/app/contracts/repositories/
 export class ConfirmEmailService implements IConfirmEmailCodeUseCase {
 	constructor (
 		private readonly getPasswordRecoveryByCodeRepository: IGetPasswordRecoveryByCodeRepository,
-		private readonly incrementPasswordRecoveryAttemptsRepository: IIncrementPasswordRecoveryAttemptsRepository,
 		private readonly updatePasswordRecoveryRepository: IUpdatePasswordRecoveryRepository,
 		private readonly jwtAuthenticationProvider: IJWTAuthenticationProvider,
 	) {}
@@ -22,7 +21,11 @@ export class ConfirmEmailService implements IConfirmEmailCodeUseCase {
 			return left(new CodeDoesNotExistError(params.code));
 		}
 
-		const currentAttempts = await this.incrementPasswordRecoveryAttemptsRepository.increment(passwordRecoveryRegister.id);
+		const currentAttempts = passwordRecoveryRegister.attempts + 1;
+
+		await this.updatePasswordRecoveryRepository.update({
+			attempts: currentAttempts,
+		}, passwordRecoveryRegister.id);
 
 		if (currentAttempts >= 3) {
 			return left(new MaximumCodeVerificationAttemptsReachedError());

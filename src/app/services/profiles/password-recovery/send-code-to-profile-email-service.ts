@@ -61,6 +61,7 @@ export class SendCodeToProfileEmailService implements ISendCodeToProfileEmailUse
 			code,
 			send_code_token: token.value,
 			expires_at: new Date(new Date().getTime() + expirationTimeInMilisseconds),
+			attempts: 0,
 		});
 
 		return right({
