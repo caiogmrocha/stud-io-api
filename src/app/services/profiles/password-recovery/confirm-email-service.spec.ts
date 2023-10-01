@@ -8,7 +8,6 @@ import { JWTVerifyError } from "@/app/contracts/auth/jwt/errors/jwt-verify-error
 import { JWTAuthenticationProvider } from "@/infra/jwt/jwt-authentication-provider";
 import { IGetPasswordRecoveryByCodeRepository } from "@/app/contracts/repositories/passwords-recoveries/i-get-by-code-repository";
 import { MaximumCodeVerificationAttemptsReachedError } from "./errors/maximum-code-verification-attempts-reached-error";
-import { IIncrementPasswordRecoveryAttemptsRepository } from "@/app/contracts/repositories/passwords-recoveries/i-increment-password-recovery-attempts";
 import { IUpdatePasswordRecoveryRepository } from "@/app/contracts/repositories/passwords-recoveries/i-update";
 
 describe('[Unit] ConfirmEmailService', () => {
