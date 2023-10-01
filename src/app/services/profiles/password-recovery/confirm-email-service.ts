@@ -5,11 +5,13 @@ import { left, right } from "@/utils/logic/either";
 import { CodeDoesNotExistError } from "./errors/code-does-not-exists-error";
 import { IIncrementPasswordRecoveryAttemptsRepository } from "@/app/contracts/repositories/passwords-recoveries/i-increment-password-recovery-attempts";
 import { MaximumCodeVerificationAttemptsReachedError } from "./errors/maximum-code-verification-attempts-reached-error";
+import { IUpdatePasswordRecoveryRepository } from "@/app/contracts/repositories/passwords-recoveries/i-update";
 
 export class ConfirmEmailService implements IConfirmEmailCodeUseCase {
 	constructor (
 		private readonly getPasswordRecoveryByCodeRepository: IGetPasswordRecoveryByCodeRepository,
 		private readonly incrementPasswordRecoveryAttemptsRepository: IIncrementPasswordRecoveryAttemptsRepository,
+		private readonly updatePasswordRecoveryRepository: IUpdatePasswordRecoveryRepository,
 		private readonly jwtAuthenticationProvider: IJWTAuthenticationProvider,
 	) {}
 
@@ -32,6 +34,20 @@ export class ConfirmEmailService implements IConfirmEmailCodeUseCase {
 			return left(jwtVerifyResult.value);
 		}
 
-		return right(undefined);
+		const changePasswordJwtSignResult = await this.jwtAuthenticationProvider.sign({
+			id: passwordRecoveryRegister.id,
+		}, 3 * 60 * 60 * 24)
+
+		if (changePasswordJwtSignResult.isLeft()) {
+			return left(changePasswordJwtSignResult.value);
+		}
+
+		await this.updatePasswordRecoveryRepository.update({
+			change_password_token: changePasswordJwtSignResult.value
+		}, passwordRecoveryRegister.id);
+
+		return right({
+			token: changePasswordJwtSignResult.value,
+		});
 	}
 }

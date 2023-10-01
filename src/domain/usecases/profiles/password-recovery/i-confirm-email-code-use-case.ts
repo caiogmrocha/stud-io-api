@@ -10,7 +10,9 @@ export type IConfirmEmailCodeUseCaseParams = {
 export type IConfirmEmailCodeUseCaseResult = Either<(
 	| CodeDoesNotExistError
 	| MaximumCodeVerificationAttemptsReachedError
-), void>;
+), {
+	token: string;
+}>;
 
 export interface IConfirmEmailCodeUseCase {
 	execute(params: IConfirmEmailCodeUseCaseParams): Promise<IConfirmEmailCodeUseCaseResult>;
