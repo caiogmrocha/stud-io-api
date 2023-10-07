@@ -31,10 +31,14 @@ describe('[E2E] SendCodeToProfileEmailController', () => {
 
 	beforeEach(async () => {
 		await redisConnection.connect();
+
+		await new Promise(resolve => setImmediate(resolve));
 	});
 
 	afterEach(async () => {
 		await redisConnection.quit();
+
+		await new Promise(resolve => setImmediate(resolve));
 	});
 
 	it('should return 404 if the provided e-mail does not exists in data source', async () => {
