@@ -64,10 +64,10 @@ jobs:
           echo DATABASE_PASS=$DATABASE_PASS >> .env.test
           echo DATABASE_PASS=$DATABASE_PASS >> .env.test
           echo JWT_SECRET=$JWT_SECRET >> .env.test
-          echo SMTP_HOST=sandbox.smtp.mailtrap.io
-          echo SMTP_PORT=2525
-          echo SMTP_USER=$SMTP_USER
-          echo SMTP_PASS=$SMTP_PASS
+          echo SMTP_HOST=sandbox.smtp.mailtrap.io >> .env.test
+          echo SMTP_PORT=2525 >> .env.test
+          echo SMTP_USER=$SMTP_USER >> .env.test
+          echo SMTP_PASS=$SMTP_PASS >> .env.test
 
       - name: Run e2e tests
         run: npm run test:e2e
