@@ -4,8 +4,8 @@ import { JWTVerifyError } from "@/app/contracts/auth/jwt/errors/jwt-verify-error
 
 import { Either, left, right } from "@/utils/logic/either";
 import jwt from 'jsonwebtoken';
+import { env } from "@/utils/env";
 
-const secret = process.env.JWT_SECRET as string;
 
 export class JWTAuthenticationProvider implements IJWTAuthenticationProvider {
   async sign(params: any, expiresIn: number): Promise<Either<
@@ -13,7 +13,7 @@ export class JWTAuthenticationProvider implements IJWTAuthenticationProvider {
     string
   >> {
     try {
-      const token = jwt.sign(params, secret, {
+      const token = jwt.sign(params, env.JWT_SECRET, {
         expiresIn,
       });
 
@@ -26,7 +26,7 @@ export class JWTAuthenticationProvider implements IJWTAuthenticationProvider {
 
   async verify(accessToken: string): Promise<Either<JWTVerifyError, any>> {
     try {
-      const decoded = jwt.verify(accessToken, secret) as any;
+      const decoded = jwt.verify(accessToken, env.JWT_SECRET) as any;
 
       return right(decoded);
     } catch (error) {
