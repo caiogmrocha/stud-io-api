@@ -11,8 +11,8 @@ dotenv.config({ path: path.resolve(__dirname, "..", "..", ".env.test") });
 // }
 
 const envSchema = z.object({
-	DATABASE_URL: z.string().nonempty().url(),
-	HTTP_HOST: z.string().nonempty().ip(),
+	DATABASE_URL: z.string().nonempty(),
+	HTTP_HOST: z.string().nonempty().ip().or(z.string().nonempty().regex(/localhost/)),
 	HTTP_PORT: z.string().nonempty().regex(/[0-9]+/).transform(Number),
 	JWT_SECRET: z.string().nonempty(),
 	REDIS_HOST: z.string().nonempty(),
