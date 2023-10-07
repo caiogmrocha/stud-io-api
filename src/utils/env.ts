@@ -2,13 +2,13 @@ import path from "path";
 import dotenv from "dotenv";
 import { z } from "zod";
 
-if (process.env.NODE_ENV === "test") {
-	console.log('test')
-	dotenv.config({ path: path.resolve(__dirname, "..", "..", ".env.test") });
-} else {
-	console.log('prod & dev')
-	dotenv.config({ path: path.resolve(__dirname, "..", "..", ".env") });
-}
+dotenv.config({ path: path.resolve(__dirname, "..", "..", ".env.test") });
+// if (process.env.NODE_ENV === "test") {
+// 	console.log('test')
+// } else {
+// 	console.log('prod & dev')
+// 	dotenv.config({ path: path.resolve(__dirname, "..", "..", ".env") });
+// }
 
 const envSchema = z.object({
 	DATABASE_URL: z.string().nonempty().url(),
