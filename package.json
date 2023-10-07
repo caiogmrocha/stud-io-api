@@ -15,7 +15,8 @@
     "test:unit:watch": "npm run test:unit -- --watch",
     "test:e2e": "jest --config ./jest-e2e.config.ts --passWithNoTests --runInBand --no-cache",
     "test:e2e:watch": "npm run test:e2e -- --watch",
-    "prepare": "husky install"
+    "prepare": "husky install",
+		"log": "npx tsx ./src/utils/env.ts"
   },
   "keywords": [],
   "author": {
