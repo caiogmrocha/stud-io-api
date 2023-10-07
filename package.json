@@ -13,10 +13,9 @@
     "dev:queue": "tsx watch --ignore ./node_modules --clear-screen=false ./src/main/queue.ts",
     "test:unit": "jest --config ./jest-unit.config.ts --passWithNoTests --runInBand --no-cache",
     "test:unit:watch": "npm run test:unit -- --watch",
-    "test:e2e": "jest --config ./jest-e2e.config.ts --passWithNoTests --runInBand --no-cache",
+    "test:e2e": "jest --config ./jest-e2e.config.ts --passWithNoTests --runInBand --no-cache --detectOpenHandles",
     "test:e2e:watch": "npm run test:e2e -- --watch",
-    "prepare": "husky install",
-		"log": "npx tsx ./src/utils/env.ts"
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": {
