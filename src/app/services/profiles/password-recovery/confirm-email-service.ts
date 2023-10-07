@@ -3,7 +3,6 @@ import { IGetPasswordRecoveryByCodeRepository } from "@/app/contracts/repositori
 import { IJWTAuthenticationProvider } from "@/app/contracts/auth/jwt/i-jwt-authentication-provider";
 import { left, right } from "@/utils/logic/either";
 import { CodeDoesNotExistError } from "./errors/code-does-not-exists-error";
-import { IIncrementPasswordRecoveryAttemptsRepository } from "@/app/contracts/repositories/passwords-recoveries/i-increment-password-recovery-attempts";
 import { MaximumCodeVerificationAttemptsReachedError } from "./errors/maximum-code-verification-attempts-reached-error";
 import { IUpdatePasswordRecoveryRepository } from "@/app/contracts/repositories/passwords-recoveries/i-update";
 

@@ -1,6 +1,6 @@
 import { ISendCodeToProfileEmailServiceResult, ISendCodeToProfileEmailUseCase, ISendCodeToProfileEmailUseCaseInputBoundary } from "@/domain/usecases/profiles/password-recovery/i-send-code-to-profile-email-use-case";
 import { IGetProfilesRepository } from "@/app/contracts/repositories/profiles/i-get-profiles-repository";
-import { ICreatePasswordRecoveryRequestRepository } from "@/app/contracts/repositories/passwords-recoveries/i-create-password-recovery-request-repository";
+import { ICreatePasswordRecoveryRepository } from "@/app/contracts/repositories/passwords-recoveries/i-create";
 import { IJWTAuthenticationProvider } from "@/app/contracts/auth/jwt/i-jwt-authentication-provider";
 import { IQueueProvider } from "@/app/contracts/queue/i-queue-provider";
 import { ProfileDoesNotExistsError } from "../errors/profile-does-not-exists-error";
@@ -9,7 +9,7 @@ import { left, right } from "@/utils/logic/either";
 export class SendCodeToProfileEmailService implements ISendCodeToProfileEmailUseCase {
 	constructor(
 		private readonly getProfilesRepository: IGetProfilesRepository,
-		private readonly createPasswordRecoveryRequestRepository: ICreatePasswordRecoveryRequestRepository,
+		private readonly createPasswordRecoveryRepository: ICreatePasswordRecoveryRepository,
 		private readonly jwtAuthenticationProvider: IJWTAuthenticationProvider,
 		private readonly queueProvider: IQueueProvider,
 	) {}
@@ -56,7 +56,7 @@ export class SendCodeToProfileEmailService implements ISendCodeToProfileEmailUse
 			attempts: 3,
 		});
 
-		await this.createPasswordRecoveryRequestRepository.createPasswordRecoveryRegister({
+		await this.createPasswordRecoveryRepository.create({
 			profile_id: profile.id,
 			code,
 			send_code_token: token.value,

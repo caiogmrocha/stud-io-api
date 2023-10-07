@@ -8,6 +8,6 @@ export type IPasswordRecoveryModelToCreate = Omit<IPasswordRecoveryModel, (
 	| 'recovered_at'
 )>
 
-export interface ICreatePasswordRecoveryRequestRepository {
-	createPasswordRecoveryRegister(data: IPasswordRecoveryModelToCreate): Promise<IPasswordRecoveryModel>;
+export interface ICreatePasswordRecoveryRepository {
+	create(data: IPasswordRecoveryModelToCreate): Promise<IPasswordRecoveryModel>;
 }

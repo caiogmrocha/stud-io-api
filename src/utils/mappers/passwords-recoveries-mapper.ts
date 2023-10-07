@@ -9,9 +9,12 @@ export class PasswordsRecoveryMapper {
 			profile_id: from.profileId,
 			code: from.code,
 			send_code_token: from.sendCodeToken,
+			change_password_token: from.changePasswordToken || undefined,
+			attempts: from.attempts,
 			expires_at: from.expiresAt || undefined,
 			created_at: from.createdAt,
 			updated_at: from.updatedAt || undefined,
+			recovered_at: from.recoveredAt || undefined,
 		};
 
 		return passwordRecovery

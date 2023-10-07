@@ -3,7 +3,7 @@ import { InMemoryGetProfilesRepository } from "../../../../../tests/mocks/infra/
 import { ProfileDoesNotExistsError } from "../errors/profile-does-not-exists-error";
 import { SendCodeToProfileEmailService } from "./send-code-to-profile-email-service";
 import { IGetProfilesRepository } from "@/app/contracts/repositories/profiles/i-get-profiles-repository";
-import { ICreatePasswordRecoveryRequestRepository } from "@/app/contracts/repositories/passwords-recoveries/i-create-password-recovery-request-repository";
+import { ICreatePasswordRecoveryRepository } from "@/app/contracts/repositories/passwords-recoveries/i-create";
 import { IJWTAuthenticationProvider } from "@/app/contracts/auth/jwt/i-jwt-authentication-provider";
 import { IQueueProvider } from "@/app/contracts/queue/i-queue-provider";
 
@@ -14,8 +14,8 @@ describe('[Unit] SendCodeToProfileEmailService', () => {
 		} as InMemoryGetProfilesRepository;
 
 		const createPasswordRecoveryRequestRepository = {
-			createPasswordRecoveryRegister: jest.fn()
-		} as ICreatePasswordRecoveryRequestRepository;
+			create: jest.fn()
+		} as ICreatePasswordRecoveryRepository;
 
 		const fakeJwtAuthenticationProvider = {
 			sign: jest.fn(),
@@ -62,8 +62,8 @@ describe('[Unit] SendCodeToProfileEmailService', () => {
 		} as unknown as IGetProfilesRepository;
 
 		const createPasswordRecoveryRequestRepository = {
-			createPasswordRecoveryRegister: jest.fn()
-		} as unknown as ICreatePasswordRecoveryRequestRepository;
+			create: jest.fn()
+		} as unknown as ICreatePasswordRecoveryRepository;
 
 		const fakeJwtAuthenticationProvider = {
 			sign: jest.fn().mockResolvedValue({
@@ -107,7 +107,7 @@ describe('[Unit] SendCodeToProfileEmailService', () => {
 			}),
 			expect.any(Object)
 		);
-		expect(createPasswordRecoveryRequestRepository.createPasswordRecoveryRegister).toHaveBeenCalledWith({
+		expect(createPasswordRecoveryRequestRepository.create).toHaveBeenCalledWith({
 			profile_id: 'any-id',
 			code: expect.any(String),
 			send_code_token: expect.any(String),
