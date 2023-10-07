@@ -42,6 +42,12 @@ jobs:
       SMTP_USER: ${{ secrets.SMTP_USER }}
       SMTP_PASS: ${{ secrets.SMTP_PASS }}
 
+    services:
+      redis:
+        image: redis:7.2-alpine
+        ports:
+          - 6379:6379
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
