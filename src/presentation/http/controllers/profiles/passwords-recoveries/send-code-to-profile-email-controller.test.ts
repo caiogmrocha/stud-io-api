@@ -29,7 +29,11 @@ describe('[E2E] SendCodeToProfileEmailController', () => {
     });
   });
 
-	afterAll(async () => {
+	beforeEach(async () => {
+		redisConnection.connect();
+	});
+
+	afterEach(async () => {
 		redisConnection.quit();
 	});
 
