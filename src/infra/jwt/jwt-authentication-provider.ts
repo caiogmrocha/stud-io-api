@@ -29,6 +29,7 @@ export class JWTAuthenticationProvider implements IJWTAuthenticationProvider {
 
       return right(decoded);
     } catch (error) {
+			console.log('JWTAuthenticationProvider', error)
       return left(new JWTVerifyError(accessToken));
     }
   }
