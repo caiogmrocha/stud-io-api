@@ -8,6 +8,8 @@ if (process.env.NODE_ENV !== 'test') {
 	dotenv.config({ path: path.resolve(__dirname, '..', '..', '.env.test') });
 }
 
+console.log('process.env', process.env)
+
 const envSchema = z.object({
 	DATABASE_URL: z.string().nonempty().url(),
 	HTTP_HOST: z.string().nonempty().ip(),
