@@ -168,6 +168,8 @@ describe('[Unit] ConfirmEmailService', () => {
 		});
 
 		// Assert
+
+		console.log(result)
 		expect(result.isRight()).toBeTruthy();
 		expect(result.value).toEqual(expect.objectContaining({
 			token: expect.any(String),
