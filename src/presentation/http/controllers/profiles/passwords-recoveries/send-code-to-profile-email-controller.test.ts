@@ -30,11 +30,11 @@ describe('[E2E] SendCodeToProfileEmailController', () => {
   });
 
 	beforeEach(async () => {
-		redisConnection.connect();
+		await redisConnection.connect();
 	});
 
 	afterEach(async () => {
-		redisConnection.quit();
+		await redisConnection.quit();
 	});
 
 	it('should return 404 if the provided e-mail does not exists in data source', async () => {
