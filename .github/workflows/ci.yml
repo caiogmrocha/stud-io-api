@@ -86,4 +86,4 @@ jobs:
           echo REDIS_PORT=REDIS_PORT >> .env
 
       - name: Run e2e tests
-        run: npm run log & npm run test:e2e
+        run: npm run test:e2e
