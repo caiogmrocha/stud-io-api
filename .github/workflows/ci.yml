@@ -37,7 +37,6 @@ jobs:
       HTTP_PORT: 3333
       REDIS_HOST: localhost
       REDIS_PORT: 6379
-
       JWT_SECRET: 795e3633541d6a898b8e1f135b916e17
       SMTP_USER: ${{ secrets.SMTP_USER }}
       SMTP_PASS: ${{ secrets.SMTP_PASS }}
