@@ -33,6 +33,11 @@ jobs:
       DATABASE_USER: root
       DATABASE_PASS: password
       DATABASE_NAME: stud_io_test
+      HTTP_HOST: localhost
+      HTTP_PORT: 3333
+      REDIS_HOST: localhost
+      REDIS_PORT: 6379
+
       JWT_SECRET: 795e3633541d6a898b8e1f135b916e17
       SMTP_USER: ${{ secrets.SMTP_USER }}
       SMTP_PASS: ${{ secrets.SMTP_PASS }}
@@ -69,6 +74,10 @@ jobs:
           echo SMTP_PORT=2525 >> .env.test
           echo SMTP_USER=$SMTP_USER >> .env
           echo SMTP_PASS=$SMTP_PASS >> .env
+          echo HTTP_HOST=HTTP_HOST >> .env
+          echo HTTP_PORT=HTTP_PORT >> .env
+          echo REDIS_HOST=REDIS_HOST >> .env
+          echo REDIS_PORT=REDIS_PORT >> .env
 
       - name: Run e2e tests
         run: npm run log & npm run test:e2e
