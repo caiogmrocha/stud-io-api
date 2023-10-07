@@ -4,6 +4,19 @@ import { z } from "zod";
 
 dotenv.config();
 
+console.log({
+	DATABASE_URL: process.env.DATABASE_URL,
+	HTTP_HOST: process.env.HTTP_HOST,
+	HTTP_PORT: process.env.HTTP_PORT,
+	JWT_SECRET: process.env.JWT_SECRET,
+	REDIS_HOST: process.env.REDIS_HOST,
+	REDIS_PORT: process.env.REDIS_PORT,
+	SMTP_HOST: process.env.SMTP_HOST,
+	SMTP_PORT: process.env.SMTP_PORT,
+	SMTP_USER: process.env.SMTP_USER,
+	SMTP_PASS: process.env.SMTP_PASS,
+})
+
 const envSchema = z.object({
 	DATABASE_URL: z.string().nonempty().url(),
 	HTTP_HOST: z.string().nonempty().ip(),

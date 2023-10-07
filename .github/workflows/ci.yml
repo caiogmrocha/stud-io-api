@@ -55,20 +55,20 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # - name: Set .env.test variables
-      #   run: |
-      #     echo DATABASE_URL=$DATABASE_URL >> .env.test
-      #     echo DATABASE_DRIVER=$DATABASE_DRIVER >> .env.test
-      #     echo DATABASE_HOST=$DATABASE_HOST >> .env.test
-      #     echo DATABASE_PORT=$DATABASE_PORT >> .env.test
-      #     echo DATABASE_USER=$DATABASE_USER >> .env.test
-      #     echo DATABASE_PASS=$DATABASE_PASS >> .env.test
-      #     echo DATABASE_PASS=$DATABASE_PASS >> .env.test
-      #     echo JWT_SECRET=$JWT_SECRET >> .env.test
-      #     echo SMTP_HOST=sandbox.smtp.mailtrap.io >> .env.test
-      #     echo SMTP_PORT=2525 >> .env.test
-      #     echo SMTP_USER=$SMTP_USER >> .env
-      #     echo SMTP_PASS=$SMTP_PASS >> .env
+      - name: Set .env.test variables
+        run: |
+          echo DATABASE_URL=$DATABASE_URL >> .env.test
+          echo DATABASE_DRIVER=$DATABASE_DRIVER >> .env.test
+          echo DATABASE_HOST=$DATABASE_HOST >> .env.test
+          echo DATABASE_PORT=$DATABASE_PORT >> .env.test
+          echo DATABASE_USER=$DATABASE_USER >> .env.test
+          echo DATABASE_PASS=$DATABASE_PASS >> .env.test
+          echo DATABASE_PASS=$DATABASE_PASS >> .env.test
+          echo JWT_SECRET=$JWT_SECRET >> .env.test
+          echo SMTP_HOST=sandbox.smtp.mailtrap.io >> .env.test
+          echo SMTP_PORT=2525 >> .env.test
+          echo SMTP_USER=$SMTP_USER >> .env
+          echo SMTP_PASS=$SMTP_PASS >> .env
 
       - name: Run e2e tests
         run: npm run log & npm run test:e2e
