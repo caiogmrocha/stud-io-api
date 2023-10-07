@@ -19,7 +19,6 @@ export class JWTAuthenticationProvider implements IJWTAuthenticationProvider {
 
       return right(token);
     } catch (error) {
-			console.log('JWTAuthenticationProvider.sign', error)
       return left(new JWTSignError(params));
     }
   }
@@ -30,7 +29,6 @@ export class JWTAuthenticationProvider implements IJWTAuthenticationProvider {
 
       return right(decoded);
     } catch (error) {
-			console.log('JWTAuthenticationProvider.verify', error)
       return left(new JWTVerifyError(accessToken));
     }
   }

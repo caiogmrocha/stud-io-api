@@ -142,8 +142,6 @@ describe('[Unit] ConfirmEmailService', () => {
 			email: fakeEmail,
 		}, 3 * 60 * 60 * 1000);
 
-		console.log({ fakeToken })
-
 		const fakeGetPasswordRecoveryByCodeRepository = {
 			getByCode: jest.fn().mockResolvedValue({
 				id: crypto.randomUUID() as string,
@@ -170,8 +168,6 @@ describe('[Unit] ConfirmEmailService', () => {
 		});
 
 		// Assert
-
-		console.log(result)
 		expect(result.isRight()).toBeTruthy();
 		expect(result.value).toEqual(expect.objectContaining({
 			token: expect.any(String),
