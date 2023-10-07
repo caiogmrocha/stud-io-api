@@ -5,6 +5,7 @@ import request from 'supertest';
 import { faker } from '@faker-js/faker';
 import bcrypt from 'bcrypt';
 import { prisma } from '@/infra/prisma/prisma';
+import { redisConnection } from '@/infra/bull/bull-queue-provider';
 
 jest.mock('@/infra/bull/bull-queue-provider', () => require('~/mocks/infra/bullmq/fake-bull-queue-provider'));
 
@@ -27,6 +28,10 @@ describe('[E2E] SendCodeToProfileEmailController', () => {
       },
     });
   });
+
+	afterAll(async () => {
+		redisConnection.quit();
+	});
 
 	it('should return 404 if the provided e-mail does not exists in data source', async () => {
 		const response = await request(app).post('/profiles/password-recovery/send-code-to-profile-email').send({
