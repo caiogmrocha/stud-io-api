@@ -8,7 +8,7 @@ if (process.env.NODE_ENV !== 'test') {
 	dotenv.config({ path: path.resolve(__dirname, '..', '..', '.env.test') });
 }
 
-console.log({
+console.log('aqui ta o env', {
 	DATABASE_URL: process.env.DATABASE_URL,
 	HTTP_HOST: process.env.HTTP_HOST,
 	HTTP_PORT: process.env.HTTP_PORT,
