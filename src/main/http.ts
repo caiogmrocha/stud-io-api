@@ -1,11 +1,9 @@
+import { env } from "@/utils/env";
 import { app } from "./config/http";
-
-const HOST = process.env.HTTP_HOST;
-const PORT = process.env.HTTP_PORT;
 
 (async (): Promise<void> => {
 	try {
-		const server = app.listen(PORT, () => console.log(`Web API service is running at http://${HOST}:${PORT}`));
+		const server = app.listen(env.HTTP_PORT, () => console.log(`Web API service is running at http://${env.HTTP_HOST}:${env.HTTP_PORT}`));
 
 		const exitSignal: NodeJS.Signals[] = ["SIGINT", "SIGTERM", "SIGQUIT"];
 
