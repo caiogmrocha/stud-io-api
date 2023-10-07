@@ -2,7 +2,11 @@ import path from "path";
 import dotenv from "dotenv";
 import { z } from "zod";
 
-dotenv.config({ path: path.resolve(__dirname, '..', '..', '.env') });
+if (process.env.NODE_ENV !== 'test') {
+	dotenv.config({ path: path.resolve(__dirname, '..', '..', '.env') });
+} else {
+	dotenv.config({ path: path.resolve(__dirname, '..', '..', '.env.test') });
+}
 
 const envSchema = z.object({
 	DATABASE_URL: z.string().nonempty().url(),
