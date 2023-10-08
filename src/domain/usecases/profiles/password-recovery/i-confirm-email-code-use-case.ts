@@ -3,7 +3,6 @@ import { MaximumCodeVerificationAttemptsReachedError } from "@/app/services/prof
 import { Either } from "@/utils/logic/either";
 
 export type IConfirmEmailCodeUseCaseParams = {
-	email: string;
 	code: string;
 };
 

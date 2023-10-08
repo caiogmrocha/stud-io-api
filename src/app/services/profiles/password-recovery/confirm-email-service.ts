@@ -1,10 +1,11 @@
 import { IConfirmEmailCodeUseCase, IConfirmEmailCodeUseCaseParams, IConfirmEmailCodeUseCaseResult } from "@/domain/usecases/profiles/password-recovery/i-confirm-email-code-use-case";
-import { IGetPasswordRecoveryByCodeRepository } from "@/app/contracts/repositories/passwords-recoveries/i-get-by-code-repository";
+import { IGetPasswordRecoveryByCodeRepository } from "@/app/contracts/repositories/profiles/passwords-recoveries/i-get-by-code";
+import { IUpdatePasswordRecoveryRepository } from "@/app/contracts/repositories/profiles/passwords-recoveries/i-update";
 import { IJWTAuthenticationProvider } from "@/app/contracts/auth/jwt/i-jwt-authentication-provider";
-import { left, right } from "@/utils/logic/either";
-import { CodeDoesNotExistError } from "./errors/code-does-not-exists-error";
 import { MaximumCodeVerificationAttemptsReachedError } from "./errors/maximum-code-verification-attempts-reached-error";
-import { IUpdatePasswordRecoveryRepository } from "@/app/contracts/repositories/passwords-recoveries/i-update";
+import { CodeDoesNotExistError } from "./errors/code-does-not-exists-error";
+
+import { left, right } from "@/utils/logic/either";
 
 export class ConfirmEmailService implements IConfirmEmailCodeUseCase {
 	constructor (

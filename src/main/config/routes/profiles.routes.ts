@@ -8,6 +8,7 @@ import { getProfileDetailsControllerFactory } from "@/main/factories/controllers
 import { profileIsAuthenticatedMiddlewareFactory } from "@/main/factories/middlewares/profiles/profile-is-authenticated-middleware-factory";
 import { updateProfileRegistrationControllerFactory } from "@/main/factories/controllers/profiles/update-profile-registration-controller-factory";
 import { sendCodeToProfileEmailControllerFactory } from "@/main/factories/controllers/profiles/passwords-recoveries/send-code-to-profile-email-controller-factory";
+import { confirmEmailControllerFactory } from "@/main/factories/controllers/profiles/passwords-recoveries/confirm-email-controller-factory";
 
 const profileRouter = Router();
 
@@ -20,5 +21,6 @@ profileRouter.put(
 	adaptRoute(updateProfileRegistrationControllerFactory()),
 );
 profileRouter.post('/password-recovery/send-code-to-profile-email', adaptRoute(sendCodeToProfileEmailControllerFactory()));
+profileRouter.post('/password-recovery/confirm-email', adaptRoute(confirmEmailControllerFactory()));
 
 export { profileRouter };

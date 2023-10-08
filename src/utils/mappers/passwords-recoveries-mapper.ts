@@ -1,4 +1,4 @@
-import { IPasswordRecoveryModel } from "@/app/contracts/repositories/passwords-recoveries/i-password-recovery-model";
+import { IPasswordRecoveryModel } from "@/app/contracts/repositories/profiles/passwords-recoveries/i-password-recovery-model";
 import { PasswordRecovery } from "@prisma/client";
 
 
