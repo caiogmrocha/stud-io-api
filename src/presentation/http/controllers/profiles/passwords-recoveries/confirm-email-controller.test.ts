@@ -86,7 +86,6 @@ describe('[E2E] ConfirmEmailController', () => {
 		).value as string;
 
 		const validCode = Math.floor(100000 + Math.random() * 900000).toString();
-		const wrongCode = Math.floor(100000 + Math.random() * 900000).toString();
 
 		await prisma.passwordRecovery.create({
 			data: {
@@ -101,7 +100,7 @@ describe('[E2E] ConfirmEmailController', () => {
 		for (let i = 0; i < 3; i++) {
 			await request(app)
 				.post('/profiles/password-recovery/confirm-email')
-				.send({ code: wrongCode });
+				.send({ code: validCode });
 		}
 
 		const response = await request(app)
@@ -111,5 +110,48 @@ describe('[E2E] ConfirmEmailController', () => {
 		expect(response.status).toBe(403);
 	});
 
-	it.todo('should return 200 if the provided code is valid');
+	it('should return 200 if the provided code is valid', async () => {
+		const profilePassword = (await bcryptHashProvider.hash(faker.random.alphaNumeric(12), 10)).value as string;
+
+		const profileData = await prisma.profile.create({
+      data: {
+        email: faker.internet.email(),
+        password: profilePassword,
+        type: 'student',
+        student: {
+          create: {
+            name: faker.name.fullName(),
+          },
+        },
+      },
+    });
+
+		const token = (
+			await jwtAuthenticationProvider.sign({
+				id: profileData.id,
+				email: profileData.email,
+			}, 3 * 60 * 60 * 1000)
+		).value as string;
+
+		const validCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+		await prisma.passwordRecovery.create({
+			data: {
+				code: validCode,
+				sendCodeToken: token,
+				expiresAt: new Date(),
+				attempts: 0,
+				profileId: profileData.id,
+			}
+		});
+
+		const response = await request(app)
+			.post('/profiles/password-recovery/confirm-email')
+			.send({ code: validCode });
+
+		expect(response.status).toBe(200);
+		expect(response.body).toMatchObject(expect.objectContaining({
+			token: expect.any(String),
+		}));
+	});
 });
