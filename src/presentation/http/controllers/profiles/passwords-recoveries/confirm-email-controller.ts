@@ -1,3 +1,4 @@
+import { JWTVerifyError } from "@/app/contracts/auth/jwt/errors/jwt-verify-error";
 import { CodeDoesNotExistError } from "@/app/services/profiles/password-recovery/errors/code-does-not-exists-error";
 import { MaximumCodeVerificationAttemptsReachedError } from "@/app/services/profiles/password-recovery/errors/maximum-code-verification-attempts-reached-error";
 import { IConfirmEmailCodeUseCase } from "@/domain/usecases/profiles/password-recovery/i-confirm-email-code-use-case";
@@ -26,6 +27,9 @@ export class ConfirmEmailController {
 
 			switch (error.constructor) {
 				case CodeDoesNotExistError:
+					return Http.forbidden(error.message);
+
+				case JWTVerifyError:
 					return Http.forbidden(error.message);
 
 				default:
