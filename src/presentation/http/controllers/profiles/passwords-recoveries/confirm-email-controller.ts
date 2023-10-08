@@ -12,8 +12,6 @@ export type IConfirmEmailControllerResponse = Http.IHttpResponse<{
 	token: string;
 }>;
 
-let count = 0;
-
 export class ConfirmEmailController {
 	constructor (
 		private readonly confirmEmailUseCase: IConfirmEmailCodeUseCase,
@@ -43,10 +41,7 @@ export class ConfirmEmailController {
 		}
 
 		return Http.ok({
-			statusCode: 200,
-			data: {
-				token: confirmEmailUseCaseResult.value.token,
-			},
+			token: confirmEmailUseCaseResult.value.token,
 		});
 	}
 }
