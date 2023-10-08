@@ -9,14 +9,14 @@
   "scripts": {
     "build": "npx tsx esbuild.config.ts",
     "start": "node ./dist/index.js",
-    "dev:http": "tsx watch --ignore ./node_modules --clear-screen=false ./src/main/http.ts",
-    "dev:queue": "tsx watch --ignore ./node_modules --clear-screen=false ./src/main/queue.ts",
-    "test:unit": "jest --config ./jest-unit.config.ts --passWithNoTests --runInBand --no-cache",
+    "dev:http": "npx tsx watch --ignore ./node_modules --clear-screen=false ./src/main/http.ts",
+    "dev:queue": "npx tsx watch --ignore ./node_modules --clear-screen=false ./src/main/queue.ts",
+    "test:unit": "npx jest --config ./jest-unit.config.ts --passWithNoTests --runInBand --no-cache",
     "test:unit:watch": "npm run test:unit -- --watch",
-    "test:e2e": "jest --config ./jest-e2e.config.ts --passWithNoTests --runInBand --no-cache --detectOpenHandles --forceExit",
+    "test:e2e": "npx jest --config ./jest-e2e.config.ts --passWithNoTests --runInBand --no-cache --detectOpenHandles --forceExit",
     "test:e2e:watch": "npm run test:e2e -- --watch",
-		"lint:fix": "eslint --fix --ext .ts .",
-    "prepare": "husky install"
+		"lint:fix": "npx eslint --fix --ext .ts .",
+    "prepare": "npx husky install"
   },
   "keywords": [],
   "author": {
