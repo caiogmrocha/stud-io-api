@@ -12,6 +12,8 @@ export type IConfirmEmailControllerResponse = Http.IHttpResponse<{
 	token: string;
 }>;
 
+let count = 0;
+
 export class ConfirmEmailController {
 	constructor (
 		private readonly confirmEmailUseCase: IConfirmEmailCodeUseCase,
@@ -32,6 +34,9 @@ export class ConfirmEmailController {
 				case JWTVerifyError:
 					return Http.forbidden(error.message);
 
+				case MaximumCodeVerificationAttemptsReachedError:
+					return Http.forbidden(error.message);
+
 				default:
 					return Http.badRequest(error.message);
 			}
@@ -40,7 +45,7 @@ export class ConfirmEmailController {
 		return Http.ok({
 			statusCode: 200,
 			data: {
-				token: 'confirmEmailUseCaseResult.value.token,'
+				token: confirmEmailUseCaseResult.value.token,
 			},
 		});
 	}

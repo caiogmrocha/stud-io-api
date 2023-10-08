@@ -47,7 +47,14 @@ export class PrismaPasswordRecoveriesRepository implements IPasswordRecoveriesRe
 	async update(data: IPasswordRecoveryModelToUpdate, id: string): Promise<void> {
 		await prisma.passwordRecovery.update({
 			where: { id },
-			data,
+			data: {
+				code: data.code,
+				attempts: data.attempts,
+				changePasswordToken: data.change_password_token,
+				recoveredAt: data.recovered_at,
+				sendCodeToken: data.send_code_token,
+				expiresAt: data.expires_at,
+			},
 		});
 	}
 }
