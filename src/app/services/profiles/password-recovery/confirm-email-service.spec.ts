@@ -6,9 +6,9 @@ import { ConfirmEmailService } from "./confirm-email-service";
 import { CodeDoesNotExistError } from "./errors/code-does-not-exists-error";
 import { JWTVerifyError } from "@/app/contracts/auth/jwt/errors/jwt-verify-error";
 import { JWTAuthenticationProvider } from "@/infra/jwt/jwt-authentication-provider";
-import { IGetPasswordRecoveryByCodeRepository } from "@/app/contracts/repositories/passwords-recoveries/i-get-by-code-repository";
+import { IGetPasswordRecoveryByCodeRepository } from "@/app/contracts/repositories/profiles/passwords-recoveries/i-get-by-code";
 import { MaximumCodeVerificationAttemptsReachedError } from "./errors/maximum-code-verification-attempts-reached-error";
-import { IUpdatePasswordRecoveryRepository } from "@/app/contracts/repositories/passwords-recoveries/i-update";
+import { IUpdatePasswordRecoveryRepository } from "@/app/contracts/repositories/profiles/passwords-recoveries/i-update";
 
 describe('[Unit] ConfirmEmailService', () => {
 	it('should return CodeDoesNotExistError if the provided code does not exist', async () => {
@@ -34,7 +34,6 @@ describe('[Unit] ConfirmEmailService', () => {
 		// Act
 		const result = await sut.execute({
 			code: fakeCode,
-			email: faker.internet.email(),
 		});
 
 		// Assert
@@ -77,7 +76,6 @@ describe('[Unit] ConfirmEmailService', () => {
 		// Act
 		const result = await sut.execute({
 			code: fakeCode,
-			email: fakeEmail,
 		});
 
 		// Assert
@@ -121,7 +119,6 @@ describe('[Unit] ConfirmEmailService', () => {
 		// Act
 		const result = await sut.execute({
 			code: fakeCode,
-			email: fakeEmail,
 		});
 
 		// Assert
@@ -164,7 +161,6 @@ describe('[Unit] ConfirmEmailService', () => {
 		// Act
 		const result = await sut.execute({
 			code: fakeCode,
-			email: fakeEmail,
 		});
 
 		// Assert

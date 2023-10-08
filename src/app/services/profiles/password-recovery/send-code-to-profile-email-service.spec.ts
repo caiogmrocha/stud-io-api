@@ -3,7 +3,7 @@ import { InMemoryGetProfilesRepository } from "../../../../../tests/mocks/infra/
 import { ProfileDoesNotExistsError } from "../errors/profile-does-not-exists-error";
 import { SendCodeToProfileEmailService } from "./send-code-to-profile-email-service";
 import { IGetProfilesRepository } from "@/app/contracts/repositories/profiles/i-get-profiles-repository";
-import { ICreatePasswordRecoveryRepository } from "@/app/contracts/repositories/passwords-recoveries/i-create";
+import { ICreatePasswordRecoveryRepository } from "@/app/contracts/repositories/profiles/passwords-recoveries/i-create";
 import { IJWTAuthenticationProvider } from "@/app/contracts/auth/jwt/i-jwt-authentication-provider";
 import { IQueueProvider } from "@/app/contracts/queue/i-queue-provider";
 
