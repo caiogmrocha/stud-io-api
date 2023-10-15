@@ -38,7 +38,7 @@ export class ConfirmEmailService implements IConfirmEmailCodeUseCase {
 		}
 
 		const changePasswordJwtSignResult = await this.jwtAuthenticationProvider.sign({
-			id: passwordRecoveryRegister.id,
+			id: passwordRecoveryRegister.profile_id,
 		}, 3 * 60 * 60 * 24)
 
 		if (changePasswordJwtSignResult.isLeft()) {

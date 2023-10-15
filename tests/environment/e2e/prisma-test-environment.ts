@@ -1,13 +1,9 @@
 import crypto from 'crypto';
 import util from 'util';
-import path from 'path';
 import { exec } from 'child_process';
 
 import { PrismaClient } from '@prisma/client';
 import NodeEnvironment from 'jest-environment-node';
-import dotenv from 'dotenv';
-
-dotenv.config({ path: path.resolve(__dirname, '..', '..', '..', '.env.test') });
 
 const execAsync = util.promisify(exec);
 

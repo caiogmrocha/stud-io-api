@@ -3,6 +3,14 @@ import NodeEnvironment from 'jest-environment-node';
 
 import { PrismaTestEnvironment } from './prisma-test-environment';
 
+import path from 'path';
+import dotenv from 'dotenv';
+
+dotenv.config({
+	path: path.resolve(__dirname, '..', '..', '..', '.env.test'),
+	override: true,
+});
+
 export default class E2ETestEnvironment extends NodeEnvironment {
   private prismaTestEnvironment: PrismaTestEnvironment;
 

@@ -20,7 +20,11 @@ export function adaptRoute(controller: IController) {
       return response.status(httpResponse.status).json(httpResponse.body);
     } else {
       return response.status(httpResponse.status).json({
-        error: httpResponse.body.error
+        error: {
+					name: httpResponse.body.error.name,
+					message: httpResponse.body.error.message,
+					errors: httpResponse.body.error.errors,
+				},
       });
     }
   }
