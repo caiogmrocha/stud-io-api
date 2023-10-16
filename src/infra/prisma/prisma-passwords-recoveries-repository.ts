@@ -5,6 +5,7 @@ import { prisma } from "./prisma";
 import { PasswordsRecoveryMapper } from "@/utils/mappers/passwords-recoveries-mapper";
 import { IGetPasswordRecoveryByCodeRepository } from "@/app/contracts/repositories/profiles/passwords-recoveries/i-get-by-code";
 import { IPasswordRecoveryModelToUpdate, IUpdatePasswordRecoveryRepository } from "@/app/contracts/repositories/profiles/passwords-recoveries/i-update";
+import { IGetPasswordRecoveryByTokenRepository } from "@/app/contracts/repositories/profiles/passwords-recoveries/i-get-by-token";
 
 type IPrismaPasswordRecoveryAdapted = PasswordRecovery & {
   profile?: Profile;
@@ -13,23 +14,11 @@ type IPrismaPasswordRecoveryAdapted = PasswordRecovery & {
 type IPasswordRecoveriesRepository = (
 	& ICreatePasswordRecoveryRepository
 	& IGetPasswordRecoveryByCodeRepository
+	& IGetPasswordRecoveryByTokenRepository
 	& IUpdatePasswordRecoveryRepository
 );
 
 export class PrismaPasswordRecoveriesRepository implements IPasswordRecoveriesRepository {
-	async create(data: IPasswordRecoveryModelToCreate): Promise<IPasswordRecoveryModel> {
-		const createdPasswordRecovery = await prisma.passwordRecovery.create({
-			data: {
-				profileId: data.profile_id,
-				code: data.code,
-				sendCodeToken: data.send_code_token,
-				expiresAt: data.expires_at,
-			},
-		}) as IPrismaPasswordRecoveryAdapted;
-
-		return PasswordsRecoveryMapper.fromPrismaToModel(createdPasswordRecovery);
-	}
-
 	async getByCode(code: string): Promise<IPasswordRecoveryModel | null> {
 		const passwordRecovery = await prisma.passwordRecovery.findFirst({
 			where: {
@@ -42,6 +31,38 @@ export class PrismaPasswordRecoveriesRepository implements IPasswordRecoveriesRe
 		}
 
 		return PasswordsRecoveryMapper.fromPrismaToModel(passwordRecovery);
+	}
+
+	async getByToken(token: string, type: "send_code_token" | "change_password_token"): Promise<IPasswordRecoveryModel | null> {
+		const map = {
+			send_code_token: "sendCodeToken",
+			change_password_token: "changePasswordToken",
+		};
+
+		const passwordRecovery = await prisma.passwordRecovery.findFirst({
+			where: {
+				[map[type]]: token,
+			},
+		}) as IPrismaPasswordRecoveryAdapted | null;
+
+		if (!passwordRecovery) {
+			return null;
+		}
+
+		return PasswordsRecoveryMapper.fromPrismaToModel(passwordRecovery);
+	}
+
+	async create(data: IPasswordRecoveryModelToCreate): Promise<IPasswordRecoveryModel> {
+		const createdPasswordRecovery = await prisma.passwordRecovery.create({
+			data: {
+				profileId: data.profile_id,
+				code: data.code,
+				sendCodeToken: data.send_code_token,
+				expiresAt: data.expires_at,
+			},
+		}) as IPrismaPasswordRecoveryAdapted;
+
+		return PasswordsRecoveryMapper.fromPrismaToModel(createdPasswordRecovery);
 	}
 
 	async update(data: IPasswordRecoveryModelToUpdate, id: string): Promise<void> {
