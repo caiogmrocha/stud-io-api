@@ -59,6 +59,28 @@ describe('[E2E] ChangePasswordController', () => {
 		});
 	}, 45000);
 
+	it('should return 422 if the password is invalid', async () => {
+		const fakeToken = (await jwtAuthenticationProvider.sign({
+			id: crypto.randomUUID(),
+			email: faker.internet.email(),
+		}, 3 * 60 * 60 * 1000)).value as string;
+
+		const changePasswordResponse = await request(app)
+			.patch('/profiles/password-recovery/change-password')
+			.send({
+				password: '123123',
+			})
+			.set('Authorization', `Bearer ${fakeToken}`);
+
+		// Assert
+		expect(changePasswordResponse.status).toBe(422);
+		expect(changePasswordResponse.body).toEqual(expect.objectContaining({
+			error: expect.objectContaining({
+				name: Errors.UnprocessableEntityError.name,
+			}),
+		}));
+	});
+
 	it('should return 403 if the token does not exists in datasource', async () => {
 		// Arrange
 		const profilePassword = (await bcryptHashProvider.hash(faker.random.alphaNumeric(12), 10)).value as string;
@@ -111,27 +133,47 @@ describe('[E2E] ChangePasswordController', () => {
 		});
 	}, 45000);
 
-	it('should return 422 if the password is invalid', async () => {
-		const fakeToken = (await jwtAuthenticationProvider.sign({
-			id: crypto.randomUUID(),
-			email: faker.internet.email(),
-		}, 3 * 60 * 60 * 1000)).value as string;
+	it('should return 200 if the password is changed successfully', async () => {
+		// Arrange
+		const profilePassword = (await bcryptHashProvider.hash(faker.random.alphaNumeric(12), 10)).value as string;
+
+		const profileData = await prisma.profile.create({
+			data: {
+				email: faker.internet.email(),
+				password: profilePassword,
+				type: 'student',
+				student: {
+					create: {
+						name: faker.name.fullName(),
+					},
+				},
+			},
+		});
+
+		// Act
+		const sendCodeToProfileEmailResponse = await request(app)
+			.post('/profiles/password-recovery/send-code-to-profile-email')
+			.send({
+				email: profileData.email,
+			});
+
+		const confirmEmailResponse = await request(app)
+			.post('/profiles/password-recovery/confirm-email')
+			.send({
+				code: sendCodeToProfileEmailResponse.body.code,
+			});
 
 		const changePasswordResponse = await request(app)
 			.patch('/profiles/password-recovery/change-password')
 			.send({
-				password: '123123',
+				password: 'any_password',
 			})
-			.set('Authorization', `Bearer ${fakeToken}`);
+			.set('Authorization', `Bearer ${confirmEmailResponse.body.token}`);
 
 		// Assert
-		expect(changePasswordResponse.status).toBe(422);
-		expect(changePasswordResponse.body).toEqual(expect.objectContaining({
-			error: expect.objectContaining({
-				name: Errors.UnprocessableEntityError.name,
-			}),
-		}));
-	});
-
-	it.todo('should return 200 if the password is changed successfully');
+		expect(changePasswordResponse.status).toBe(200);
+		expect(changePasswordResponse.body).toEqual({
+			message: 'Senha alterada com sucesso.'
+		});
+	}, 45000);
 });
