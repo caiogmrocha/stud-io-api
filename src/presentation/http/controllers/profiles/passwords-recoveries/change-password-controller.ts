@@ -2,6 +2,9 @@ import * as Http from "@/presentation/http/contracts";
 import { IChangePasswordUseCase } from "@/domain/usecases/profiles/password-recovery/i-change-password-use-case";
 import { JWTVerifyError } from "@/app/contracts/auth/jwt/errors/jwt-verify-error";
 import { TokenDoesNotExistError } from "@/app/services/profiles/password-recovery/errors/token-does-not-exists-error";
+import { ValidationComposite } from "@/validation/validation-composite";
+import { MinimumValueValidator } from "@/validation/rules/minimum-value-validator";
+import { RequiredValueValidator } from "@/validation/rules/required-value-validator";
 
 export type IChangePasswordControllerRequest = Http.IHttpRequest<
 	{ password: string },
@@ -17,6 +20,17 @@ export class ChangePasswordController implements Http.IController {
 
 	async handle(request: IChangePasswordControllerRequest): Promise<Http.IHttpResponse> {
 		try {
+			const validationComposite = new ValidationComposite([
+        new RequiredValueValidator('password', request.body.password),
+        new MinimumValueValidator('password', request.body.password, 12),
+      ]);
+
+			const validationResult = await validationComposite.validate();
+
+			if (validationResult.isLeft()) {
+				return Http.unprocessable(validationResult.value);
+			}
+
 			const authToken = request.headers['Authorization'];
 
 			if (!authToken) {
