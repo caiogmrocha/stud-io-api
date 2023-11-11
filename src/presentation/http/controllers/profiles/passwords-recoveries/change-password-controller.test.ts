@@ -7,7 +7,7 @@ import { app } from '@/main/config/http';
 import { faker } from '@faker-js/faker';
 import { prisma } from '@/infra/prisma/prisma';
 import { JWTAuthenticationProvider } from '@/infra/jwt/jwt-authentication-provider';
-import { JWTVerifyError } from '@/app/contracts/auth/jwt/errors/jwt-verify-error';
+import * as Errors from '@/presentation/http/contracts';
 
 const bcryptHashProvider = new BCryptHashProvider();
 const jwtAuthenticationProvider = new JWTAuthenticationProvider();
@@ -111,6 +111,27 @@ describe('[E2E] ChangePasswordController', () => {
 		});
 	}, 45000);
 
-	it.todo('should return 422 if the password is invalid');
+	it('should return 422 if the password is invalid', async () => {
+		const fakeToken = (await jwtAuthenticationProvider.sign({
+			id: crypto.randomUUID(),
+			email: faker.internet.email(),
+		}, 3 * 60 * 60 * 1000)).value as string;
+
+		const changePasswordResponse = await request(app)
+			.patch('/profiles/password-recovery/change-password')
+			.send({
+				password: '123123',
+			})
+			.set('Authorization', `Bearer ${fakeToken}`);
+
+		// Assert
+		expect(changePasswordResponse.status).toBe(422);
+		expect(changePasswordResponse.body).toEqual(expect.objectContaining({
+			error: expect.objectContaining({
+				name: Errors.UnprocessableEntityError.name,
+			}),
+		}));
+	});
+
 	it.todo('should return 200 if the password is changed successfully');
 });
