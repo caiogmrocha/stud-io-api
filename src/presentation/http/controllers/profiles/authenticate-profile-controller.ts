@@ -4,17 +4,23 @@ import { EmailFormatValidator } from "@/validation/rules/email-format-validator"
 import { MinimumValueValidator } from "@/validation/rules/minimum-value-validator";
 import { RequiredValueValidator } from "@/validation/rules/required-value-validator";
 import { ValidationComposite } from "@/validation/validation-composite";
-import { clientError, IController, IHttpRequest, IHttpResponse, ok, serverError, unauthorized, unprocessable } from "../../contracts";
+import * as Http from "../../contracts";
 
 export type IAuthenticateProfileControllerRequestBody = {
-  email: string;
-  password: string;
+	email: string;
+	password: string;
 };
 
-export class AuthenticateProfileController implements IController {
+export type IAuthenticateProfileControllerResponseBody = {
+  token: string;
+};
+
+export class AuthenticateProfileController implements Http.IController {
   constructor (private readonly authenticateProfileUseCase: IAuthenticateProfileUseCase) {}
 
-  async handle({ body }: IHttpRequest<IAuthenticateProfileControllerRequestBody>): Promise<IHttpResponse<any>> {
+  async handle({ body }: Http.IHttpRequest<IAuthenticateProfileControllerRequestBody>): Promise<
+		Http.IHttpResponse<IAuthenticateProfileControllerResponseBody>
+	> {
     try {
       const validationComposite = new ValidationComposite([
         new RequiredValueValidator('email', body.email),
@@ -26,7 +32,7 @@ export class AuthenticateProfileController implements IController {
       const validationResult = await validationComposite.validate();
 
       if (validationResult.isLeft()) {
-        return unprocessable(validationResult.value);
+        return Http.unprocessable(validationResult.value);
       }
 
       const result = await this.authenticateProfileUseCase.execute(body);
@@ -36,16 +42,16 @@ export class AuthenticateProfileController implements IController {
 
         switch (error.constructor) {
           case ProfileDoesNotExistsError:
-            return unauthorized(error);
+            return Http.unauthorized();
 
           default:
-            return clientError(error);
+            return Http.badRequest();
         }
       }
 
-      return ok(result.value);
+      return Http.ok(result.value);
     } catch (error) {
-      return serverError(error as Error);
+      return Http.serverError();
     }
   }
 }

@@ -1,10 +1,9 @@
 import { IJWTAuthenticationProvider } from "@/app/contracts/auth/jwt/i-jwt-authentication-provider";
 import { JWTSignError } from "@/app/contracts/auth/jwt/errors/jwt-sign-error";
+import { JWTVerifyError } from "@/app/contracts/auth/jwt/errors/jwt-verify-error";
 
 import { Either, left, right } from "@/utils/logic/either";
 import jwt from 'jsonwebtoken';
-import { JWTVerifyError } from "@/app/contracts/auth/jwt/errors/jwt-verify-error";
-
 
 const secret = process.env.JWT_SECRET as string;
 

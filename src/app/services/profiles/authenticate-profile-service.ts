@@ -1,4 +1,4 @@
-import { IAuthenticateProfileUseCase, IAuthenticateProfileUseCaseInputBoundary, IAuthenticateProfileUseCaseOutPutBoundary } from "@/domain/usecases/profiles/i-authentaticate-profile-use-case";
+import { IAuthenticateProfileUseCase, IAuthenticateProfileUseCaseInputBoundary, IAuthenticateProfileUseCaseOutPutBoundary, IAuthenticatedProfilePayload } from "@/domain/usecases/profiles/i-authentaticate-profile-use-case";
 import { IGetProfilesRepository } from "@/app/contracts/repositories/profiles/i-get-profiles-repository";
 import { IJWTAuthenticationProvider } from "@/app/contracts/auth/jwt/i-jwt-authentication-provider";
 import { IBCryptProvider } from "@/app/contracts/encription/bcrypt/i-bcrypt-provider";
@@ -9,7 +9,7 @@ import { Either, left, right } from "@/utils/logic/either";
 export class AuthenticateProfileService implements IAuthenticateProfileUseCase {
   constructor (
     private readonly getProfilesRepository: IGetProfilesRepository,
-    private readonly jwtAuthenticationProvider: IJWTAuthenticationProvider,
+    private readonly jwtAuthenticationProvider: IJWTAuthenticationProvider<IAuthenticatedProfilePayload>,
     private readonly bcryptHashProvider: IBCryptProvider,
   ) {}
 
@@ -33,7 +33,7 @@ export class AuthenticateProfileService implements IAuthenticateProfileUseCase {
 
     const token = await this.jwtAuthenticationProvider.sign({
       id: profileFoundedByEmail.id,
-      ...input
+      email: profileFoundedByEmail.email,
     }, 36000);
 
     if (token.isLeft()) {

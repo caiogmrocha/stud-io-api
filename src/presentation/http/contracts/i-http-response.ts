@@ -1,3 +1,9 @@
+import { ValidationCompositeError } from "@/validation/errors/validation-composite-error";
+import { InternalServerError, UnauthorizedError } from "./errors";
+import { NotFoundError } from "./errors/not-found-error";
+import { BadRequestError } from "./errors/bad-request-error";
+import { ForbiddenError } from "./errors/forbidden-error";
+
 export type IHttpResponse<B = any> = {
   body: B;
   status: number;
@@ -17,56 +23,44 @@ export const created = (): IHttpResponse => {
   };
 };
 
-export const clientError = (error: Error): IHttpResponse => {
+export const badRequest = (message?: string): IHttpResponse => {
   return {
-    body: {
-      error
-    },
+    body: { error: new BadRequestError(message) },
     status: 400
   };
 };
 
-export const notFound = (error: Error): IHttpResponse => {
+export const notFound = (message?: string): IHttpResponse => {
   return {
-    body: {
-      error,
-    },
+    body: { error: new NotFoundError(message) },
     status: 404
   }
 }
 
-export const unauthorized = (error: Error): IHttpResponse => {
+export const unauthorized = (message?: string): IHttpResponse => {
   return {
-    body: {
-      error
-    },
-    status: 401
-  }
+    body: { error: new UnauthorizedError(message) },
+    status: 401,
+  };
 }
 
-export const conflict = (error: Error): IHttpResponse => {
+export const forbidden = (message?: string): IHttpResponse => {
   return {
-    body: {
-      error
-    },
-    status: 403
-  }
+    body: { error: new ForbiddenError(message) },
+    status: 403,
+  };
 }
 
-export const unprocessable = (error: Error): IHttpResponse => {
+export const unprocessable = (error: ValidationCompositeError): IHttpResponse => {
   return {
-    body: {
-      error
-    },
-    status: 422
+    body: { error },
+    status: 422,
   };
 };
 
-export const serverError = (error: Error): IHttpResponse => {
+export const serverError = (): IHttpResponse => {
   return {
-    body: {
-      error
-    },
-    status: 500
+    body: { error: new InternalServerError() },
+    status: 500,
   };
 };

@@ -10,8 +10,6 @@ export interface IStudentProps {
 
   profile?: Profile;
   profileId: string;
-
-  subjects?: Subject[];
 }
 
 export class Student extends Entity<IStudentProps> {
@@ -49,9 +47,5 @@ export class Student extends Entity<IStudentProps> {
 
   get profileId(): string {
     return this.props.profileId;
-  }
-
-  get subjects(): Subject[] {
-    return this.props.subjects || [];
   }
 }

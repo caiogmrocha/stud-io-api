@@ -1,12 +1,12 @@
 import { Entity, Post, Profile, Student, Teacher } from ".";
 
 export interface ISubjectProps {
-  id: string;
+  id: number;
   name: string;
   displayName: string;
-  description: string;
+  description?: string;
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt?: Date;
   deletedAt?: Date;
   isDeleted: boolean;
 
@@ -20,7 +20,7 @@ export class Subject extends Entity<ISubjectProps> {
     super(props);
   }
 
-  get id(): string {
+  get id(): number {
     return this.props.id;
   }
 
@@ -32,7 +32,7 @@ export class Subject extends Entity<ISubjectProps> {
     return this.props.displayName;
   }
 
-  get description(): string {
+  get description(): string | undefined {
     return this.props.description;
   }
 
@@ -40,7 +40,7 @@ export class Subject extends Entity<ISubjectProps> {
     return this.props.createdAt;
   }
 
-  get updatedAt(): Date {
+  get updatedAt(): Date | undefined {
     return this.props.updatedAt;
   }
 

@@ -1,4 +1,5 @@
 import { IStudentModel } from "../students/i-student-model";
+import { ISubjectModel } from "../subjects/i-subject-model";
 import { ITeacherModel } from "../teachers/i-teacher-model";
 
 export type IProfileModel = {
@@ -14,4 +15,5 @@ export type IProfileModel = {
 
   student?: IStudentModel;
   teacher?: ITeacherModel;
+	subjects?: ISubjectModel[];
 }

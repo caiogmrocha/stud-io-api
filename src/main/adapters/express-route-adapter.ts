@@ -7,7 +7,14 @@ export function adaptRoute(controller: IController) {
     const params = request.params;
     const query = request.query;
 
-    const httpResponse = await controller.handle({ body, params, query });
+    const httpResponse = await controller.handle({
+			body,
+			params,
+			query,
+			headers: {
+				Authorization: request.headers.authorization,
+			}
+		});
 
     if (httpResponse.status >= 200 && httpResponse.status <= 299) {
       return response.status(httpResponse.status).json(httpResponse.body);

@@ -26,7 +26,7 @@ describe('[Unit] Post Entity', () => {
         isDeleted: false,
       }),
       subjects: [new Subject({
-        id: faker.datatype.uuid(),
+        id: faker.datatype.number(),
         name: faker.name.firstName(),
         displayName: faker.name.fullName(),
         description: faker.random.words(7),

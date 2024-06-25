@@ -1,9 +1,9 @@
-import { ProfileDoesNotExistsError } from '@/app/services/profiles/errors/profile-does-not-exists-error';
-import { prisma } from '@/infra/prisma/prisma';
+import { NotFoundError } from '../../contracts/errors/not-found-error';
 import { app } from '@/main/server';
 
-import request from 'supertest';
+import { prisma } from '@/infra/prisma/prisma';
 import { faker } from '@faker-js/faker';
+import request from 'supertest';
 
 describe('[E2E] Get Profile Details Controller', () => {
   it('should return 200 if the profile has been founded', async () => {
@@ -37,10 +37,11 @@ describe('[E2E] Get Profile Details Controller', () => {
 
   it("should return 400 if the profile hasn't been founded", async () => {
     const response = await request(app).get(`/profiles/qualquer-coisa`);
-    expect(response.status).toBe(400);
+
+    expect(response.status).toBe(404);
     expect(response.body).toEqual(expect.objectContaining({
       error: expect.objectContaining({
-        name: ProfileDoesNotExistsError.name,
+        name: NotFoundError.name,
       })
     }));
   });

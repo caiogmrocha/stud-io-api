@@ -1,4 +1,4 @@
-import { ProfileAlreadyExistsError } from '@/app/services/profiles/errors/profile-already-exists-error';
+import { ForbiddenError } from '../../contracts/errors/forbidden-error';
 import { ValidationCompositeError } from '@/validation/errors/validation-composite-error';
 import { app } from '@/main/server';
 
@@ -63,7 +63,7 @@ describe('[E2E] Register Profile Controller', () => {
     expect(response.status).toBe(403);
     expect(response.body).toEqual(expect.objectContaining({
       error: expect.objectContaining({
-        name: ProfileAlreadyExistsError.name
+        name: ForbiddenError.name
       }),
     }));
   });

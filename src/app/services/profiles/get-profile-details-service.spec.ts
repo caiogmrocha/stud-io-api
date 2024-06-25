@@ -12,6 +12,8 @@ async function makeSut(profilesData: IProfileModel[] = []) {
     profiles: profilesData,
     students: [],
     teachers: [],
+		subjects: [],
+		profile_subjects: [],
   });
 
   const getProfilesRepository = new InMemoryGetProfilesRepository();

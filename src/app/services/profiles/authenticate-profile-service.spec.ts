@@ -1,6 +1,6 @@
 import { InMemoryGetProfilesRepository } from "@/../tests/mocks/infra/in-memory/profiles/in-memory-get-profiles-repository";
 import { IProfileModel } from "@/app/contracts/repositories/profiles/i-profile-model";
-import { IAuthenticateProfileUseCase } from "@/domain/usecases/profiles/i-authentaticate-profile-use-case"
+import { IAuthenticateProfileUseCase, IAuthenticatedProfilePayload } from "@/domain/usecases/profiles/i-authentaticate-profile-use-case"
 import { FakeAuthenticationJWTProvider } from "@/../tests/mocks/infra/auth/jwt/fake-jwt-authentication-provider";
 import { FakeBCryptProvider } from "@/../tests/mocks/infra/encription/bcrypt/fake-bcrypt-provider";
 import { AuthenticateProfileService } from "./authenticate-profile-service"
@@ -19,10 +19,12 @@ async function makeSut(profilesData: IProfileModel[] = []): Promise<SutTypes> {
     profiles: profilesData,
     students: [],
     teachers: [],
+		subjects: [],
+		profile_subjects: [],
   });
 
   const getProfilesRepository = new InMemoryGetProfilesRepository();
-  const jwtAuthenticationProvider = new FakeAuthenticationJWTProvider();
+  const jwtAuthenticationProvider = new FakeAuthenticationJWTProvider<IAuthenticatedProfilePayload>();
   const bcryptProvider = new FakeBCryptProvider();
   const sut = new AuthenticateProfileService(
     getProfilesRepository,
